@@ -1,8 +1,11 @@
 const Job = require("../../models/jobs.model")
+const JobCategory = require("../../models/jobs-category.model.js");
+const Account = require("../../models/account.model.js");
 const filterStatusHelper = require("../../helpers/filterStatus.js")
 const filterSearchHelper = require("../../helpers/filterSearch.js")
 const paginationHelper = require("../../helpers/pagination.js")
 const systemConfig = require("../../config/system.js");
+const createTreeHelper = require("../../helpers/createTree.js");
 // [GET] /admin/job
 module.exports.index = async (req, res) => {
     let filterStatus = filterStatusHelper(req.query);
@@ -22,6 +25,16 @@ module.exports.index = async (req, res) => {
     if (location) {
         find.location = location;
     }
+    // sort
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        const sortKey = req.query.sortKey;
+        const sortValue = req.query.sortValue;
+        sort[sortKey] = sortValue;
+    } else {
+        sort.position = "desc"
+    }
+    // end sort
     // pagination
     const countJobs = await Job.countDocuments(find);
     let objectPagination = paginationHelper({
@@ -32,12 +45,29 @@ module.exports.index = async (req, res) => {
     // console.log(req.originalUrl);
     // end pagination
     const jobs = await Job.find(find)
-        .sort({
-            position: "desc"
-        })
+        .sort(sort)
         .limit(objectPagination.limitItem)
         .skip(objectPagination.skipItem);
     // res.json(jobs);
+    for (const job of jobs) {
+        //Lấy ra tên người tạo
+        const user = await Account.findOne({
+            _id: job.createdBy.account_id
+        });
+        if (user) {
+            job.accountFullName = user.fullName;
+        }
+        //Lấy ra tên người cập nhật gần nhất
+        const updatedBy = job.updatedBy.slice(-1)[0];
+        if(updatedBy){
+            const userUpdatedBy = await Account.findOne({
+                _id: updatedBy.account_id
+            });
+            if(userUpdatedBy){
+                updatedBy.accountFullName = userUpdatedBy.fullName;
+            }
+        }
+    }
     res.render("admin/pages/job/index", {
         title: "Trang quản lý công việc",
         message: 'Hello, world!',
@@ -52,8 +82,7 @@ module.exports.index = async (req, res) => {
     // console.log(req.body);
 }
 module.exports.indexApi = async (req, res) => {
-    const jobs = await Job.find({
-    });
+    const jobs = await Job.find({});
     res.json(jobs);
 }
 //[PATCH] /admin/job/change-status/:status/:id
@@ -64,10 +93,19 @@ module.exports.changeStatus = async (req, res) => {
     // console.log(status);
     // console.log(id);
     try {
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        }
         await Job.updateOne({
             _id: id
         }, {
-            status: status
+            $set:{
+                status: status
+            },
+            $push: {
+                updatedBy: updatedBy
+            }
         })
         req.flash('success', 'Cập nhật trạng thái thành công!');
     } catch (error) {
@@ -82,6 +120,10 @@ module.exports.changeMulti = async (req, res) => {
     let ids = req.body.ids;
     ids = ids.split(", ");
     // console.log(ids);
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     switch (type) {
         case "active":
             try {
@@ -90,7 +132,10 @@ module.exports.changeMulti = async (req, res) => {
                         $in: ids
                     }
                 }, {
-                    status: "active"
+                    status: "active",
+                    $push: {
+                        updatedBy: updatedBy
+                    }
                 })
                 req.flash('success', `Cập nhật trạng thái cho ${ids.length} jobs thành công!`);
 
@@ -106,7 +151,10 @@ module.exports.changeMulti = async (req, res) => {
                         $in: ids
                     }
                 }, {
-                    status: "inactive"
+                    status: "inactive",
+                    $push: {
+                        updatedBy: updatedBy
+                    }
                 })
                 req.flash('success', `Cập nhật trạng thái cho ${ids.length} jobs thành công!`);
             } catch (error) {
@@ -122,7 +170,10 @@ module.exports.changeMulti = async (req, res) => {
                     }
                 }, {
                     deleted: true,
-                    deleteAt: new Date()
+                    deletedBy: {
+                        account_id: res.locals.user._id,
+                        deleteAt: new Date()
+                    }
                 })
                 req.flash('success', `Xóa thành công ${ids.length} jobs!`);
             } catch (error) {
@@ -138,7 +189,10 @@ module.exports.changeMulti = async (req, res) => {
                     await Job.updateOne({
                         _id: id
                     }, {
-                        position: position
+                        position: position,
+                        $push: {
+                            updatedBy: updatedBy
+                        }
                     })
                 }
                 req.flash('success', `Cập nhật vị trí cho ${ids.length} jobs thành công!`);
@@ -158,7 +212,10 @@ module.exports.deleteItem = async (req, res) => {
             _id: id
         }, {
             deleted: true,
-            deleteAt: new Date()
+            deletedBy: {
+                account_id: res.locals.user._id,
+                deleteAt: new Date()
+            }
         })
         req.flash('success', 'Xóa thành công!');
     } catch (error) {
@@ -168,8 +225,13 @@ module.exports.deleteItem = async (req, res) => {
 }
 //[GET] /admin/job/create
 module.exports.create = async (req, res) => {
+    const categories = await JobCategory.find({
+        deleted: false
+    });
+    const newCategories = createTreeHelper.tree(categories);
     res.render("admin/pages/job/create", {
-        title: "Trang tạo công việc"
+        title: "Trang tạo công việc",
+        categories: newCategories
     })
 }
 //[POST] /admin/job/create
@@ -181,6 +243,9 @@ module.exports.createPost = async (req, res) => {
         req.body.position = countJobs + 1;
     } else {
         req.body.position = parseInt(req.body.position);
+    }
+    req.body.createdBy = {
+        account_id: res.locals.user._id
     }
     const newJob = new Job(req.body);
     try {
@@ -205,9 +270,14 @@ module.exports.edit = async (req, res) => {
             deleted: false
         }
         const job = await Job.findOne(find);
+        const categories = await JobCategory.find({
+            deleted: false
+        });
+        const newCategories = createTreeHelper.tree(categories);
         res.render("admin/pages/job/edit", {
             title: "Cập nhật công việc",
-            job: job
+            job: job,
+            categories: newCategories
         })
     } catch (error) {
         console.error(error);
@@ -219,14 +289,23 @@ module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // if (req.file) {
+    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // }
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
     }
     req.body.position = parseInt(req.body.position);
     try {
         await Job.updateOne({
             _id: id
-        }, req.body);
+        }, {
+            ...req.body,
+            $push: {
+                updatedBy: updatedBy
+            }
+        });
         req.flash('success', 'Cập nhật công việc thành công!');
     } catch (error) {
         console.error(error);
@@ -240,9 +319,13 @@ module.exports.detail = async (req, res) => {
         const job = await Job.findOne({
             _id: id
         });
+        const category = await JobCategory.findOne({
+            _id: job.category
+        })
         res.render("admin/pages/job/detail", {
             title: "Chi tiết công việc",
-            job: job
+            job: job,
+            category: category
         })
     } catch (error) {
         console.error(error);

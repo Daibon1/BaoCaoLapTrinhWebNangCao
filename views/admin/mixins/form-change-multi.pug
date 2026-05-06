@@ -16,9 +16,10 @@ mixin form-change-multi()
             button.btn.btn-primary.w-100(type="submit") Áp dụng
           .col-md-1
             input(type="text" name="ids" value="" class="form-control d-none" placeholder="id1, id2, id3,...")
-          .col-md-5.text-end
-            a(href=`/${prefixAdmin}/job/create` 
-              class="btn btn-primary btn-sm" 
-              id="create-job"
-            ) + Thêm job
+          if(role.permissions.includes("jobs-create"))
+            .col-md-5.text-end
+              a(href=`/${prefixAdmin}/job/create` 
+                class="btn btn-primary btn-sm" 
+                id="create-job"
+              ) + Thêm job
             //- button(class="btn btn-primary btn-sm ")+ Thêm job

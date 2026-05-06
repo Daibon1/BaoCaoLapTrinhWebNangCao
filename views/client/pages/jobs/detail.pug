@@ -1,49 +1,140 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+
 block main
+    script(src="/client/css/job.css") 
     +alert-success(3000)
     +alert-error(3000)
-    // Header
-    header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-    h4.mb-0 Chi tiết công việc
-    .card.mb-4
-    .card-body
-        .mb-3
-            if(job.title)
-                span Tiêu đề công việc : #{job.title}
-        .mb-3
-            if(job.description)
-                span Mô tả công việc : #{job.description}
-        .mb-3
-            if(job.location)
-                span Địa điểm làm việc : #{job.location}
-        .mb-3
-            if(job.experience)
-                span Kinh nghiệm yêu cầu : #{job.experience}
-        .mb-3
-            if(job.type)
-                span Thời gian làm việc : #{job.type}
-        .mb-3
-            if(job.salaryMin)
-                span Mức lương tối thiểu (VNĐ) : #{job.salaryMin}
-        .mb-3
-            if(job.salaryMax)
-                span Mức lương tối đa (VNĐ) : #{job.salaryMax}
-        .mb-3
-            if(job.position)
-                span Vị trí : #{job.position}
-        .mb-3
-           span Trạng thái :
-           if(job.status=="active")
-                .btn.badge.bg-success Hoạt động
-           else if(job.status=="inactive")
-                .btn.badge.bg-danger Ngừng hoạt động
-        .mb-3
-           span Thumbnail : 
-           if(job.thumbnail)
-                img(src=job.thumbnail alt="" id="img-preview" )
-           else
-                img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
-        .mb-9
-            a.btn.btn-outline-primary.btn-sm(href=`/job/edit/${job.id}`) Chỉnh sửa
-            a.btn.btn-outline-secondary.btn-sm.text-end(href=`/jobs`) Quay lại danh sách
+    main.job-detail
+        .container
+
+            // ===== Breadcrumb =====
+            nav.breadcrumb-wrap
+                a(href="/") Trang chủ
+                span /
+                a(href="/jobs") Việc làm
+                span /
+                span.text-muted Chi tiết công việc
+
+            .row
+
+                // ================= LEFT =================
+                .col-lg-8
+
+                    // ===== JOB HEADER =====
+                    .job-header.card.mb-4
+                        .card-body
+                            .d-flex.align-items-center
+
+                                img.company-logo(
+                                    src="/images/company.png"
+                                    alt="company"
+                                    width="70"
+                                )
+
+                                .ms-3
+                                    h1.job-title #{job.title}
+                                    p.company-name
+                                        a(href="/companies/slug") #{job.companyName}
+
+                                    .job-meta
+                                        span.badge.bg-primary #{job.type}
+                                        span.text-muted.ms-3 📍 #{job.location}
+                                        span.text-muted.ms-3 💰 #{(job.salaryMin/1000000).toLocaleString()} - #{(job.salaryMax/1000000).toLocaleString()} triệu
+
+                            hr
+
+                            .d-flex.gap-2
+                                form(
+                                    action=`/jobs/applications/add/${job._id}`
+                                    method="POST"
+                                )
+                                    button.btn.btn-success(type="submit")
+                                        i.fa-solid.fa-paper-plane.me-2
+                                        | Ứng tuyển ngay
+                                form(
+                                    action=`/jobs/saved_jobs/add/${job._id}`
+                                    method="POST"
+                                )
+                                    button.btn.btn-outline-danger(type="submit")
+                                        i.fa-regular.fa-heart.me-2
+                                        | Lưu việc
+
+                    // ===== JOB DESCRIPTION =====
+                    .card.mb-4
+                        .card-body
+                            h3 Mô tả công việc
+                            span !{job.description}
+
+                            h4 Yêu cầu
+                            ul
+                                li Có kinh nghiệm NodeJS
+                                li Hiểu RESTful API
+                                li Biết MongoDB hoặc MySQL
+
+                            h4 Quyền lợi
+                            ul
+                                li Lương tháng 13
+                                li Remote linh hoạt
+                                li Môi trường trẻ
+
+                            h4 Danh mục
+                            a(href=`/jobs/${category.slug}`) #{category.title}
+
+                    // ===== COMPANY INFO =====
+                    .card
+                        .card-body
+                            h3 Giới thiệu công ty
+                            p
+                                | DDS là công ty công nghệ chuyên phát triển
+                                | nền tảng tuyển dụng và hệ thống SaaS.
+
+                            a.btn.btn-outline-primary(
+                                href="/companies/slug"
+                            ) Xem công ty
+
+
+                // ================= RIGHT =================
+                .col-lg-4
+
+                    // APPLY BOX
+                    .card.mb-4
+                        .card-body
+                            h5 Thông tin chung
+
+                            ul.list-unstyled
+                                li.mb-2
+                                    strong Mức lương:
+                                    |  #{(job.salaryMin/1000000).toLocaleString()} - #{(job.salaryMax/1000000).toLocaleString()} triệu
+
+                                li.mb-2
+                                    strong Kinh nghiệm:
+                                    |  #{job.experience}
+
+                                li.mb-2
+                                    strong Hình thức:
+                                    |  #{job.type}
+
+                                li.mb-2
+                                    strong Địa điểm:
+                                    |  #{job.location}
+
+                                li.mb-2
+                                    strong Hạn nộp:
+                                    |  30/12/2025
+
+                            a.btn.btn-success.w-100 Ứng tuyển ngay
+
+
+                    // RELATED JOBS
+                    .card
+                        .card-body
+                            h5 Việc làm liên quan
+
+                            .related-job.mb-3
+                                a(href="#") Frontend Developer ReactJS
+                                div.text-muted 18 triệu • Hà Nội
+
+                            .related-job.mb-3
+                                a(href="#") Backend Developer PHP
+                                div.text-muted 20 triệu • Remote

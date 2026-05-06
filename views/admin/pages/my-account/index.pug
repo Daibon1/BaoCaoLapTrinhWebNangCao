@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+block main
+  .admin-profile
+    .profile-card
+
+      .profile-header
+        .avatar
+          img(src=account.avatar || "/images/avatar.png")
+
+        .info
+          h2.name #{account.fullName}
+          p.role #{role.title}
+          p.email #{account.email}
+
+        a(href=`/${prefixAdmin}/my-account/edit` class="edit-btn")  
+          i.fa-solid.fa-pencil
+
+      hr.divider
+
+      .profile-body
+        .info-group
+          label Username
+          span= account.fullName
+
+        .info-group
+          label Phone
+          span= account.phone || "Chưa cập nhật"
+
+        .info-group
+          label Created At
+          +momentDate(account.createdAt)
+
+        .info-group
+          label Status
+          if(account.status=="active")
+            span.status Active
+          else  
+            span.status Inactive

@@ -1,0 +1,42 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+  +alert-success(3000)
+  +alert-error(3000)
+  .admin-profile-edit
+    .edit-card
+
+      h2.page-title
+        i.fa-solid.fa-user-pen
+        |  Chỉnh sửa thông tin cá nhân
+
+      form(method="POST" action="/admin/my-account/edit?_method=PATCH" enctype="multipart/form-data")
+
+        .avatar-section
+           div(id="preview-img")
+              input.form-control-file(
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  id="file-input"
+              )
+              img(src=user.avatar alt="" id="img-preview" )
+
+        .form-grid
+          .form-group
+            label Username
+            input(type="text" name="fullName" value=user.fullName required)
+
+          .form-group
+            label Email
+            input(type="email" name="email" value=user.email required)
+
+          .form-group
+            label Số điện thoại
+            input(type="text" name="phone" value=user.phone)
+
+        .actions
+          a.cancel-btn(href="/admin/my-account") Huỷ
+          button.save-btn(type="submit")
+            i.fa-solid.fa-floppy-disk
+            |  Lưu thay đổi

@@ -3,10 +3,13 @@ const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const jobSchema = new mongoose.Schema({
     title: String,
+    description: String,
     location: String,
+    category: String,
     thumbnail: String,
     salaryMin: Number,
     salaryMax: Number,
+    featured: String,
     type: String,
     experience: String,
     status: String,
@@ -15,12 +18,28 @@ const jobSchema = new mongoose.Schema({
         slug: "title",
         unique: true
     },
+    createdBy:{
+        account_id:String,
+        createAt:{
+            type:Date,
+            default:Date.now
+        }
+    },
     deleted: {
         type: Boolean,
         default: false
     },
+    deletedBy:{
+        account_id:String,
+        deleteAt:Date
+    },
     position: Number,
-    deleteAt: Date
+    updatedBy:[
+        {
+            account_id:String,
+            updatedAt: Date
+        }
+    ]
 }, {
     timestamps: true
 });

@@ -1,0 +1,28 @@
+include ../mixins/moment.pug
+mixin job-item(job)
+    .job-card
+        .job-header
+            img.logo(src=job.thumbnail title=job.title)
+
+            .job-info
+                a(href=`/jobs/detail/${job.slug}` class="title text-primary text-decoration-none") #{job.title}
+                .company Grab Vietnam
+
+                .tags
+                    span.tag Go
+                    span.tag Microservices
+                    span.tag Kafka
+
+        hr.divider
+
+        .job-footer
+            .meta
+                span.location <i class="fa-solid fa-location-dot" style="color: #046CE9;"></i> #{job.location}
+                span.salary <i class="fa-solid fa-sack-dollar" style="color: #F7B300;"></i> #{(job.salaryMin/1000000).toLocaleString()} - #{(job.salaryMax/1000000).toLocaleString()} triệu
+                span.type #{job.type}
+
+            .date 
+                +momentDate(job.createdAt)
+        if (job.featured=="1")
+            button(class="featured") <i class="fa-solid fa-star"></i>
+        button.save-btn <i class="fa-regular fa-heart"></i>

@@ -1,0 +1,141 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+  if(role.permissions.includes("roles-permissions"))
+    +alert-success(2000)
+    +alert-error(2000)
+    h2(class="mb-4") Phân quyền
+    if (records.length>0)
+        div(data-records=records class="d-none")
+        div(class="text-end")
+            button(
+                type="submit"
+                class="btn btn-primary"
+                button-submit
+            ) Cập nhật
+        table(class="table table-hover"
+            table-permissions
+        )
+            thead
+                tr
+                    th Tính năng
+                    each record in records
+                        th(class="text-center") #{record.title}
+            tbody
+                tr(data-name="id" class="d-none")
+                    td 
+                    each record in records
+                        td(class="text-center") 
+                            input(type="text" name="id" value=record.id)
+                tr 
+                    td(colspan="4")
+                        b Danh mục việc làm
+                tr(data-name="jobs-category-view")
+                    td Xem
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-category-view" value="true")
+                tr(data-name="jobs-category-create")
+                    td Thêm mới
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-category-create" value="true")
+                tr(data-name="jobs-category-edit")
+                    td Chỉnh sửa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-category-edit" value="true")
+                tr(data-name="jobs-category-delete")
+                    td Xóa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-category-delete" value="true")
+                tr 
+                    td(colspan="4")
+                        b Việc làm
+                tr(data-name="jobs-view")
+                    td Xem
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-view" value="true")
+                tr(data-name="jobs-create")
+                    td Thêm mới
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-create" value="true")
+                tr(data-name="jobs-edit")
+                    td Chỉnh sửa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-edit" value="true")
+                tr(data-name="jobs-delete")
+                    td Xóa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="jobs-delete" value="true")
+                tr 
+                    td(colspan="4")
+                        b Nhóm quyền
+                tr(data-name="roles-view")
+                    td Xem
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="roles-view" value="true")
+                tr(data-name="roles-create")
+                    td Thêm mới
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="roles-create" value="true")
+                tr(data-name="roles-edit")
+                    td Chỉnh sửa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="roles-edit" value="true")
+                tr(data-name="roles-delete")
+                    td Xóa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="roles-delete" value="true")
+                tr(data-name="roles-permissions")
+                    td Phân quyền
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="roles-permissions" value="true")
+                tr 
+                    td(colspan="4")
+                        b Accounts
+                tr(data-name="accounts-view")
+                    td Xem
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="accounts-view" value="true")
+                tr(data-name="accounts-create")
+                    td Thêm mới
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="accounts-create" value="true")
+                tr(data-name="accounts-edit")
+                    td Chỉnh sửa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="accounts-edit" value="true")
+                tr(data-name="accounts-delete")
+                    td Xóa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="accounts-delete" value="true")
+        form(
+            id="form-change-permissions"
+            method="POST"
+            class="d-none"
+            action=`/${prefixAdmin}/roles/permissions?_method=PATCH`
+        )
+            div(class="form-group")
+                input(
+                    type="text"
+                    class="form-control"
+                    name="permissions"
+                )
+        script(src="/admin/js/role.js")
+    else 
+        h2 Không có quyền truy cập

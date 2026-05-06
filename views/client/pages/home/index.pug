@@ -1,3 +1,8 @@
 extends ../../layouts/default.pug
-block main 
-    h1 Trang chủ
+include ../../mixins/job-layout.pug
+include ../../mixins/box-head.pug
+block main
+    +boxHead("Công việc nổi bật")
+    +job-grid(jobsFeatured)
+    +boxHead("Công việc mới nhất")
+    +job-grid(jobsNew)

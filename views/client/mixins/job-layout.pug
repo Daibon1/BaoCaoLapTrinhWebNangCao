@@ -1,0 +1,6 @@
+include ../mixins/job-item.pug
+mixin job-grid(jobs)
+  .container
+    each job in jobs
+      if job.status === "active" && job.deleted === false
+        +job-item(job)

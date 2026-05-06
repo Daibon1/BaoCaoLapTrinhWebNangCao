@@ -1,15 +1,48 @@
 aside.sidebar.shadow-sm
-    h3.logo Admin
-    nav
-        a(href=`/${prefixAdmin}/dashboard`  class=['sidebar-item', currentUrl === `/${prefixAdmin}/dashboard` ? 'active' : ''].join(' ')) Tổng Quan
-        a(href=`/${prefixAdmin}/job` class=['sidebar-item', currentUrl === `/${prefixAdmin}/job` ? 'active' : ''].join(' ')) Quản lý việc làm
-        a(href="#" class="sidebar-item") Cài đặt
-        a(href=`/${prefixAdmin}/account`  class=['sidebar-item', currentUrl === `/${prefixAdmin}/account` ? 'active' : ''].join(' ')) Danh sách tài khoản
-//- nav.sidebar(class="bg-light border-end")
-//-   ul.nav.flex-column
-//-     li.nav-item
-//-       a.nav-link(href=`/${prefixAdmin}/dashboard`) Dashboard
-//-     li.nav-item
-//-       a.nav-link(href=`/${prefixAdmin}/job`) Jobs
-//-     li.nav-item
-//-       a.nav-link(href=`/${prefixAdmin}/account`) Account
+  .sidebar-inner.d-flex.flex-column.h-50
+
+    // ===== Logo =====
+    h3.logo.text-center.py-2.mb-1 #{user.fullName}
+
+    // ===== Menu =====
+    nav.nav.flex-column
+
+      a.sidebar-item(
+        href=`/${prefixAdmin}/dashboard`
+        class=currentUrl === `/${prefixAdmin}/dashboard` ? 'active' : ''
+      )
+        span Tổng Quan
+      if(role.permissions.includes("jobs-view"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/job`
+          class=currentUrl === `/${prefixAdmin}/job` ? 'active' : ''
+        )
+          span Quản lý việc làm
+
+      a.sidebar-item(href="#")
+        span Cài đặt
+      if(role.permissions.includes("accounts-view"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/account`
+          class=currentUrl === `/${prefixAdmin}/account` ? 'active' : ''
+        )
+          span Danh sách tài khoản
+      if(role.permissions.includes("jobs-category-view"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/job-category`
+          class=currentUrl === `/${prefixAdmin}/job-category` ? 'active' : ''
+        )
+          span Danh mục việc làm
+      if(role.permissions.includes("roles-view"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/roles`
+          class=currentUrl === `/${prefixAdmin}/roles` ? 'active' : ''
+        )
+          span Nhóm quyền
+      if(role.permissions.includes("roles-permissions"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/roles/permissions`
+          class=currentUrl === `/${prefixAdmin}/roles/permissions` ? 'active' : ''
+        )
+          span Phân quyền
+      

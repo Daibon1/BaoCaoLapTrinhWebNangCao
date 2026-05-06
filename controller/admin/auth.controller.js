@@ -31,11 +31,7 @@ module.exports.loginPost = async (req, res) => {
         return;
     }
     res.cookie('token',user.token,{ httpOnly: true, maxAge: 24*60*60*1000 });
-    if(user.role_id=="admin"){
-        res.redirect(res.get("Referrer") || `${systemConfig.prefixAdmin}/dashboard`);
-    }else{
-        res.redirect(res.get("Referrer") || `/jobs`);
-    }
+    res.redirect(res.get("Referrer") || `${systemConfig.prefixAdmin}/dashboard`);
     // res.redirect(res.get("Referrer") || `${systemConfig.prefixAdmin}/dashboard`);
 }
 // [GET] /admin/auth/logout

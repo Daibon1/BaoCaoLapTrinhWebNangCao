@@ -1,51 +1,110 @@
 extends ../../layouts/default.pug
+
 include ../../mixins/alert.pug
-block main 
+
+block main
+  if(role.permissions.includes("jobs-view"))
     +alert-success(3000)
     +alert-error(3000)
-    // Header
-    header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-    h4.mb-0 Chi tiết công việc
-    .card.mb-4
-    .card-body
-        .mb-3
-            if(job.title)
-                span Tiêu đề công việc : #{job.title}
-        .mb-3
-            if(job.description)
-                span Mô tả công việc : #{job.description}
-        .mb-3
-            if(job.location)
-                span Địa điểm làm việc : #{job.location}
-        .mb-3
-            if(job.experience)
-                span Kinh nghiệm yêu cầu : #{job.experience}
-        .mb-3
-            if(job.type)
-                span Thời gian làm việc : #{job.type}
-        .mb-3
-            if(job.salaryMin)
-                span Mức lương tối thiểu (VNĐ) : #{job.salaryMin}
-        .mb-3
-            if(job.salaryMax)
-                span Mức lương tối đa (VNĐ) : #{job.salaryMax}
-        .mb-3
-            if(job.position)
-                span Vị trí : #{job.position}
-        .mb-3
-           span Trạng thái : #{job.status} 
-           if(job.status=="active")
-                .btn.badge.bg-success Hoạt động
-           else if(job.status=="inactive")
-                .btn.badge.bg-danger Ngừng hoạt động
-        .mb-3
-           span Thumbnail : 
-           if(job.thumbnail)
-                img(src=job.thumbnail alt="" id="img-preview" )
-           else
-                img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
-        .mb-3
-            a.btn.btn-outline-primary.btn-sm(href=`/${prefixAdmin}/job/edit/${job.id}`) Chỉnh sửa
-        .mb-9
-            a.btn.btn-outline-secondary.btn-sm.text-end(href=`/${prefixAdmin}/job/`) Quay lại danh sách
-    script(src="/admin/js/job.js") 
+
+    main.main
+      // Header
+      header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
+        h4.mb-0 Chi tiết công việc
+
+      .card.mb-4
+        .card-body
+          // Tiêu đề
+          if job.title
+            .mb-3
+              strong Tiêu đề công việc:
+              span.ms-2 #{job.title}
+
+          // Danh mục
+          if job.category
+            .mb-3
+              strong Danh mục việc làm: 
+              span.ms-2 #{category.title}
+          // Mô tả
+          if job.description
+            .mb-3
+              strong Mô tả công việc:
+              span.ms-2 !{job.description}
+
+          // Địa điểm
+          if job.location
+            .mb-3
+              strong Địa điểm làm việc:
+              span.ms-2 #{job.location}
+
+          // Kinh nghiệm
+          if job.experience
+            .mb-3
+              strong Kinh nghiệm yêu cầu:
+              span.ms-2 #{job.experience}
+
+          // Thời gian làm việc
+          if job.type
+            .mb-3
+              strong Thời gian làm việc:
+              span.ms-2 #{job.type}
+
+          // Mức lương
+          if job.salaryMin || job.salaryMax
+            .mb-3
+              strong Mức lương:
+              span.ms-2
+                if job.salaryMin && job.salaryMax
+                  | #{job.salaryMin.toLocaleString()} - #{job.salaryMax.toLocaleString()} VNĐ
+                else if job.salaryMin
+                  | Tối thiểu #{job.salaryMin.toLocaleString()} VNĐ
+                else if job.salaryMax
+                  | Tối đa #{job.salaryMax.toLocaleString()} VNĐ
+
+          // Vị trí
+          if job.position
+            .mb-3
+              strong Vị trí:
+              span.ms-2 #{job.position}
+
+          // Trạng thái
+          .mb-3
+            strong Trạng thái:
+            span.ms-2
+              if job.status == "active"
+                span.badge.bg-success Hoạt động
+              else if job.status == "inactive"
+                span.badge.bg-danger Ngừng hoạt động
+              else
+                span.badge.bg-secondary #{job.status}
+
+          // Thumbnail
+          .mb-3
+            strong Thumbnail:
+            .mt-2
+              if job.thumbnail
+                img.rounded.shadow-sm(
+                  src=job.thumbnail
+                  alt=job.title
+                  style="width: 200px; height: auto; object-fit: cover;"
+                  id="img-preview"
+                )
+              else
+                img(
+                  src="/admin/images/no-image.png"
+                  alt="No Image"
+                  style="width: 80px; height: 80px; object-fit: cover;"
+                )
+
+          // Hành động
+          .mt-4.d-flex.gap-2
+            a.btn.btn-outline-primary.btn-sm(href=`/${prefixAdmin}/job/edit/${job.id}`)
+              i.bi.bi-pencil.me-1
+              | Chỉnh sửa
+            a.btn.btn-outline-secondary.btn-sm(href=`/${prefixAdmin}/job/`)
+              i.bi.bi-arrow-left.me-1
+              | Quay lại danh sách
+
+    script(src="/admin/js/job.js")
+  else 
+    h2 Không có quyền truy cập  

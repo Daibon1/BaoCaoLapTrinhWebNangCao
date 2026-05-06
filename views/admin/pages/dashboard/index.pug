@@ -1,20 +1,85 @@
-extends ../../layouts/default.pug 
+extends ../../layouts/default.pug
+
 block main
-  section.row.g-3
+
+  script(src="https://cdn.jsdelivr.net/npm/chart.js")
+
+  h2.mb-4 Dashboard thống kê
+
+  .row.g-4
+
     .col-md-3
       .stat-card
-        h2 #{sumJob}
-        p Tổng công việc
+        h2 #{totalJob}
+        p Tổng Job
+
     .col-md-3
       .stat-card
         h2 #{activeJob}
         p Job đang hiển thị
+
     .col-md-3
       .stat-card
         h2 #{inactiveJob}
         p Job bị ẩn
+
     .col-md-3
       .stat-card
-        h2 8
-        p Ứng viên
+        h2 #{totalAccount}
+        p Tài khoản
 
+    .col-md-3
+      .stat-card.bg-success.text-white
+        h2 #{percentActive}%
+        p Tỉ lệ Job Active
+
+    .col-md-3
+      .stat-card.bg-warning
+        h2 #{newJobWeek}
+        p Job mới 7 ngày
+
+    .col-md-3
+      .stat-card.bg-info.text-white
+        h2 #{totalCategory}
+        p Danh mục
+
+
+  hr.my-5
+
+  .row
+
+    .col-md-6
+      h4 Job theo Category
+      canvas#categoryChart(height="150")
+
+    .col-md-6
+      h4 Job theo Tháng
+      canvas#monthChart(height="150")
+
+
+  script.
+    const categoryData = !{JSON.stringify(jobByCategory)}
+    const monthData = !{JSON.stringify(jobByMonth)}
+
+    new Chart(document.getElementById("categoryChart"), {
+      type: "pie",
+      data: {
+        labels: categoryData.map(i => i._id),
+        datasets: [{
+          data: categoryData.map(i => i.total)
+        }]
+      }
+    });
+
+    new Chart(document.getElementById("monthChart"), {
+      type: "line",
+      data: {
+        labels: monthData.map(i => "Tháng " + i._id),
+        datasets: [{
+          label: "Job đăng",
+          data: monthData.map(i => i.total),
+          fill:true,
+          tension:0.4
+        }]
+      }
+    });

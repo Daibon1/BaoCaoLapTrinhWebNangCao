@@ -1,78 +1,108 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
-block main 
-    main.main
-        +alert-success(3000)
-        +alert-error(3000)
-        // Header
-        header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-        h4.mb-0 Tạo công việc
-        .card.mb-4
-        .card-body
-            form(action=`/${prefixAdmin}/job/create` method="POST" id="form-create-job" enctype="multipart/form-data")
-                .mb-3
-                    label.form-label Tiêu đề công việc
-                    input.form-control(
-                        type="text"
-                        name="title"
-                        required
-                    )
-                .mb-3
-                    label.form-label Mô tả công việc
-                    textarea.form-control(
-                        name="description" 
-                        rows="5" 
-                    )
-                .mb-3
-                    label.form-label Địa điểm làm việc
-                    input.form-control(
-                        type="text" 
-                        name="location"
-                    )
-                .mb-3
-                    label.form-label Kinh nghiệm yêu cầu
-                    input.form-control(
-                        type="text" 
-                        name="experience"
-                    )
-                .mb-3
-                    label.form-label Thời gian làm việc
-                    .flex.align-items-center.gap-3
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="type" value="Full-time" checked)
-                            | Fulltime
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="type" value="Part-time")
-                            | Parttime
-                .mb-3
-                    label.form-label Mức lương tối thiểu (VNĐ)
-                    input.form-control(type="number" name="salaryMin" min="0")
-                .mb-3
-                    label.form-label Mức lương tối đa (VNĐ)
-                    input.form-control(type="number" name="salaryMax" min="0" )
-                .mb-3
-                    label.form-label Vị trí
-                    input.form-control(type="number" name="position" min="0" placeholder="Tự động tăng")
-                .mb-3
-                    label.form-label Thumbnail (Ảnh công việc)
-                    div(id="preview-img")
-                        input.form-control-file(
-                            type="file"
-                            name="thumbnail"
-                            accept="image/*"
-                            id="file-input"
+include ../../mixins/select-tree.pug
+block main
+    if(role.permissions.includes("jobs-create"))
+        main.main
+            +alert-success(3000)
+            +alert-error(3000)
+            // Header
+            header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
+            h4.mb-0 Tạo công việc
+            .card.mb-4
+            .card-body
+                form(action=`/${prefixAdmin}/job/create` method="POST" id="form-create-job" enctype="multipart/form-data")
+                    .mb-3
+                        label.form-label Tiêu đề công việc
+                        input.form-control(
+                            type="text"
+                            name="title"
+                            required
                         )
-                        img(src="", alt="" id="img-preview" )
+                    .mb-3 
+                        label.form-label Danh mục việc làm
+                        select.form-select(name="category")
+                            option(value="") Chọn danh mục
+                            +select-tree(categories)
+                    .mb-3
+                        div(class="form-check form-check-inline")
+                            input(
+                                type="radio"
+                                name="featured"
+                                id="featured-1"
+                                value="1"
+                                class="form-check-input"
+                            )
+                            label(for="featured-1" class="form-check-label") Nổi bật
+                        div(class="form-check form-check-inline")
+                            input(
+                                type="radio"
+                                name="featured"
+                                id="featured-0"
+                                value="0"
+                                class="form-check-input"
+                                checked
+                            )
+                            label(for="featured-0" class="form-check-label") Không nổi bật
+                    .mb-3
+                        label.form-label Mô tả công việc
+                        textarea.form-control(
+                            class="tinymce"
+                            name="description" 
+                            rows="5" 
+                        )
+                    .mb-3
+                        label.form-label Địa điểm làm việc
+                        input.form-control(
+                            type="text" 
+                            name="location"
+                        )
+                    .mb-3
+                        label.form-label Kinh nghiệm yêu cầu
+                        input.form-control(
+                            type="text" 
+                            name="experience"
+                        )
+                    .mb-3
+                        label.form-label Thời gian làm việc
+                        .flex.align-items-center.gap-3
+                            label.form-check-label
+                                input.form-check-input(type="radio" name="type" value="Full-time" checked)
+                                | Fulltime
+                            label.form-check-label
+                                input.form-check-input(type="radio" name="type" value="Part-time")
+                                | Parttime
+                    .mb-3
+                        label.form-label Mức lương tối thiểu (VNĐ)
+                        input.form-control(type="number" name="salaryMin" min="0")
+                    .mb-3
+                        label.form-label Mức lương tối đa (VNĐ)
+                        input.form-control(type="number" name="salaryMax" min="0" )
+                    .mb-3
+                        label.form-label Vị trí
+                        input.form-control(type="number" name="position" min="0" placeholder="Tự động tăng")
+                    .mb-3
+                        label.form-label Thumbnail (Ảnh công việc)
+                        div(id="preview-img")
+                            input.form-control-file(
+                                type="file"
+                                name="thumbnail"
+                                accept="image/*"
+                                id="file-input"
+                            )
+                            img(src="", alt="" id="img-preview" )
 
-                .mb-3
-                    label.form-label Trạng thái
-                    .flex.align-items-center.gap-3
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="status" value="active" checked)
-                            | Hoạt động
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="status" value="Part-time")
-                            | Dừng hoạt động
-                button.btn.btn-primary(type="submit") Tạo mới
+                    .mb-3
+                        label.form-label Trạng thái
+                        .flex.align-items-center.gap-3
+                            label.form-check-label
+                                input.form-check-input(type="radio" name="status" value="active" checked)
+                                | Hoạt động
+                            label.form-check-label
+                                input.form-check-input(type="radio" name="status" value="inactive")
+                                | Dừng hoạt động
+                    button.btn.btn-primary(type="submit") Tạo mới
 
-    script(src="/admin/js/job.js") 
+        script(src="/admin/js/job.js")
+    else 
+        h2 Không có quyền truy cập

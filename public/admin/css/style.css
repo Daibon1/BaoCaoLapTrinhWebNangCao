@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin-top:25px;
   background: #f6f8fb;
   font-family: Inter, Arial, sans-serif;
   padding-top: 15px
@@ -11,33 +11,34 @@ body {
   min-height: 100vh;
 }
 
-/* Sidebar */
 .sidebar {
   width: 200px;
-  background: white;
-  padding: 20px;
-  border-right: 1px solid #eee;
+  min-height: 100vh;
+  background: #ffffff;
 }
 
-.logo {
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.sidebar nav a {
+.sidebar-item {
   display: block;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 10px 10px;
+  color: #333;
   text-decoration: none;
-  color: #555;
-  margin-bottom: 5px;
-  transition: .15s;
+  border-radius: 8px;
+  margin: 4px 10px;
+  transition: all 0.25s ease;
 }
 
-.sidebar nav a.active,
-.sidebar nav a:hover {
-  background: #eaf1ff;
-  color: #2563eb;
+/* hover */
+.sidebar-item:hover {
+  background: #f1f3f5;
+  color: #000;
+}
+
+/* ACTIVE - sáng hàng */
+.sidebar-item.active {
+  background: #0d6efd;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(13,110,253,0.25);
 }
 
 /* Main */
@@ -51,17 +52,6 @@ body {
 .header {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-/* .admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-} */
-
-/* .admin-user {
-  color: #666;
-  font-size: 14px;
-} */
 
 /* Cards */
 .stat-card {
@@ -205,3 +195,199 @@ a.badge.bg-danger:hover {
     margin-bottom: 20px;
     border: 2px solid #0000;
  }
+ /* .................. */
+ .admin-profile {
+  padding: 30px;
+  background: #F8FAFC;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+.profile-card {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 8px 30px rgba(0,0,0,.05);
+}
+
+/* HEADER */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.role {
+  color: #6366F1;
+  font-size: 13px;
+  margin: 3px 0;
+}
+
+.email {
+  font-size: 13px;
+  color: #64748B;
+}
+
+/* BUTTON */
+.edit-btn {
+  margin-left: auto;
+  background: #6366F1;
+  border: none;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #9a97e4;
+}
+
+/* BODY */
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #E2E8F0;
+}
+
+.profile-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-group label {
+  font-size: 12px;
+  color: #94A3B8;
+  margin-bottom: 4px;
+}
+
+.info-group span {
+  font-weight: 500;
+  color: #0F172A;
+}
+
+.status {
+  color: #10B981;
+  font-weight: 600;
+}
+/* .......... */
+.admin-profile-edit {
+  padding: 30px;
+  background: #F8FAFC;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+.edit-card {
+  max-width: 850px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 8px 30px rgba(0,0,0,.05);
+}
+
+.page-title {
+  margin-bottom: 25px;
+  font-size: 22px;
+}
+
+/* AVATAR */
+.avatar-section {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #E2E8F0;
+}
+
+/* FORM */
+.admin-profile-edit .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.admin-profile-edit .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-profile-edit .form-group.full {
+  grid-column: span 2;
+}
+
+.admin-profile-edit .form-group label {
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: #64748B;
+}
+
+.admin-profile-edit .form-group input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  outline: none;
+}
+
+.admin-profile-edit .form-group input:focus {
+  border-color: #6366F1;
+}
+
+/* BUTTONS */
+.actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #E2E8F0;
+  text-decoration: none;
+  color: #334155;
+}
+
+.save-btn {
+  background: #6366F1;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #4F46E5;
+}

@@ -1,10 +1,15 @@
 const express = require('express');
 //Dùng env
+// process.on("unhandledRejection", (reason, promise) => {
+//     console.log("========== ERROR ==========");
+//     console.log(reason);
+// });
+const path = require('path');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
-
+const moment = require('moment');
 const app = express();
 const port = process.env.PORT;
 let database = require("./config/database");
@@ -21,6 +26,8 @@ app.use(session({
 }));
 app.use(flash());
 //end flash
+// tinymce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 // Middleware để xử lý dữ liệu form
 app.use(express.urlencoded({
   extended: true
@@ -30,7 +37,9 @@ app.use(express.json());
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 route(app);
+// Biến toàn cục
 app.locals.prefixAdmin = 'admin';
+app.locals.moment = moment;
 routeAdmin(app);
 routeApi(app);
 //Dùng pug

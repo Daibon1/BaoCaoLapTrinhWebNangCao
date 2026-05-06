@@ -1,0 +1,16 @@
+mixin sort()
+    .card-body.py-2
+        .row.align-items-center
+          .col-auto
+            label.me-2.mb-0 Sắp xếp
+          .col-auto
+            div(sort).d-flex
+              select.form-select.form-select-sm(name="sort" sort-select style="width: auto;")
+                option(value="position-desc") Vị trí ↓
+                option(value="position-asc") Vị trí ↑
+                option(value="salaryMin-desc") Lương ↓
+                option(value="salaryMin-asc") Lương ↑
+                option(value="title-desc") Tiêu đề Z→A
+                option(value="title-asc") Tiêu đề A→Z
+              .col-auto
+                button.btn.btn-sm.btn-outline-danger(sort-clear) Clear

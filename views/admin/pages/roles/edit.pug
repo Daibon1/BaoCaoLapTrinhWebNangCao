@@ -1,0 +1,18 @@
+extends ../../layouts/default.pug 
+include ../../mixins/alert.pug
+block main
+  if(role.permissions.includes("roles-edit"))
+    +alert-success(2000)
+    +alert-error(2000)
+    h2(class="mb-4") Chỉnh sửa nhóm quyền
+    form(action=`/${prefixAdmin}/roles/edit/${record.id}?_method=PATCH` method="post")
+      .form-group
+        label(for="title") Tên nhóm quyền
+        input.form-control(type="text" name="title" id="title"  value=record.title required)
+      .form-group
+        label(for="description") Mô tả nhóm quyền
+        input.form-control(type="text" name="description" id="description" value=record.description)
+      .form-group.mt-3
+        button.btn.btn-primary(type="submit") Cập nhật
+  else
+    h2 Không có quyền truy cập

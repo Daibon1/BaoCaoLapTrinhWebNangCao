@@ -2,15 +2,14 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block main 
     main.main
+    if(role.permissions.includes("accounts-edit"))
         +alert-success(3000)
         +alert-error(3000)
         // Header
-        header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-        h4.mb-0 Chỉnh sửa tài khoản
-        .card.mb-4
+        h2 Tạo tài khoản
         .card-body
             form(action=`/${prefixAdmin}/account/edit/${account.id}?_method=PATCH` method="POST" id="form-edit-account" enctype="multipart/form-data")
-                .mb-3
+                div(class="form-group")
                     label.form-label FullName
                     input.form-control(
                         type="text"
@@ -18,38 +17,51 @@ block main
                         value=account.fullName
                         required
                     )
-                .mb-3
+                div(class="form-group")
                     label.form-label Email
                     input.form-control(
                         type="email"
                         name="email"
                         value=account.email
                     )
-                .mb-3
+                div(class="form-group")
                     label.form-label Password
                     .input-group-custom(style="position: relative;")
                         input#password-input.form-control(
                             type="password"
                             name="password"
+                            autocomplete="new-password"
                         )
                         span#toggle-password(style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;")
                             i.fas.fa-eye#eye-icon
-                .mb-3
+                div(class="form-group")
                     label.form-label Số điện thoại
                     input.form-control(
                         type="text" 
                         name="phone"
                         value=account.phone
                     )
-                .mb-3
-                    label.form-label Trạng thái
-                    .flex.align-items-center.gap-3
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="status" value="active" checked=account.status=="active"?true:false)
-                            | Hoạt động
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="status" value="inactive" checked=account.status=="inactive"?true:false)
-                            | Ngừng hoạt động
+                div(class="form-group form-check form-check-inline")
+                    input(
+                        type="radio"
+                        name="status"
+                        id="status-active"
+                        value="active"
+                        class="form-check-input"
+                        checked=account.status=="active"?true:false
+                    )
+                    label(for="status-active") Hoạt động
+                div(class="form-group form-check form-check-inline")
+                    input(
+                        type="radio"
+                        name="status"
+                        id="status-inactive"
+                        value="inactive"
+                        class="form-check-input"
+                        checked=account.status=="inactive"?true:false
+                    )
+                    label(for="status-inactive") Ngừng hoạt động
+                div(class="form-group")
                     label.form-label Avartar
                     div(id="preview-img")
                         input.form-control-file(
@@ -59,14 +71,14 @@ block main
                             id="file-input"
                         )
                         img(src=account.avatar alt="" id="img-preview" )
-                .mb-3
-                    label.form-label Quyền
-                    .flex.align-items-center.gap-3
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="role_id" value="" checked)
-                            | Quản trị viên
-                        label.form-check-label
-                            input.form-check-input(type="radio" name="role_id" value="")
-                            | Quản lý nội dung
-                button.btn.btn-primary(type="submit") Cập nhật
-    script(src="/admin/js/account.js")
+                div(class="form-group")
+                    label(for="role_id") Phân quyền
+                    select.form-select(name="role_id" id="role_id" class="form-select")
+                        option(value="") Chọn phân quyền
+                        each role in roles
+                            option(value=role.id selected=account.role_id==role.id) #{role.title}
+                div(class="form-group mt-3")
+                    button.btn.btn-primary(type="submit") Cập nhật
+        script(src="/admin/js/account.js")
+    else
+        h2 Không có quyền truy cập

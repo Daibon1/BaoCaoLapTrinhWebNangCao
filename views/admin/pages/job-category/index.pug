@@ -1,0 +1,87 @@
+extends ../../layouts/default.pug 
+include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
+block main
+  if (role.permissions.includes("jobs-category-view"))
+    +alert-success(2000)
+    +alert-error(2000)
+    main.main
+      // Header
+      h1 Danh mục công việc
+      .card.mb-3
+        .card-header 
+          h3.card-title Danh sách
+        .card-body
+          .row 
+            .col-8
+            if(role.permissions.includes("jobs-category-create"))
+              .col-4.text-end
+                a.btn.btn-primary.btn-sm(href=`/${prefixAdmin}/job-category/create`) Thêm danh mục
+          .table-card
+            .table-responsive
+              table(class="table align-middle mb-0" checkbox-multi)
+                thead.table-light.sticky-top
+                  tr
+                    th 
+                      input(type="checkbox" name="checkbox-all")
+                    th STT
+                    th Hình ảnh
+                    th Tiêu đề
+                    th Vị trí
+                    th Trạng thái
+                    th Hành động
+                tbody
+                  each item,index in records
+                    tr
+                      td 
+                        input(type="checkbox" name="id" value=item.id)
+                      td #{(pagination.page-1)*pagination.limitItem+index+1}
+                      td 
+                        if item.thumbnail
+                          img(src=item.thumbnail alt=item.title style="width: 80px; height: 80px; object-fit: contain;")
+                        else
+                          img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
+                      td #{item.title}
+                      td 
+                        input(type="number" min="1" value=item.position style="width: 50px;" name="position")
+                      td
+                        if(item.status=="active")
+                          a.btn(
+                            data-id=item.id
+                            href="javascript:;"
+                            class="badge bg-success"
+                            change-status
+                            data-status=item.status
+                          ) Hoạt động
+                        else
+                          a.btn(
+                            href="javascript:;"
+                            class="badge bg-danger"
+                            change-status
+                            data-id=item.id
+                            data-status=item.status
+                          ) Ngừng hoạt động
+                      td(class="text-end")
+                        .d-flex.flex-column.flex-md-row.gap-1
+                          a(class= "btn btn-outline-secondary btn-sm"
+                          href=`/${prefixAdmin}/job-category/detail/${item.id}`) Chi tiết
+                          if(role.permissions.includes("jobs-category-edit"))
+                            a(class="btn btn-outline-primary btn-sm"
+                              href=`/${prefixAdmin}/job-category/edit/${item.id}`) Sửa
+                          if(role.permissions.includes("jobs-category-delete"))
+                            button(class="btn btn-outline-danger btn-sm"
+                            button-delete
+                            data-id=item.id) Xóa
+          +pagination(pagination)
+      //- _id
+      //- title
+      //- parent_id
+      //- description
+      //- thumbnail
+      //- position 
+      //- status 
+      //- deleted 
+      //- deletedAt 
+      //- createdAt
+      //- updatedAt
+      //- slug

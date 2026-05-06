@@ -5,92 +5,119 @@ include ../../mixins/filter-search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
-block main 
-  +alert-success(2000)
-  +alert-error(2000)
-  main.main
-    // Header
-    header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-      h4.mb-0 Danh sách việc làm
-    
-    // ===== Status button () =====
-    .col-md-12.mb-2
-      .btn-group(role="group")
-        +filter-status(filterStatus)
-    // ===== Form lọc =====
-    +filter-search(keyword, filterLocation)
-    .card.mb-4
-    .card-body
-      +form-change-multi()
-    .table-card
-      .table-responsive
-        table(class="table align-middle mb-0" checkbox-multi)
-          thead.table-light.sticky-top
-            tr
-              th 
-                input(type="checkbox" name="checkbox-all")
-              th STT
-              th Hình ảnh
-              th Công việc
-              th Địa điểm
-              th Lương
-              th Vị trí
-              th Trạng thái
-              th Hành động
-          tbody
-            each item,index in jobs
+include ../../mixins/sort.pug
+include ../../mixins/moment.pug
+block main
+  if(role.permissions.includes("jobs-view"))
+    +alert-success(2000)
+    +alert-error(2000)
+    main.main
+      // Header
+      header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
+        h4.mb-0 Danh sách việc làm
+      // ===== Status button () =====
+      .col-md-12.mb-2
+        .btn-group(role="group")
+          +filter-status(filterStatus)
+      // ===== Form lọc =====
+      +filter-search(keyword, filterLocation)
+      .card-body
+        +form-change-multi()
+      .card.mb-3.bg-light
+        +sort()
+      .table-card
+        .table-responsive
+          table(class="table align-middle mb-0" checkbox-multi)
+            thead.table-light.sticky-top
               tr
-                td 
-                  input(type="checkbox" name="id" value=item.id)
-                td #{(pagination.page-1)*pagination.limitItem+index+1}
-                td 
-                  if item.thumbnail
-                    img(src=item.thumbnail alt=item.title style="width: 80px; height: 80px; object-fit: cover;")
-                  else
-                    img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
-                td #{item.title}
-                td #{item.location}
-                td #{item.salaryMin/1000000} - #{item.salaryMax/1000000} triệu
-                td 
-                  input(type="number" min="1" value=item.position style="width: 50px;" name="position")
-                td
-                  if(item.status=="active")
-                    a.btn(
-                      data-id=item.id
-                      href="javascript:;"
-                      class="badge bg-success"
-                      change-status
-                      data-status=item.status
-                    ) Hoạt động
-                  else
-                    a.btn(
-                      href="javascript:;"
-                      class="badge bg-danger"
-                      change-status
-                      data-id=item.id
-                      data-status=item.status
-                    ) Ngừng hoạt động
-                td(class="text-end")
-                  .d-flex.flex-column.flex-md-row.gap-1
-                    a(class= "btn btn-outline-secondary btn-sm"
-                    href=`/${prefixAdmin}/job/detail/${item.id}`) Chi tiết
-                    a(class="btn btn-outline-primary btn-sm"
-                      href=`/${prefixAdmin}/job/edit/${item.id}`) Sửa
-                    button(class="btn btn-outline-danger btn-sm"
-                    button-delete
-                    data-id=item.id) Xóa
-    // ===== Pagination =====
-    form(action="" 
-      method="POST" 
-      name="form-change-status" 
-      id="form-change-status" 
-      path=`/${prefixAdmin}/job/change-status`
-    )
-    form(action=""
-      method="POST"
-      name="form-delete-item"
-      id="form-delete-item"
-      path=`/${prefixAdmin}/job/delete`
-    )
-    +pagination(pagination)
-    script(src="/admin/js/job.js") 
+                th 
+                  input(type="checkbox" name="checkbox-all")
+                th STT
+                th Hình ảnh
+                th Công việc
+                th Địa điểm
+                th Lương
+                th Vị trí
+                th Người tạo
+                th Người cập nhật
+                th Trạng thái
+                th Hành động
+            tbody
+              each item,index in jobs
+                tr
+                  td 
+                    input(type="checkbox" name="id" value=item.id)
+                  td #{(pagination.page-1)*pagination.limitItem+index+1}
+                  td 
+                    if item.thumbnail
+                      img(src=item.thumbnail alt=item.title style="width: 80px; height: 80px; object-fit: cover;")
+                    else
+                      img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
+                  td #{item.title}
+                  td #{item.location}
+                  td #{item.salaryMin/1000000} - #{item.salaryMax/1000000} triệu
+                  td 
+                    input(type="number" min="1" value=item.position style="width: 50px;" name="position")
+                  td
+                    p #{item.accountFullName}
+                    if(item.createdBy.createAt)
+                      +momentDate(item.createdBy.createAt)
+                  td 
+                    -const updatedBy=item.updatedBy.slice(-1)[0];
+                    if (updatedBy)
+                      p #{updatedBy.accountFullName}
+                      +momentDate(updatedBy.updatedAt)
+                  td
+                    if(role.permissions.includes("jobs-edit"))
+                      if(item.status=="active")
+                        a.btn(
+                          data-id=item.id
+                          href="javascript:;"
+                          class="badge bg-success"
+                          change-status
+                          data-status=item.status
+                        ) Hoạt động
+                      else
+                        a.btn(
+                          href="javascript:;"
+                          class="badge bg-danger"
+                          change-status
+                          data-id=item.id
+                          data-status=item.status
+                        ) Ngừng hoạt động
+                    else 
+                      if(item.status=="active")
+                        a.btn(
+                          class="badge bg-success"
+                        ) Hoạt động 
+                      else
+                        a.btn(
+                          class="badge bg-danger"
+                        ) Ngừng hoạt động
+                  td(class="text-end")
+                    .d-flex.flex-column.flex-md-row.gap-1
+                      a(class= "btn btn-outline-secondary btn-sm"
+                      href=`/${prefixAdmin}/job/detail/${item.id}`) Chi tiết
+                      if(role.permissions.includes("jobs-edit"))
+                        a(class="btn btn-outline-primary btn-sm"
+                          href=`/${prefixAdmin}/job/edit/${item.id}`) Sửa
+                      if(role.permissions.includes("jobs-delete"))
+                        button(class="btn btn-outline-danger btn-sm"
+                        button-delete
+                        data-id=item.id) Xóa
+      // ===== Pagination =====
+      form(action="" 
+        method="POST" 
+        name="form-change-status" 
+        id="form-change-status" 
+        path=`/${prefixAdmin}/job/change-status`
+      )
+      form(action=""
+        method="POST"
+        name="form-delete-item"
+        id="form-delete-item"
+        path=`/${prefixAdmin}/job/delete`
+      )
+      +pagination(pagination)
+    script(src="/admin/js/job.js")
+      

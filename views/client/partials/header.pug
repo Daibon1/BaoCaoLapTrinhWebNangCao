@@ -1,1 +1,32 @@
-header.header header 
+include ../mixins/sub-menu.pug
+mixin header()
+  header.client-header
+    .container-header
+
+      // LEFT
+      .left
+        a.logo(href="/")
+          .logo-icon DDS
+          span.logo-text DDS
+
+        nav.nav
+          ul.nav-list
+            li
+              - const jobsPath="/jobs";
+              a.nav-item(href=jobsPath) Việc làm
+              +sub-menu(layoutProductsCategory,jobsPath)
+
+            li
+              a.nav-item(href="/companies") Công ty
+
+            li
+              a.nav-item(href="/about") Giới thiệu
+
+      // RIGHT
+      .right
+        .search
+          i.fa-solid.fa-magnifying-glass
+          input(type="text" placeholder="Tìm việc, công ty...")
+
+        a.login(href="/login") Đăng nhập
+        a.register(href="/register") Đăng ký

@@ -1,11 +1,21 @@
-header.header.bg-dark.text-white.fixed-top
-    .container-fluid
-        .row.align-items-center
-            .col-3 
-                .inner-logo Admin
-            .col-9.d-flex.justify-content-end
-                div(class="text-end")
-                    a(
-                        href=`/${prefixAdmin}/auth/logout`
-                        class="btn btn-danger btn-sm"
-                    ) Đăng xuất
+header.header.bg-dark.text-white.fixed-top.shadow-sm
+  .container-fluid
+    .row.align-items-center.py-2
+
+      // ===== Logo =====
+      .col-6.col-md-3
+        .inner-logo.fw-bold.fs-5
+          | DDSJob
+
+      // ===== Right Actions =====
+      .col-6.col-md-9.d-flex.justify-content-end
+        .text-end
+          a.btn.btn-primary.btn-sm.px-3(
+            href=`/${prefixAdmin}/my-account`
+          )
+           <i class="fa-regular fa-user"></i>
+          a.btn.btn-danger.btn-sm.px-3(
+            href=`/${prefixAdmin}/auth/logout`
+          )
+            i.fa-solid.fa-right-from-bracket.me-1
+            | Đăng xuất

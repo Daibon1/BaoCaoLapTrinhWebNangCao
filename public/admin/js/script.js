@@ -173,12 +173,46 @@ const togglePassword = document.querySelector('#toggle-password');
 const passwordInput = document.querySelector('#password-input');
 const eyeIcon = document.querySelector('#eye-icon');
 
-togglePassword.addEventListener('click', function () {
-    // Chuyển đổi kiểu input
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    
-    // Thay đổi biểu tượng con mắt
-    eyeIcon.classList.toggle('fa-eye');
-    eyeIcon.classList.toggle('fa-eye-slash');
-});
+if (togglePassword && passwordInput && eyeIcon) {
+    togglePassword.addEventListener('click', function () {
+        // Chuyển đổi kiểu input
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Thay đổi biểu tượng con mắt
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+}
+// sort
+const sort=document.querySelector("[sort]");
+if(sort){
+    let url=new URL(window.location.href);
+    const sortSelect=sort.querySelector("[sort-select]");
+    const sortClear=sort.querySelector("[sort-clear]");
+    sortSelect.addEventListener("change",(e)=>{
+        const value=e.target.value;
+        const [sortKey,sortValue]=value.split("-");
+        console.log(sortKey,sortValue);
+        if (sortKey && sortValue) {
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
+        }
+        window.location.href=url.href;
+    });
+    sortClear.addEventListener("click",(e)=>{
+        url.searchParams.delete("sortKey");
+        url.searchParams.delete("sortValue");
+        window.location.href=url.href;
+    })
+    const sortKey=url.searchParams.get("sortKey");
+    const sortValue=url.searchParams.get("sortValue");
+    if(sortKey && sortValue){
+        const stringSort=`${sortKey}-${sortValue}`;
+        const optionSelected=sortSelect.querySelector(`option[value="${stringSort}"]`);
+        if(optionSelected){
+            optionSelected.selected=true;
+        }
+    }
+}
+// end sort

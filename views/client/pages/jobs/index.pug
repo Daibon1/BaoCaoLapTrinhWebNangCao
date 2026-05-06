@@ -1,26 +1,12 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/job-layout.pug
+include ../../mixins/box-head.pug
 block main
-  //- +alert-success(3000)
+  +alert-success(3000)
   +alert-error(3000)
-  h2.mb-4 Danh sách công việc
-  // Form tìm kiếm
-  form.row.g-2.mb-4(method="GET", action="/jobs")
-    .col-md-5
-      input.form-control(type="text", name="keyword", placeholder="Nhập từ khóa...")
-    .col-md-4
-      select.form-select(name="location")
-        option(value="") -- Chọn địa điểm --
-        option(value="HCM") TP.HCM
-        option(value="HN") Hà Nội
-    .col-md-3
-      button.btn.btn-primary.w-100(type="submit") Tìm kiếm
-
   if jobs && jobs.length
-    .row
-      each job in jobs
-        if job.status === "active" && job.deleted === false
-          .col-md-4.mb-4.d-flex
-            include ../../partials/job-card.pug
+    +boxHead(title)
+    +job-grid(jobs)
   else
     .alert.alert-warning Không có công việc nào.

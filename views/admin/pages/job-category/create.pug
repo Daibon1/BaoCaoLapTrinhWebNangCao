@@ -1,0 +1,58 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+block main
+    if(role.permissions.includes("jobs-category-create"))
+        main.main
+            +alert-success(3000)
+            +alert-error(3000)
+            // Header
+            h2 Tạo danh mục
+            .card.mb-4
+                .card-body
+                    form(action=`/${prefixAdmin}/job-category/create` id="form-create-job-category" method="POST" enctype="multipart/form-data")
+                        .mb-3
+                            label.form-label Tiêu đề danh mục
+                            input.form-control(
+                                type="text"
+                                name="title"
+                                required
+                            )
+                        .mb-3 
+                            label.form-label Danh mục cha 
+                            select.form-select(name="parent_id")
+                                option(value="") -- Chọn danh mục cha --
+                                +select-tree(records,1)
+                        .mb-3
+                            label.form-label Mô tả danh mục
+                            textarea.form-control(
+                                class="tinymce"
+                                name="description" 
+                                rows="5" 
+                            )
+                        .mb-3
+                            label.form-label Vị trí
+                            input.form-control(type="number" name="position" min="0" placeholder="Tự động tăng")
+                        .mb-3
+                            label.form-label Thumbnail (Ảnh danh mục)
+                            div(id="preview-img")
+                                input.form-control-file(
+                                    type="file"
+                                    name="thumbnail"
+                                    accept="image/*"
+                                    id="file-input"
+                                )
+                                img(src="", alt="" id="img-preview" )
+
+                        .mb-3
+                            label.form-label Trạng thái
+                            .flex.align-items-center.gap-3
+                                label.form-check-label
+                                    input.form-check-input(type="radio" name="status" value="active" checked)
+                                    | Hoạt động
+                                label.form-check-label
+                                    input.form-check-input(type="radio" name="status" value="inactive")
+                                    | Dừng hoạt động
+                        button.btn.btn-primary(type="submit") Tạo mới
+    else 
+        h2 Không có quyền truy cập
