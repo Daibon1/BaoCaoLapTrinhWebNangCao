@@ -35,6 +35,9 @@ module.exports.index = async (req, res) => {
         sort.position = "desc"
     }
     // end sort
+    if (res.locals.role.title === "Employer") {
+        find["createdBy.account_id"] = res.locals.user._id;
+    }
     // pagination
     const countJobs = await Job.countDocuments(find);
     let objectPagination = paginationHelper({
@@ -44,6 +47,8 @@ module.exports.index = async (req, res) => {
     }, req.query, countJobs);
     // console.log(req.originalUrl);
     // end pagination
+
+    // console.log(find);
     const jobs = await Job.find(find)
         .sort(sort)
         .limit(objectPagination.limitItem)
@@ -59,11 +64,11 @@ module.exports.index = async (req, res) => {
         }
         //Lấy ra tên người cập nhật gần nhất
         const updatedBy = job.updatedBy.slice(-1)[0];
-        if(updatedBy){
+        if (updatedBy) {
             const userUpdatedBy = await Account.findOne({
                 _id: updatedBy.account_id
             });
-            if(userUpdatedBy){
+            if (userUpdatedBy) {
                 updatedBy.accountFullName = userUpdatedBy.fullName;
             }
         }
@@ -100,7 +105,7 @@ module.exports.changeStatus = async (req, res) => {
         await Job.updateOne({
             _id: id
         }, {
-            $set:{
+            $set: {
                 status: status
             },
             $push: {
@@ -225,6 +230,7 @@ module.exports.deleteItem = async (req, res) => {
 }
 //[GET] /admin/job/create
 module.exports.create = async (req, res) => {
+    if(res.locals.role.permissions.includes("jobs-create")&&res.locals.user.company_id){
     const categories = await JobCategory.find({
         deleted: false
     });
@@ -232,10 +238,35 @@ module.exports.create = async (req, res) => {
     res.render("admin/pages/job/create", {
         title: "Trang tạo công việc",
         categories: newCategories
-    })
+    })}
+    else{
+        req.flash('error', 'Bạn không có quyền truy cập || Vui lòng tạo công ty trước khi tạo công việc');
+        res.redirect(`/admin/job`);
+    }
 }
 //[POST] /admin/job/create
 module.exports.createPost = async (req, res) => {
+    const skills = req.body.skill
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+    if (skills.length > 5) {
+        req.flash('error', 'Chỉ được tối đa 5 kỹ năng');
+        return res.redirect(`${systemConfig.prefixAdmin}/job/create`);
+    }
+
+    for (let skill of skills) {
+        if (skill.length > 20) {
+            req.flash('error', 'Mỗi kỹ năng tối đa 20 ký tự');
+            return res.redirect(`${systemConfig.prefixAdmin}/job/create`);
+        }
+    }
+    if (skills.length > 0) {
+        req.body.skill = skills;
+    } else {
+        req.body.skill = [];
+    }
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
     if (!req.body.position) {
@@ -248,6 +279,7 @@ module.exports.createPost = async (req, res) => {
         account_id: res.locals.user._id
     }
     const newJob = new Job(req.body);
+    console.log(req.file);
     try {
         await newJob.save();
         req.flash('success', 'Tạo công việc thành công!');
@@ -287,6 +319,28 @@ module.exports.edit = async (req, res) => {
 //[PATCH] /admin/job/edit/:id
 module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
+    const skills = req.body.skill
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+    if (skills.length > 5) {
+        req.flash('error', 'Chỉ được tối đa 5 kỹ năng');
+        return res.redirect(`${systemConfig.prefixAdmin}/job/edit/${id}`);
+    }
+
+    for (let skill of skills) {
+        if (skill.length > 20) {
+            req.flash('error', 'Mỗi kỹ năng tối đa 20 ký tự');
+            return res.redirect(`${systemConfig.prefixAdmin}/job/edit/${id}`);
+        }
+    }
+    if (skills.length > 0) {
+        req.body.skill = skills;
+    } else {
+        req.body.skill = [];
+    }
+    req.body.skill = skills;
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
     // if (req.file) {

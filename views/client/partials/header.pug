@@ -6,7 +6,9 @@ mixin header()
       // LEFT
       .left
         a.logo(href="/")
-          .logo-icon DDS
+          .logo-icon
+
+            img(src="/images/default-job.png" alt="Logo" style="width: 40px; height: 40px;")
           span.logo-text DDS
 
         nav.nav
@@ -21,12 +23,27 @@ mixin header()
 
             li
               a.nav-item(href="/about") Giới thiệu
+            li
+              a.nav-item(href="/applications") Đã ứng tuyển
 
       // RIGHT
       .right
-        .search
-          i.fa-solid.fa-magnifying-glass
-          input(type="text" placeholder="Tìm việc, công ty...")
-
-        a.login(href="/login") Đăng nhập
-        a.register(href="/register") Đăng ký
+        form(action="/search" method="GET")
+          .search
+            input(name="keyword" type="text" placeholder="Tìm việc, công ty..." value=keyword)
+            button(type="submit" class="btn")
+              i.fa-solid.fa-magnifying-glass
+        if(user)
+          a(href="/user/info")
+            if(user.avatar)
+              img.avatar-profile(src=user.avatar alt="Avatar")
+            else
+              img.avatar-profile(src="/images/default-avatar.png" alt="Avatar")
+          a.logout(href="/user/logout") Đăng xuất
+        else
+            a.login(href="/user/login") Đăng nhập
+            a.register(href="/user/register") Đăng ký
+        .save-job-header
+          a(href="/saved-jobs")
+            span Đã lưu(#{miniSavedJobs.totalSavedJobs})
+            i.fa-solid.fa-heart

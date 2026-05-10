@@ -1,0 +1,48 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet", href="/css/application.css")
+    .apply-page
+        .apply-container
+
+            // ===== JOB INFO =====
+            .apply-job-card
+                .job-left
+                    img.job-logo(
+                        src=job.thumbnail || "/images/default-company.png"
+                        alt="company logo"
+                    )
+
+                .job-right
+                    h2.job-title= job.title
+                    p.job-company 
+                    p.job-meta
+                        span 📍 #{job.location}
+                        span 💰 #{job.salaryMin/1000000} - #{job.salaryMax/1000000} triệu
+
+            // ===== APPLY FORM =====
+            form.apply-form(
+                method="POST"
+                action=`/applications/add/${job._id}`
+                enctype="multipart/form-data"
+            )
+
+                .form-group
+                    label CV của bạn (PDF)
+                    input(
+                        type="file"
+                        name="cvUrl"
+                        accept=".pdf"
+                        required
+                    )
+
+                .form-group
+                    label Thư xin việc
+                    textarea(
+                        name="coverLetter"
+                        rows="6"
+                        placeholder="Viết vài dòng giới thiệu bản thân..."
+                    )
+
+                button.apply-btn(type="submit")
+                    | Ứng tuyển ngay

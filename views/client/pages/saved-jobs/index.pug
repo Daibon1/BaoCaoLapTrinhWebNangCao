@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    link(rel="stylesheet", href="/css/job.css")
+    +alert-success(3000)
+    +alert-error(3000)
+    .saved-job-list
+        each job in savedJobs
+            .saved-job-item
+                .left
+                    a(href=`/jobs/detail/${job.slug}`)
+                        img(src=job.thumbnail alt=job.title width="80" height="80" style="border-radius: 8px; object-fit: contain;")
+
+                .center
+                    h3= job.title
+                    .company= job.companyName
+                    .location= job.location
+                    .salary= `${(job.salaryMin/1000000).toLocaleString()} - ${(job.salaryMax/1000000).toLocaleString()} triệu`
+                    .type-job= job.type 
+
+                .right
+                    a.apply-btn(href=`/jobs/detail/${job.slug}`)
+                        | Apply now
+
+                    a.btn.btn-sm.btn-outline-danger(
+                        href=`/save-job/delete/${job._id}`
+                    )="Xóa"

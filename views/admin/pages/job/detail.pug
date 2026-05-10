@@ -30,7 +30,10 @@ block main
             .mb-3
               strong Mô tả công việc:
               span.ms-2 !{job.description}
-
+          if job.skill.length > 0
+            .mb-3
+              strong Skill:
+              span.ms-2 #{job.skill.join(", ")}
           // Địa điểm
           if job.location
             .mb-3

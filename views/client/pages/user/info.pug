@@ -1,0 +1,34 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    +alert-success(2000)
+    +alert-error(2000)
+    link(rel="stylesheet", href="/css/user-info.css")
+    .profile-container
+        .profile-card
+            .profile-header
+                if user.avatar
+                    img.profile-avatar(src=user.avatar alt="Avatar")
+                else
+                    img.profile-avatar(src="/images/default-avatar.png")
+
+                h2.profile-name= user.fullName
+                p.profile-email= user.email
+
+            .profile-info
+                .info-item
+                    span.label Số điện thoại:
+                    span.value= user.phone || "Chưa cập nhật"
+
+                .info-item
+                    span.label Trạng thái:
+                    span.value.status= user.status
+
+                if user.cvFile
+                    .info-item
+                        span.label CV:
+                        a.cv-link(href=user.cvFile target="_blank") Xem CV
+
+            .profile-actions
+                a.btn-edit(href="/user/edit") Chỉnh sửa hồ sơ
+                a.btn-logout(href="/user/logout") Đăng xuất

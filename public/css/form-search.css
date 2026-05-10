@@ -1,0 +1,109 @@
+.jobpro-page{
+  max-width:1400px;
+  margin: auto;
+  padding:10px;
+  font-family:system-ui;
+  background:#f6f8fc;
+}
+
+/* SEARCH */
+.jobpro-page .jobpro-search{
+  display:flex;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.jobpro-page .jobpro-search input{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:15px;
+}
+
+.jobpro-page .jobpro-search button{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:14px 24px;
+  border-radius:12px;
+  font-weight:600;
+}
+
+/* LAYOUT */
+.jobpro-page .jobpro-wrapper{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:25px;
+}
+
+/* SIDEBAR */
+.jobpro-page .jobpro-filter{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 5px 14px rgba(0,0,0,.06);
+  height:max-content;
+}
+
+.jobpro-page .jobpro-filter label{
+  margin-top:15px;
+  display:block;
+  font-weight:600;
+}
+
+.jobpro-page .jobpro-filter select,
+.jobpro-page .jobpro-filter button{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  border-radius:8px;
+}
+
+.jobpro-page .jobpro-filter button{
+  margin-top:15px;
+  background:#2563eb;
+  color:#fff;
+  border:none;
+}
+/* ================= MOBILE ================= */
+@media (max-width:600px){
+
+  .jobpro-page{
+    padding:15px;
+  }
+
+  /* đổi layout từ 2 cột -> 1 cột */
+  .jobpro-page .jobpro-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  /* filter lên trên */
+  .jobpro-page .jobpro-filter{
+    order:-1;
+    width:100%;
+  }
+
+  /* search xuống dòng đẹp hơn */
+  .jobpro-page .jobpro-search{
+    flex-direction:column;
+  }
+
+  .jobpro-page .jobpro-search button{
+    width:100%;
+  }
+
+}
+/* ================= TABLET ================= */
+/* ================= TABLET ================= */
+@media (max-width:1199px){
+
+  .jobpro-page .jobpro-wrapper{
+    grid-template-columns:200px 1fr;
+  }
+
+  .jobpro-page .jobpro-page{
+    padding:20px;
+  }
+
+}

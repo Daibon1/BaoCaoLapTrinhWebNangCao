@@ -15,5 +15,4 @@ if(showAlert){
     // console.log(showAlert);
     }
 }
-
 // end show alert

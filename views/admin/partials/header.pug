@@ -10,6 +10,18 @@ header.header.bg-dark.text-white.fixed-top.shadow-sm
       // ===== Right Actions =====
       .col-6.col-md-9.d-flex.justify-content-end
         .text-end
+          if(user.company_id)
+            a.btn.btn-primary.btn-sm.px-3(
+              href=`/${prefixAdmin}/company`
+            )
+              <i class="fa-regular fa-building"></i>
+              | #{user.company_id.name}
+          else
+            a.btn.btn-primary.btn-sm.px-3(
+              href=`/${prefixAdmin}/company/create`
+            )
+              <i class="fa-regular fa-building"></i>
+              | Tạo công ty
           a.btn.btn-primary.btn-sm.px-3(
             href=`/${prefixAdmin}/my-account`
           )

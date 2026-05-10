@@ -20,3 +20,94 @@
     font-weight: 600;
     text-decoration: none;
 }
+.btn-savedjob {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+/*  */
+.saved-job-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    background:#fff;
+    border-radius:10px;
+
+    padding:20px;
+    margin-bottom:16px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.saved-job-item .left img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    border:1px solid #eee;
+    border-radius:8px;
+}
+
+.saved-job-item .center{
+    flex:1;
+    padding:0 24px;
+}
+
+.saved-job-item .center h3{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.saved-job-item .company{
+    color:#555;
+    margin-bottom:6px;
+}
+
+.saved-job-item .location{
+    color:#eb1a1a;
+}
+.saved-job-item .salary{
+    color:#777;
+}
+.saved-job-item .type{
+    color:#777;
+}
+.saved-job-item .right{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.apply-btn{
+    padding:12px 26px;
+    border:1px solid #ff4d4f;
+    border-radius:8px;
+
+    color:#ff4d4f;
+    text-decoration:none;
+    font-weight:600;
+
+    transition:0.2s;
+}
+
+.apply-btn:hover{
+    background:#ff4d4f;
+    color:#fff;
+}
+
+.save-btn-1{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+    background:#fff0f0;
+
+    color:#ff4d4f;
+    font-size:22px;
+
+    text-decoration:none;
+}

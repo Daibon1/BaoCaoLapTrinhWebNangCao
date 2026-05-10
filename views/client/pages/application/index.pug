@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+block main
+    link(rel="stylesheet", href="/css/application.css")
+    .applied
+        .applied__container
+
+            h2.applied__title Công việc đã ứng tuyển
+
+            if applications.length === 0
+                .applied__empty
+                    p Bạn chưa ứng tuyển công việc nào
+            else
+                each app in applications
+                    .applied__job
+
+                        // LOGO COMPANY
+                        .applied__logo
+                            img(src=app.jobId.thumbnail || "/images/company.png")
+
+                        // INFO JOB
+                        .applied__info
+                            a.applied__jobTitle(
+                                href=`/jobs/${app.jobId._id}`
+                            )= app.jobId.title
+
+                            p.applied__company="DDS"
+                            //- app.jobId.companyName
+                            .applied__meta
+                                span.applied__salary 💰 #{app.jobId.salaryMin/1000000}/#{app.jobId.salaryMax/1000000}
+                                span.applied__location 📍 #{app.jobId.location}
+
+                        // STATUS
+                        .applied__right
+                            span(class=`applied__status applied__status--${app.status}`)
+                                = app.status
+
+                            a.applied__view(
+                                href=`/jobs/${app.jobId._id}`
+                            ) Xem chi tiết

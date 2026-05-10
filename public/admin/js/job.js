@@ -30,3 +30,47 @@ if (buttonDelete.length > 0) {
     })
 }
 // end delete
+// input skill
+const skillInput = document.getElementById("skillInput");
+const errorBox = document.getElementById("skillError");
+
+const MAX_SKILLS = 5;
+const MAX_LENGTH = 20;
+
+skillInput.addEventListener("input", () => {
+
+  let skills = skillInput.value
+    .split(",")
+    .map(s => s.trim())
+    .filter(s => s !== "");
+
+  //quá số lượng
+  if (skills.length > MAX_SKILLS) {
+    errorBox.textContent = "Chỉ được tối đa 5 kỹ năng";
+    skillInput.classList.add("is-invalid");
+    return;
+  }
+
+  //  skill quá dài
+  for (let skill of skills) {
+    if (skill.length > MAX_LENGTH) {
+      errorBox.textContent = "Mỗi kỹ năng tối đa 20 ký tự";
+      skillInput.classList.add("is-invalid");
+      return;
+    }
+  }
+
+  // ký tự lạ
+  const regex = /^[a-zA-Z0-9+#.\-\s]+$/;
+  for (let skill of skills) {
+    if (!regex.test(skill)) {
+      errorBox.textContent = "Skill chứa ký tự không hợp lệ";
+      skillInput.classList.add("is-invalid");
+      return;
+    }
+  }
+
+  //  hợp lệ
+  errorBox.textContent = "";
+  skillInput.classList.remove("is-invalid");
+});

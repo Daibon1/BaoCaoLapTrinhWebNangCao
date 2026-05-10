@@ -1,0 +1,59 @@
+include ../mixins/job-item.pug
+include ../mixins/job-layout.pug
+include ../mixins/pagination.pug
+mixin form-search(keyword,jobs, filterLocation, filterType)
+    link(rel="stylesheet", href="/css/form-search.css")
+    .jobpro-page
+
+        // ===== SEARCH =====
+        form.jobpro-search(method="GET" id="form-search-jobs")
+            input(
+                type="text"
+                name="keyword"
+                placeholder="Tìm việc IT, Marketing, Designer..."
+                value=keyword
+            )
+            button(type="submit") Tìm kiếm
+
+        .jobpro-wrapper
+
+            // ===== SIDEBAR FILTER =====
+            .jobpro-filter
+                h3 Bộ lọc
+
+                form(method="GET" id="form-filter-jobs")
+
+                    label Địa điểm
+                    select(name="location")
+                        each item in filterLocation
+                            option(value=item.name selected=item.selected ? true : false) #{item.name?item.name:"--Địa Điểm--"}
+
+                    label Hình thức
+                    select(name="type")
+                        each item in filterType
+                            option(value=item.name selected=item.selected ? true : false) #{item.name?item.name:"--Hình thức--"}
+
+                    button(type="submit") Lọc
+                    button(type="reset") Xóa lọc
+
+            // ===== CONTENT =====
+            .jobpro-content
+
+                .jobpro-sort
+                    div(sort).d-flex
+                        select(name="sort" sort-select style="width: auto;")
+                            option(value="") Sắp xếp
+                            option(value="position-desc") Mới nhất
+                            option(value="salaryMin-desc") Lương cao
+                            option(value="title-desc") Tiêu đề Z→A
+                            option(value="title-asc") Tiêu đề A→Z
+                        .col-auto   
+                            button(sort-clear) Clear
+
+                // ===== GRID JOB =====
+                if(jobs.length > 0)
+                    +job-grid(jobs)
+                    +pagination(pagination)
+                else
+                    .alert.alert-warning Không có công việc nào.
+                

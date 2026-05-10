@@ -36,19 +36,18 @@ app.use(express.json());
 //ghi đè method của form
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
-route(app);
 // Biến toàn cục
 app.locals.prefixAdmin = 'admin';
 app.locals.moment = moment;
-routeAdmin(app);
-routeApi(app);
 //Dùng pug
 app.set('view engine', 'pug');
 app.set('views', `${__dirname}/views`);
 //Dùng file tĩnh
 // console.log(__dirname);
 app.use(express.static(`${__dirname}/public`));
-
+route(app);
+routeAdmin(app);
+routeApi(app);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 })

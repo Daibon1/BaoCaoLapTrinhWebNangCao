@@ -2,7 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-    script(src="/client/css/job.css") 
+    link(rel="stylesheet", href="/css/job.css")
     +alert-success(3000)
     +alert-error(3000)
     main.job-detail
@@ -45,20 +45,23 @@ block main
                             hr
 
                             .d-flex.gap-2
-                                form(
-                                    action=`/jobs/applications/add/${job._id}`
-                                    method="POST"
-                                )
+            
+                                a(href=`/applications/add/${job._id}`)
                                     button.btn.btn-success(type="submit")
                                         i.fa-solid.fa-paper-plane.me-2
                                         | Ứng tuyển ngay
                                 form(
-                                    action=`/jobs/saved_jobs/add/${job._id}`
+                                    action=`/saved-jobs/add/${job._id}`
                                     method="POST"
                                 )
-                                    button.btn.btn-outline-danger(type="submit")
-                                        i.fa-regular.fa-heart.me-2
-                                        | Lưu việc
+                                    if  (job.savedJob)
+                                        button.btn.btn-savedjob(type="submit")
+                                            i.fa-solid.fa-heart.me-2
+                                            | Đã lưu
+                                    else
+                                        button.btn.btn-savedjob(type="submit")
+                                            i.fa-regular.fa-heart.me-2  
+                                            | Lưu việc
 
                     // ===== JOB DESCRIPTION =====
                     .card.mb-4

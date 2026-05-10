@@ -1,7 +1,10 @@
 extends ../../layouts/default.pug
 include ../../mixins/job-layout.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 block main
+    +alert-success(2000)
+    +alert-error(2000)
     +boxHead("Công việc nổi bật")
     +job-grid(jobsFeatured)
     +boxHead("Công việc mới nhất")

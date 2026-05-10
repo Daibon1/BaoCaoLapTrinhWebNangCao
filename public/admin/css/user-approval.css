@@ -1,0 +1,196 @@
+/* ===== PAGE ===== */
+.admin-app {
+    padding: 30px;
+}
+
+.admin-app__title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* ===== TABLE ===== */
+.admin-app__table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-app__table th {
+    background: #f3f6fb;
+    text-align: left;
+    padding: 14px;
+}
+
+.admin-app__table td {
+    padding: 14px;
+    border-top: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* ===== CANDIDATE ===== */
+.admin-app__candidate {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-app__candidate img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ===== COVER LETTER ===== */
+.admin-app__cover {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.admin-app__cover .cover-short {
+    cursor: pointer;
+    color: #0d6efd;
+}
+/* ===== STATUS ===== */
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+
+.status--pending {
+    background: #fff3cd;
+}
+
+.status--reviewing {
+    background: #d1ecf1;
+}
+
+.status--interview {
+    background: #e2f0d9;
+}
+
+.status--accepted {
+    background: #d4edda;
+}
+
+.status--rejected {
+    background: #f8d7da;
+}
+
+/* ===== BUTTON ===== */
+.btn-cv {
+    background: #0d6efd;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+/* ===== ACTION ===== */
+.admin-app__action select {
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.admin-app__action button {
+    background: #198754;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+/* ===== MODAL COVER LETTER ===== */
+/* CLICK TEXT */
+.cover-preview {
+    color: #0d6efd;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* ===== MODAL ===== */
+.div-cover-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.div-cover-modal.active {
+    display: flex;
+}
+
+.div-cover-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+}
+
+/* BOX */
+.div-cover-modal__content {
+    position: relative;
+    background: white;
+    width: 600px;
+    max-height: 70vh;
+    padding: 25px;
+    border-radius: 12px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: popup .25s ease;
+}
+
+@keyframes popup {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.div-cover-modal__close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 22px;
+    cursor: pointer;
+}
+/* status */
+.status {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: white;
+}
+
+/* từng trạng thái */
+
+.status--pending {
+    background: #f39c12;
+}
+
+.status--reviewing {
+    background: #3498db;
+}
+
+.status--interview {
+    background: #9b59b6;
+}
+
+.status--accepted {
+    background: #27ae60;
+}
+
+.status--rejected {
+    background: #e74c3c;
+}

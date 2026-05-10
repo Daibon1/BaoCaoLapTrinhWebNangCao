@@ -108,52 +108,50 @@ if (checkboxMulti) {
 }
 // end checkbox multi
 // form change multi
-const formChangeMulti=document.querySelector("[form-change-multi]");
+const formChangeMulti = document.querySelector("[form-change-multi]");
 // console.log(formChangeMulti);
-if(formChangeMulti){
-    formChangeMulti.addEventListener("submit",(e)=>{
+if (formChangeMulti) {
+    formChangeMulti.addEventListener("submit", (e) => {
         e.preventDefault();
-        const checkboxMulti=document.querySelector("[checkbox-multi]");
-        const inputChecked=checkboxMulti.querySelectorAll("input[name='id']:checked");
-        const typeChange=formChangeMulti.querySelector("select[name='type']").value;
-        if(typeChange=="delete-all"){
-            const isConfirm=confirm("Bạn có chắc chắn muốn xóa tất cả mục đã chọn không?");
-            if(!isConfirm){
+        const checkboxMulti = document.querySelector("[checkbox-multi]");
+        const inputChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+        const typeChange = formChangeMulti.querySelector("select[name='type']").value;
+        if (typeChange == "delete-all") {
+            const isConfirm = confirm("Bạn có chắc chắn muốn xóa tất cả mục đã chọn không?");
+            if (!isConfirm) {
                 return;
             }
         }
-        if(inputChecked.length>0){
-            let ids=[];
-            inputChecked.forEach(item=>{
-                if(typeChange=="change-position"){
-                    const position=item.closest("tr").querySelector("input[name='position']").value;
+        if (inputChecked.length > 0) {
+            let ids = [];
+            inputChecked.forEach(item => {
+                if (typeChange == "change-position") {
+                    const position = item.closest("tr").querySelector("input[name='position']").value;
                     ids.push(`${item.value}-${position}`);
-                }
-                else ids.push(item.value);
+                } else ids.push(item.value);
             })
             // console.log(ids);
-            e.target.elements.ids.value=ids.join(", ");
+            e.target.elements.ids.value = ids.join(", ");
             formChangeMulti.submit();
-        }
-        else {
+        } else {
             alert("Vui lòng chọn ít nhất một mục để thực hiện hành động.");
         }
     })
 }
 // end form change multi
 // show alert
-const showAlert=document.querySelector("[show-alert]");
-if(showAlert){
-    const time=parseInt(showAlert.getAttribute("data-time"));
-    const closeAlert=showAlert.querySelector("[close-alert]");
-    setTimeout(()=>{
+const showAlert = document.querySelector("[show-alert]");
+if (showAlert) {
+    const time = parseInt(showAlert.getAttribute("data-time"));
+    const closeAlert = showAlert.querySelector("[close-alert]");
+    setTimeout(() => {
         showAlert.classList.add("alert-hiden");
     }, time);
-    if(closeAlert){
-        closeAlert.addEventListener("click",()=>{
+    if (closeAlert) {
+        closeAlert.addEventListener("click", () => {
             showAlert.classList.add("alert-hiden");
         })
-    // console.log(showAlert);
+        // console.log(showAlert);
     }
 }
 // end show alert
@@ -162,9 +160,9 @@ const preview = document.querySelector("#preview-img");
 if (preview) {
     const inputFile = preview.querySelector("#file-input");
     const imgPreview = preview.querySelector("#img-preview");
-    inputFile.addEventListener("change",(e)=>{
+    inputFile.addEventListener("change", (e) => {
         const src = URL.createObjectURL(e.target.files[0]);
-        imgPreview.src=src;
+        imgPreview.src = src;
     })
 }
 // end preview
@@ -178,41 +176,57 @@ if (togglePassword && passwordInput && eyeIcon) {
         // Chuyển đổi kiểu input
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        
+
         // Thay đổi biểu tượng con mắt
         eyeIcon.classList.toggle('fa-eye');
         eyeIcon.classList.toggle('fa-eye-slash');
     });
 }
 // sort
-const sort=document.querySelector("[sort]");
-if(sort){
-    let url=new URL(window.location.href);
-    const sortSelect=sort.querySelector("[sort-select]");
-    const sortClear=sort.querySelector("[sort-clear]");
-    sortSelect.addEventListener("change",(e)=>{
-        const value=e.target.value;
-        const [sortKey,sortValue]=value.split("-");
-        console.log(sortKey,sortValue);
+const sort = document.querySelector("[sort]");
+if (sort) {
+    let url = new URL(window.location.href);
+    const sortSelect = sort.querySelector("[sort-select]");
+    const sortClear = sort.querySelector("[sort-clear]");
+    sortSelect.addEventListener("change", (e) => {
+        const value = e.target.value;
+        const [sortKey, sortValue] = value.split("-");
+        console.log(sortKey, sortValue);
         if (sortKey && sortValue) {
             url.searchParams.set("sortKey", sortKey);
             url.searchParams.set("sortValue", sortValue);
         }
-        window.location.href=url.href;
+        window.location.href = url.href;
     });
-    sortClear.addEventListener("click",(e)=>{
+    sortClear.addEventListener("click", (e) => {
         url.searchParams.delete("sortKey");
         url.searchParams.delete("sortValue");
-        window.location.href=url.href;
+        window.location.href = url.href;
     })
-    const sortKey=url.searchParams.get("sortKey");
-    const sortValue=url.searchParams.get("sortValue");
-    if(sortKey && sortValue){
-        const stringSort=`${sortKey}-${sortValue}`;
-        const optionSelected=sortSelect.querySelector(`option[value="${stringSort}"]`);
-        if(optionSelected){
-            optionSelected.selected=true;
+    const sortKey = url.searchParams.get("sortKey");
+    const sortValue = url.searchParams.get("sortValue");
+    if (sortKey && sortValue) {
+        const stringSort = `${sortKey}-${sortValue}`;
+        const optionSelected = sortSelect.querySelector(`option[value="${stringSort}"]`);
+        if (optionSelected) {
+            optionSelected.selected = true;
         }
     }
 }
+
 // end sort
+const modal = document.querySelector(".div-cover-modal");
+const modalText = document.querySelector(".div-cover-modal__text");
+const overlay = document.querySelector(".div-cover-modal__overlay");
+const closeBtn = document.querySelector(".div-cover-modal__close");
+
+document.querySelectorAll(".cover-preview").forEach(el => {
+    el.onclick = () => {
+        modal.classList.add("active");
+        modalText.textContent = el.dataset.text;
+    };
+});
+
+overlay.onclick = closeBtn.onclick = () => {
+    modal.classList.remove("active");
+};

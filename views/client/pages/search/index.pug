@@ -1,0 +1,9 @@
+extends ../../layouts/default.pug
+include ../../mixins/job-layout.pug
+include ../../mixins/box-head.pug
+block main
+    +boxHead("Kết quả tìm kiếm")
+    if jobs && jobs.length
+        +job-grid(jobs)
+    else
+        .alert.alert-warning Không tìm thấy kết quả nào.

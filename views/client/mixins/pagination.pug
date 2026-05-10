@@ -1,0 +1,17 @@
+mixin pagination(pagination)
+    ul.pagination
+        button.btn-pagination(class="page-link" value=`${1}`) Trang đầu
+        li.page-item
+            if (pagination.page>1)
+                button.btn-pagination(class="page-link" value=`${pagination.page-1}`) <<
+            - for(let i=pagination.page;i<=pagination.page+2;i++)
+                if (i<=pagination.totalPage)
+                    li.page-item
+                        if (pagination.page==i)
+                            button.btn-pagination(class="page-link active" value=`${i}`) #{i}
+                        else 
+                            button.btn-pagination(class="page-link" value=`${i}`) #{i}
+        li.page-item
+            if (pagination.page<pagination.totalPage) 
+                button.btn-pagination(class="page-link" value=`${pagination.page+1}`) >>
+        button.btn-pagination(class="page-link" value=`${pagination.totalPage}`) Trang cuối

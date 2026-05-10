@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet", href="/admin/css/user-approval.css")
+    .admin-app
+        h2.admin-app__title Quản lý ứng viên tuyển dụng
+
+        table.admin-app__table
+            thead
+                tr
+                    th Ứng viên
+                    th Job
+                    th CV
+                    th Cover Letter
+                    th Trạng thái
+                    th Ngày apply
+                    th Hành động
+
+            tbody
+                each app in applications
+                    tr
+
+                        td.admin-app__candidate
+                            img(src=app.userId.avatar)
+                            div
+                                strong= app.userId.fullName
+                                p= app.userId.email
+
+                        td
+                            a(
+                                href=`/admin/jobs/detail/${app.jobId._id}`
+                            )= app.jobId.title
+
+                        td
+                            if app.cvUrl
+                                a.btn-cv(
+                                    href=app.cvUrl
+                                    target="_blank"
+                                ) Xem CV
+                            else
+                                span Không có
+
+                        td.admin-app__cover
+                            if app.coverLetter
+                                span.cover-preview(data-text=app.coverLetter)=app.coverLetter.substring(0,15) + "..."
+                            else
+                                | Không có
+
+                        td
+                            span(class=`status status--${app.status}`)
+                                = app.status
+
+                        td= app.createdAt.toLocaleDateString()
+
+                        td.admin-app__action
+                            form(method="POST", action=`/admin/user-approval/change-status/${app._id}?_method=PATCH` class="form-status-application")
+                                select(name="status")
+                                    option(value="pending" class="status--pending" selected=app.status=="pending") Pending
+                                    option(value="reviewing" class="status--reviewing" selected=app.status=="reviewing") Reviewing
+                                    option(value="interview" class="status--interview" selected=app.status=="interview") Interview
+                                    option(value="accepted" class="status--accepted" selected=app.status=="accepted") Accepted
+                                    option(value="rejected" class="status--rejected" selected=app.status=="rejected") Rejected
+                                button(type="submit" class="btn-change-status") Cập nhật
+                        // ===== MODAL COVER LETTER =====
+    .div-cover-modal
+        .div-cover-modal__overlay
+        .div-cover-modal__content
+            span.div-cover-modal__close x
+            h3 Cover Letter
+            p.div-cover-modal__text
+    script(src="/admin/js/user-approval.js") 

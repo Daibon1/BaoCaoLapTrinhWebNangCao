@@ -52,6 +52,16 @@ block main
                             rows="5" 
                         )
                     .mb-3
+                        label.form-label Skill (Nhập cách nhau bằng dấu phẩy)
+                        input.form-control(
+                            type="text"
+                            name="skill"
+                            id="skillInput"
+                            placeholder="VD: NodeJS, MongoDB, React"
+                        )
+                        small.text-muted Tối đa 5 kỹ năng
+                        .invalid-feedback(id="skillError")
+                    .mb-3
                         label.form-label Địa điểm làm việc
                         input.form-control(
                             type="text" 

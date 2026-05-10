@@ -8,6 +8,10 @@ const jobSchema = new mongoose.Schema({
     category: String,
     thumbnail: String,
     salaryMin: Number,
+    skill: {
+        type: [String],
+        default: []
+    },
     salaryMax: Number,
     featured: String,
     type: String,
@@ -18,28 +22,26 @@ const jobSchema = new mongoose.Schema({
         slug: "title",
         unique: true
     },
-    createdBy:{
-        account_id:String,
-        createAt:{
-            type:Date,
-            default:Date.now
+    createdBy: {
+        account_id: String,
+        createAt: {
+            type: Date,
+            default: Date.now
         }
     },
     deleted: {
         type: Boolean,
         default: false
     },
-    deletedBy:{
-        account_id:String,
-        deleteAt:Date
+    deletedBy: {
+        account_id: String,
+        deleteAt: Date
     },
     position: Number,
-    updatedBy:[
-        {
-            account_id:String,
-            updatedAt: Date
-        }
-    ]
+    updatedBy: [{
+        account_id: String,
+        updatedAt: Date
+    }]
 }, {
     timestamps: true
 });

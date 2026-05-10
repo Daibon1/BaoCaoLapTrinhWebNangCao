@@ -53,6 +53,15 @@ block main
                             value=job.description
                         ) !{job.description}
                     .mb-3
+                        label.form-label Skill (Nhập cách nhau bằng dấu phẩy)
+                        input.form-control(
+                            type="text"
+                            name="skill"
+                            id="skillInput"
+                            placeholder="VD: NodeJS, MongoDB, React"
+                            value=job.skill.join(",")
+                        )
+                    .mb-3
                         label.form-label Địa điểm làm việc
                         input.form-control(
                             type="text" 
