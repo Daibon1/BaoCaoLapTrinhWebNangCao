@@ -1,5 +1,6 @@
 const Job = require("../../models/jobs.model");
 const Category = require("../../models/jobs-category.model");
+const Company = require("../../models/company.model");
 const helperCategory = require("../../helpers/product-category");
 const SavedJob = require("../../models/saved-jobs.model");
 const filterSearchHepler = require("../../helpers/filterSearch");
@@ -88,17 +89,30 @@ module.exports.detail = async (req, res) => {
         } else {
             job.savedJob = false;
         }
+        const jobCategory = await Job.find({
+            category: job.category,
+            deleted: false,
+            status: "active"
+        }).limit(3);
+        const company = await Company.findOne({
+            _id: job.company_id,
+            deleted: false,
+            status: "active"
+        });
         if (job) {
             res.render("client/pages/jobs/detail", {
                 title: "Chi tiết công việc",
                 job: job,
-                category: category
+                category: category,
+                company: company,
+                jobCategory: jobCategory
             })
         } else {
             req.flash("error", "Vui lòng thêm slug");
             return res.redirect("/jobs");
         }
     } catch (error) {
+        console.error(error);
         req.flash("error", "Có lỗi xảy ra khi tải dữ liệu!");
         res.redirect(`/jobs`);
     }

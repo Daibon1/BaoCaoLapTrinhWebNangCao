@@ -30,7 +30,7 @@ module.exports.upload = async (req, res, next) => {
                 .pipe(stream);
         });
 
-        // ⭐ Lưu URL đã được format đúng
+        //  Lưu URL đã được format đúng
         req.body[req.file.fieldname] = result.secure_url;
 
         next();

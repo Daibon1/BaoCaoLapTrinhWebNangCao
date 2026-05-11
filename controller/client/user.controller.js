@@ -171,3 +171,23 @@ module.exports.info = async (req, res) => {
         pageTitle: "Thông tin tài khoản"
     });
 }
+// [GET] /user/info/edit
+module.exports.edit = async (req, res) => {
+    res.render("client/pages/user/edit", {
+        pageTitle: "Chỉnh sửa thông tin tài khoản"
+    });
+}
+// [PATCH] /user/info/edit
+module.exports.editPatch = async (req, res) => {
+    try {
+        await User.updateOne({
+            _id: res.locals.user._id
+        }, req.body);
+        req.flash('success', 'Cập nhật thành công!');
+        res.redirect(`/user/info`);
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Có lỗi xảy ra khi cập nhật thông tin!');
+        res.redirect(`/user/info/edit`);
+    }
+}

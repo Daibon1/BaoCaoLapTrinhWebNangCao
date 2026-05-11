@@ -1,0 +1,264 @@
+.client-company-page{
+  max-width:1400px;
+  margin:auto;
+  padding:30px;
+  font-family:system-ui;
+  background:#f6f8fc;
+}
+
+/* TITLE */
+.client-company-page .page-title{
+  font-size:28px;
+  margin-bottom:20px;
+}
+
+/* SEARCH */
+.client-company-page .company-search form{
+  display:flex;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.client-company-page input{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+}
+
+.client-company-page button{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:14px 24px;
+  border-radius:12px;
+  font-weight:600;
+}
+
+/* GRID */
+.client-company-page .company-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:22px;
+}
+
+/* CARD */
+.client-company-page .company-card{
+  text-decoration:none;
+  color:#111;
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  transition:.3s;
+  display:flex;
+  flex-direction:column;
+}
+
+.client-company-page .company-card:hover{
+  transform:translateY(-6px);
+}
+
+/* TOP */
+.client-company-page .card-top{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+
+.client-company-page .logo{
+  width:60px;
+  height:60px;
+  object-fit:cover;
+  border-radius:12px;
+  background:#eee;
+}
+
+.client-company-page .info h3{
+  margin:0;
+  font-size:18px;
+}
+
+.client-company-page .address{
+  font-size:13px;
+  color:#777;
+}
+
+/* DESC */
+.client-company-page .desc{
+  margin-top:15px;
+  font-size:14px;
+  color:#555;
+  flex:1;
+}
+
+.client-company-page .chua{
+  color:#aaa;
+  font-style:italic;
+}
+
+/* META */
+.client-company-page .meta{
+  margin-top:15px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.client-company-page .size{
+  background:#eef2ff;
+  color:#2563eb;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .client-company-page{
+    padding:15px;
+  }
+
+  .client-company-page .company-search form{
+    flex-direction:column;
+  }
+}
+/* COMPANY DETAIL ----------------------------------------*/
+/* ===== CONTAINER ===== */
+.company-detail {
+    background: #f5f7fb;
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+.company-detail__container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* ===== HEADER ===== */
+
+.company-detail__header {
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.company-detail__header .company-detail__container {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* LOGO */
+
+.company-detail__logo img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+/* INFO */
+
+.company-detail__name {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.company-detail__address {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.company-detail__meta span {
+    background: #f1f3f7;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+/* ===== BODY ===== */
+
+.company-detail__body {
+    margin-top: 20px;
+}
+
+.company-detail__body .company-detail__container {
+    display: flex;
+    gap: 20px;
+}
+
+/* LEFT RIGHT */
+
+.company-detail__left {
+    flex: 2;
+}
+
+.company-detail__right {
+    flex: 1;
+}
+
+/* ===== BOX ===== */
+
+.company-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.company-box__title {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.company-box__content {
+    line-height: 1.6;
+    color: #444;
+}
+
+.company-box__empty {
+    color: #999;
+}
+
+/* ===== INFO LIST ===== */
+
+.company-info {
+    list-style: none;
+    padding: 0;
+}
+
+.company-info li {
+    margin-bottom: 10px;
+}
+
+/* ===== JOB CARD ===== */
+
+.job-card {
+    display: block;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: black;
+    transition: 0.2s;
+}
+
+.job-card:hover {
+    border-color: #1677ff;
+    transform: translateY(-2px);
+}
+
+.job-card__title {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.job-card__salary {
+    color: #1677ff;
+    font-weight: 600;
+}

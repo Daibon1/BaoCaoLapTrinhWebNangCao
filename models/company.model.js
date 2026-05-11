@@ -1,8 +1,15 @@
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
 const companySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    slug: {
+        type: String,
+        slug: "name",
+        unique: true
     },
 
     logo: String,
@@ -16,7 +23,15 @@ const companySchema = new mongoose.Schema({
     address: String,
 
     description: String,
-
+    status: {
+        type: String,
+        enum: ["active", "inactive"],
+        default: "active"
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     size: {
         type: String,
         enum: ["1-10", "10-50", "50-100", "100-500", "500+"]

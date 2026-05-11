@@ -37,6 +37,7 @@ const jobSchema = new mongoose.Schema({
         account_id: String,
         deleteAt: Date
     },
+    company_id: String,
     position: Number,
     updatedBy: [{
         account_id: String,

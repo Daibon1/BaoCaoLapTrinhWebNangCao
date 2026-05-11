@@ -46,10 +46,11 @@ aside.sidebar.shadow-sm
         )
           span Phân quyền
       //- if(role.permissions.inlcudes("jobs-approval-view"))
-      a.sidebar-item(
-        href=`/${prefixAdmin}/user-approval`
-        class=currentUrl === `/${prefixAdmin}/user-approval` ? 'active' : ''
-      )
-        span Duyệt ứng tuyển
+      if(role.permissions.includes("user-approval-view"))
+        a.sidebar-item(
+          href=`/${prefixAdmin}/user-approval`
+          class=currentUrl === `/${prefixAdmin}/user-approval` ? 'active' : ''
+        )
+          span Duyệt ứng tuyển
 
       

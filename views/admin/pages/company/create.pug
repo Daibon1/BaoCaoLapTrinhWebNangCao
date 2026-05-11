@@ -1,56 +1,59 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block main
-    link(rel="stylesheet", href="/admin/css/company.css")
-    +alert-success(2000)
-    +alert-error(2000)
-    .company-create-page
-        .company-container
+    if(!user.company_id)
+        link(rel="stylesheet", href="/admin/css/company.css")
+        +alert-success(2000)
+        +alert-error(2000)
+        .company-create-page
+            .company-container
 
-            .company-header
-                h2 Tạo hồ sơ công ty
-                p Hoàn thiện thông tin công ty trước khi đăng tuyển
+                .company-header
+                    h2 Tạo hồ sơ công ty
+                    p Hoàn thiện thông tin công ty trước khi đăng tuyển
 
-            form.company-form(method="POST" action="/admin/company/create" enctype="multipart/form-data")
+                form.company-form(method="POST" action="/admin/company/create" enctype="multipart/form-data")
 
-                .form-grid
+                    .form-grid
 
-                    .form-group
-                        label Tên công ty *
-                        input(type="text" name="name" placeholder="VD: FPT Software" required)
+                        .form-group
+                            label Tên công ty *
+                            input(type="text" name="name" placeholder="VD: FPT Software" required)
 
-                    .form-group
-                        label Email công ty
-                        input(type="email" name="email" placeholder="contact@company.com")
+                        .form-group
+                            label Email công ty
+                            input(type="email" name="email" placeholder="contact@company.com")
 
-                    .form-group
-                        label Website
-                        input(type="text" name="website" placeholder="https://company.com")
-                    .form-group
-                        label Phone 
-                        input(type="text" name="phone" placeholder="09123456789")
-                    .form-group
-                        label Quy mô công ty
-                        select(name="size")
-                            option(value="") -- Chọn quy mô --
-                            option(value="1-10") 1-10 nhân viên
-                            option(value="10-50") 10-50 nhân viên
-                            option(value="50-100") 50-100 nhân viên
-                            option(value="100-500") 100-500 nhân viên
-                            option(value="500+") 500+ nhân viên
+                        .form-group
+                            label Website
+                            input(type="text" name="website" placeholder="https://company.com")
+                        .form-group
+                            label Phone 
+                            input(type="text" name="phone" placeholder="09123456789")
+                        .form-group
+                            label Quy mô công ty
+                            select(name="size")
+                                option(value="") -- Chọn quy mô --
+                                option(value="1-10") 1-10 nhân viên
+                                option(value="10-50") 10-50 nhân viên
+                                option(value="50-100") 50-100 nhân viên
+                                option(value="100-500") 100-500 nhân viên
+                                option(value="500+") 500+ nhân viên
 
-                    .form-group.full
-                        label Địa chỉ
-                        input(type="text" name="address" placeholder="Hà Nội / TP.HCM")
+                        .form-group.full
+                            label Địa chỉ
+                            input(type="text" name="address" placeholder="Hà Nội / TP.HCM")
 
-                    .form-group.full
-                        label Mô tả công ty
-                        textarea(name="description" rows="5" placeholder="Giới thiệu về công ty...")
+                        .form-group.full
+                            label Mô tả công ty
+                            textarea(name="description" rows="5" placeholder="Giới thiệu về công ty...")
 
-                    .form-group.full
-                        label Logo công ty
-                        input(type="file" name="logo"
-                        accept="image/*")
+                        .form-group.full
+                            label Logo công ty
+                            input(type="file" name="logo"
+                            accept="image/*")
 
-                .form-actions
-                    button.btn-create(type="submit") Tạo công ty
+                    .form-actions
+                        button.btn-create(type="submit") Tạo công ty
+    else
+        .alert.alert-warning Bạn đã tạo công ty rồi!

@@ -124,6 +124,24 @@ block main
                     each record in records
                         td(class="text-center") 
                             input(type="checkbox" name="accounts-delete" value="true")
+                tr 
+                td(colspan="4")
+                    b Duyệt ứng tuyển
+                tr(data-name="user-approval-view")
+                    td Xem
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="user-approval-view" value="true")
+                tr(data-name="user-approval-edit")
+                    td Chỉnh sửa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="user-approval-edit" value="true")
+                tr(data-name="user-approval-delete")
+                    td Xóa
+                    each record in records
+                        td(class="text-center") 
+                            input(type="checkbox" name="user-approval-delete" value="true")
         form(
             id="form-change-permissions"
             method="POST"

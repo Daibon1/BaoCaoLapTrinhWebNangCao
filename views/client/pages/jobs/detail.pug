@@ -8,16 +8,7 @@ block main
     main.job-detail
         .container
 
-            // ===== Breadcrumb =====
-            nav.breadcrumb-wrap
-                a(href="/") Trang chủ
-                span /
-                a(href="/jobs") Việc làm
-                span /
-                span.text-muted Chi tiết công việc
-
             .row
-
                 // ================= LEFT =================
                 .col-lg-8
 
@@ -71,29 +62,26 @@ block main
 
                             h4 Yêu cầu
                             ul
-                                li Có kinh nghiệm NodeJS
-                                li Hiểu RESTful API
-                                li Biết MongoDB hoặc MySQL
-
-                            h4 Quyền lợi
-                            ul
-                                li Lương tháng 13
-                                li Remote linh hoạt
-                                li Môi trường trẻ
+                                if job.skill.length > 0
+                                    each item in job.skill
+                                        li #{item}
+                                else
+                                    li Không có yêu cầu
 
                             h4 Danh mục
                             a(href=`/jobs/${category.slug}`) #{category.title}
 
-                    // ===== COMPANY INFO =====
                     .card
                         .card-body
                             h3 Giới thiệu công ty
-                            p
-                                | DDS là công ty công nghệ chuyên phát triển
-                                | nền tảng tuyển dụng và hệ thống SaaS.
+                            if company.description
+                                p= company.description
+                            else
+                                p.text-muted Công ty chưa cập nhật mô tả.
+                        
 
                             a.btn.btn-outline-primary(
-                                href="/companies/slug"
+                                href=`/company/detail/${company.slug}`
                             ) Xem công ty
 
 
@@ -126,18 +114,17 @@ block main
                                     strong Hạn nộp:
                                     |  30/12/2025
 
-                            a.btn.btn-success.w-100 Ứng tuyển ngay
+                            a.btn.btn-success.w-100(href=`/applications/add/${job._id}`) Ứng tuyển ngay
 
 
                     // RELATED JOBS
-                    .card
-                        .card-body
-                            h5 Việc làm liên quan
-
-                            .related-job.mb-3
-                                a(href="#") Frontend Developer ReactJS
-                                div.text-muted 18 triệu • Hà Nội
-
-                            .related-job.mb-3
-                                a(href="#") Backend Developer PHP
-                                div.text-muted 20 triệu • Remote
+                .card
+                    .card-body
+                        h5 Việc làm liên quan
+                        if(jobCategory)
+                            each item in jobCategory
+                                .related-job.mb-3
+                                    a(href=`/jobs/detail/${item.slug}`) #{item.title}
+                                    div.text-muted #{item.salaryMin} - #{item.salaryMax} triệu • #{item.location}
+                        else
+                            p.text-muted Không có công việc nào.

@@ -1,10 +1,48 @@
 const Company = require("../../models/company.model");
 const Account = require("../../models/account.model");
+// [GET] /admin/company/my-company
+module.exports.index = async (req, res) => {
+    const company = await Company.findOne({
+        _id: res.locals.user.company_id
+    });
+    res.render("admin/pages/company/index", {
+        title: "Công ty",
+        company: company
+    })
+}
+// [GET] /admin/company/edit/:id
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+    const company = await Company.findOne({
+        _id: id
+    });
+    res.render("admin/pages/company/edit", {
+        title: "Cập nhật công ty",
+        company: company
+    })
+}
+// [PATCH] /admin/company/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    try {
+        await Company.updateOne({
+            _id: id
+        }, req.body);
+        req.flash('success', 'Cập nhật thành công!');
+        res.redirect(`/admin/company/edit/${id}`);
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Có lỗi xảy ra khi cập nhật công ty!');
+        res.redirect(`/admin/company/edit/${id}`);
+    }
+}
+// [GET] /admin/company/create
 module.exports.create = async (req, res) => {
     res.render("admin/pages/company/create", {
         title: "Tạo công ty"
     })
 }
+// [POST] /admin/company/create
 module.exports.createPost = async (req, res) => {
     const name = req.body.name;
     const email = req.body.email;

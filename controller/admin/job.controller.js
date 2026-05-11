@@ -267,6 +267,7 @@ module.exports.createPost = async (req, res) => {
     } else {
         req.body.skill = [];
     }
+    req.body.company_id = res.locals.user.company_id;
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
     if (!req.body.position) {

@@ -101,3 +101,126 @@
 .btn-logout:hover {
   background: #e53935;
 }
+/* EDIT PROFILE */
+.profile-edit-page{
+    max-width:1100px;
+    margin:auto;
+    padding:30px;
+    background:#f6f8fc;
+    font-family:system-ui;
+}
+
+/* TITLE */
+.profile-edit-page .page-title{
+    margin-bottom:25px;
+    font-size:26px;
+    font-weight:700;
+}
+
+/* LAYOUT */
+.profile-edit-page .profile-layout{
+    display:flex;
+    gap:30px;
+}
+
+/* LEFT */
+.profile-edit-page .profile-left{
+    width:260px;
+}
+
+.profile-edit-page .avatar-card{
+    background:#fff;
+    padding:25px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.profile-edit-page .avatar{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:12px;
+}
+
+.profile-edit-page .change-avatar{
+    display:block;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+/* RIGHT */
+.profile-edit-page .profile-right{
+    flex:1;
+}
+
+.profile-edit-page .form-box{
+    background:#fff;
+    padding:30px;
+    border-radius:14px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+/* FORM */
+.profile-edit-page .form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.profile-edit-page label{
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.profile-edit-page input{
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+/* CV */
+.profile-edit-page .cv-link{
+    margin-top:6px;
+    color:#2563eb;
+    font-weight:500;
+}
+
+/* BUTTON */
+.profile-edit-page .form-action{
+    margin-top:20px;
+    text-align:right;
+}
+
+.profile-edit-page .btn-save{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.profile-edit-page .btn-save:hover{
+    background:#1e40af;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .profile-edit-page .profile-layout{
+        flex-direction:column;
+    }
+
+    .profile-edit-page .profile-left{
+        width:100%;
+    }
+
+    .profile-edit-page .form-action{
+        text-align:center;
+    }
+}

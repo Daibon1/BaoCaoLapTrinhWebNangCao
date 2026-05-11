@@ -1,0 +1,68 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet" href="/css/user-info.css")
+
+    .profile-edit-page
+
+        h1.page-title Chỉnh sửa hồ sơ cá nhân
+
+        form(method="POST" action=`/user/info/edit?_method=PATCH` enctype="multipart/form-data")
+
+            .profile-layout
+
+                //- /* ========= LEFT ========= */
+                .profile-left
+
+                    .avatar-card#preview-img
+                        if user.avatar
+                            img.avatar(src=user.avatar alt="Avatar" id="img-preview")
+                        else
+                            img.avatar(src="/images/avatar-default.png" id="img-preview")
+
+                        label.change-avatar Đổi ảnh đại diện
+                        input(type="file" name="avatar" accept="image/*" id="file-input")
+
+                //- /* ========= RIGHT ========= */
+                .profile-right
+
+                    .form-box
+
+                        .form-group
+                            label Họ và tên
+                            input(
+                                type="text"
+                                name="fullName"
+                                value=user.fullName
+                                required
+                            )
+
+                        .form-group
+                            label Email
+                            input(
+                                type="email"
+                                value=user.email
+                                disabled
+                            )
+
+                        .form-group
+                            label Số điện thoại
+                            input(
+                                type="text"
+                                name="phone"
+                                value=user.phone
+                            )
+
+                        .form-group
+                            label CV cá nhân
+                            input(type="file" name="cvFile")
+
+                            if user.cvFile
+                                a.cv-link(
+                                    href=user.cvFile
+                                    target="_blank"
+                                ) Xem CV hiện tại
+
+                    .form-action
+                        button.btn-save(type="submit")
+                            | Lưu thông tin

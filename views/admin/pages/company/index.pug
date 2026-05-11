@@ -1,0 +1,42 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet" href="/admin/css/company.css")
+    .my-company
+        if company
+            .my-company__header
+                img.my-company__logo(
+                    src=company.logo
+                )
+
+                .my-company__info
+                    h1= company.name
+                    p 📍 #{company.address || "Chưa cập nhật"}
+
+                    a.btn-edit(href=`/admin/company/edit/${company._id}`) Chỉnh sửa công ty
+
+            .my-company__body
+
+                .company-box
+                    h3 Giới thiệu
+                    p= company.description || "Chưa có mô tả"
+
+                .company-box
+                    h3 Thông tin liên hệ
+                    ul
+                        li Email: #{company.email || "Chưa cập nhật"}
+                        li Điện thoại: #{company.phone || "Chưa cập nhật"}
+                        li Website:
+                            if company.website
+                                a(href=company.website target="_blank")= company.website
+                            else
+                                span Chưa cập nhật
+
+                .company-box
+                    h3 Quy mô
+                    p= company.size || "Đang cập nhật"
+
+        else
+            .no-company
+                h2 Bạn chưa tạo công ty
+                a.create-btn(href="/admin/company/create") Tạo công ty ngay

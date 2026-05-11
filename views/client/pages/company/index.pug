@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet" href="/css/company.css")
+    .client-company-page
+
+        h2.page-title Danh sách công ty tuyển dụng
+
+        .company-search
+            form(method="GET")
+                input(
+                    type="text"
+                    name="keyword"
+                    placeholder="Tìm công ty..."
+                    value=keyword
+                )
+                button Tìm kiếm
+
+        .company-grid
+            each company in companies
+                a.company-card(href=`/company/detail/${company.slug}`)
+
+                    .card-top
+                        if company.logo
+                            img.logo(src=company.logo)
+                        else
+                            img.logo(src="/images/company-default.png")
+
+                        .info
+                            h3= company.name
+                            p.address= company.address
+
+                    .desc
+                        if company.description
+                            p= company.description.substring(0,120) + "..." 
+                        else
+                            p.chua Chưa có mô tả
+
+                    .meta
+                        span.size #{company.size}

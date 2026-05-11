@@ -1,0 +1,66 @@
+extends ../../layouts/default.pug
+
+block main
+    link(rel="stylesheet" href="/css/company.css")
+
+    .company-detail
+
+        // HEADER
+        .company-detail__header
+            .company-detail__container
+
+                .company-detail__logo
+                    if company.logo
+                        img(src=company.logo)
+                    else
+                        img(src="/images/company-default.png")
+
+                .company-detail__info
+                    h1.company-detail__name= company.name
+                    p.company-detail__address 📍 #{company.address || "Chưa cập nhật địa chỉ"}
+
+                    .company-detail__meta
+                        span Quy mô: #{company.size || "Đang cập nhật"}
+                        span Email: #{company.email || "Chưa cập nhật"}
+
+        // BODY
+        .company-detail__body
+            .company-detail__container
+
+                // LEFT
+                .company-detail__left
+                    .company-box
+                        h3.company-box__title Giới thiệu công ty
+
+                        if company.description
+                            p.company-box__content= company.description
+                        else
+                            p.company-box__empty Công ty chưa cập nhật mô tả.
+
+                // RIGHT
+                .company-detail__right
+
+                    .company-box
+                        h3.company-box__title Thông tin nhanh
+                        ul.company-info
+                            li
+                                strong Website:
+                                if company.website
+                                    a(href=company.website target="_blank")= company.website
+                                else
+                                    span.company-box__empty Chưa cập nhật
+
+                            li
+                                strong Điện thoại:
+                                span= company.phone || "Chưa cập nhật"
+
+                    .company-box
+                        h3.company-box__title Việc làm đang tuyển
+
+                        if jobs.length
+                            each job in jobs
+                                a.job-card(href=`/jobs/detail/${job.slug}`)
+                                    h4.job-card__title= job.title
+                                    p.job-card__salary= job.salary || "Thỏa thuận"
+                        else
+                            p.company-box__empty Công ty chưa đăng tuyển job nào
