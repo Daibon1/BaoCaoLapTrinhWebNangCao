@@ -52,3 +52,28 @@ module.exports.index = async (req, res) => {
         savedJobs: jobs
     })
 }
+// [GET] /saved-jobs/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+    const savedJob = await SavedJob.findOne({
+        _id: req.cookies.saveJobId
+    });
+    if (savedJob) {
+        try {
+            await SavedJob.updateOne({
+                _id: savedJob._id
+            }, {
+                $pull: {
+                    jobIds: id
+                }
+            })
+            req.flash("success", "Xóa thành công!");
+            res.redirect(req.get("Referrer") || "/saved-jobs");
+        } catch (error) {
+            console.error(error);
+            req.flash("error", "Có lỗi xảy ra khi xóa công việc!");
+            res.redirect(req.get("Referrer") || "/saved-jobs");
+        }
+    }
+    res.redirect(req.get("Referrer") || "/saved-jobs");
+}
