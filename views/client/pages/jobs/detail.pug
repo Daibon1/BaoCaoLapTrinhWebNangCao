@@ -74,15 +74,15 @@ block main
                     .card
                         .card-body
                             h3 Giới thiệu công ty
-                            if company.description
-                                p= company.description
+                            if (company)
+                                p=company.description
                             else
                                 p.text-muted Công ty chưa cập nhật mô tả.
                         
-
-                            a.btn.btn-outline-primary(
-                                href=`/company/detail/${company.slug}`
-                            ) Xem công ty
+                            if (company)
+                                a.btn.btn-outline-primary(
+                                    href=`/company/detail/${company.slug}`
+                                ) Xem công ty
 
 
                 // ================= RIGHT =================
