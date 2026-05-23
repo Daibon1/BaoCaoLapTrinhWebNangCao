@@ -183,7 +183,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
     ///Gửi otp qua email cho user
     const subject = "Mã OTP lấy lại mật khẩu";
     const html = `<p>Mã OTP của bạn là: <b>${otp}</b></p><p>Mã OTP có hiệu lực trong vòng 3 phút</p>`;
-    sendMailHelper.sendMail(email, subject, html);
+    await sendMailHelper.sendMail(email, subject, html);
     // xqxz fakv kgsu zcpe
     res.redirect(`/user/password/otp?email=${email}`);
 }

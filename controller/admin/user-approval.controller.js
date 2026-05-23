@@ -30,7 +30,7 @@ const escapeHtml = (text = "") => {
         .replace(/'/g, "&#039;");
 };
 
-const sendStatusMail = (application, status) => {
+const sendStatusMail = async (application, status) => {
     const mailContent = statusMailContent[status];
     if (!mailContent || !application.userId || !application.userId.email) {
         return;
@@ -126,7 +126,7 @@ module.exports.changeStatus = async (req, res) => {
                 }
             })
             if (oldStatus !== status) {
-                sendStatusMail(application, status);
+                await sendStatusMail(application, status);
             }
             req.flash('success', 'Cập nhật trạng thái thành công!');
             res.redirect(req.get("Referrer") || `/admin/user-approval`);
