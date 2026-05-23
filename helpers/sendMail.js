@@ -29,19 +29,20 @@ const nodemailer = require('nodemailer');
 
 module.exports.sendMail = (email, subject, html) => {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.resend.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
+            user: 'resend',
+            pass: process.env.RESEND_API_KEY
         }
     });
 
     console.log("[sendMail] Gửi tới:", email);
-    console.log("[sendMail] EMAIL_USER:", process.env.EMAIL_USER);
-    console.log("[sendMail] EMAIL_PASSWORD set:", !!process.env.EMAIL_PASSWORD);
+    console.log("[sendMail] RESEND_API_KEY set:", !!process.env.RESEND_API_KEY);
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: 'onboarding@resend.dev', // ← dùng địa chỉ này khi chưa verify domain
         to: email,
         subject: subject,
         html: html
@@ -50,7 +51,6 @@ module.exports.sendMail = (email, subject, html) => {
     transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
             console.error("[sendMail] Lỗi gửi mail:", error.message);
-            console.error("[sendMail] Chi tiết:", error);
         } else {
             console.log("[sendMail] Gửi thành công:", info.response);
         }
