@@ -2,6 +2,7 @@ const Application = require("../../models/application.model");
 const User = require("../../models/user.model");
 const Job = require("../../models/jobs.model");
 const sendMailHelper = require("../../helpers/sendMail");
+const paginationHelper = require("../../helpers/pagination.js");
 
 const statusMailContent = {
     interview: {
@@ -56,7 +57,7 @@ module.exports.index = async (req, res) => {
     }).select("_id title")
     const jobIds = jobs.map(job => job._id);
 
-    const filter = {
+    const baseFilter = {
         jobId: {
             $in: jobIds
         }
@@ -67,26 +68,45 @@ module.exports.index = async (req, res) => {
     const keyword = req.query.keyword ? req.query.keyword.trim() : "";
 
     if (selectedJobId) {
-        filter.jobId = selectedJobId;
-    }
-
-    if (selectedStatus) {
-        filter.status = selectedStatus;
+        baseFilter.jobId = selectedJobId;
     }
 
     if (keyword) {
+        const keywordRegex = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const users = await User.find({
             $or: [
-                { fullName: new RegExp(keyword, "i") },
-                { email: new RegExp(keyword, "i") }
+                { fullName: new RegExp(keywordRegex, "i") },
+                { email: new RegExp(keywordRegex, "i") }
             ]
         }).select("_id");
-        filter.userId = {
+        baseFilter.userId = {
             $in: users.map(user => user._id)
         }
     }
 
-    const applications = await Application.find(filter).populate("jobId").populate("userId");
+    const filter = { ...baseFilter };
+    if (selectedStatus) {
+        filter.status = selectedStatus;
+    }
+
+    const countApplications = await Application.countDocuments(filter);
+    const objectPagination = paginationHelper({
+        limitItem: 6,
+        skipItem: 0,
+        page: 1
+    }, req.query, countApplications);
+
+    const [applications, totalApplications, pendingApplications, acceptedApplications] = await Promise.all([
+        Application.find(filter)
+            .sort({ createdAt: "desc" })
+            .limit(objectPagination.limitItem)
+            .skip(objectPagination.skipItem)
+            .populate("jobId")
+            .populate("userId"),
+        Application.countDocuments(baseFilter),
+        Application.countDocuments({ ...baseFilter, status: "pending" }),
+        Application.countDocuments({ ...baseFilter, status: "accepted" })
+    ]);
     // console.log(applications);
     res.render("admin/pages/user-approval/index", {
         pagetitle: "Duyệt ứng tuyển",
@@ -95,7 +115,12 @@ module.exports.index = async (req, res) => {
         jobs: jobs,
         selectedJobId: selectedJobId,
         selectedStatus: selectedStatus,
-        keyword: keyword
+        keyword: keyword,
+        pagination: objectPagination,
+        countApplications: countApplications,
+        totalApplications: totalApplications,
+        pendingApplications: pendingApplications,
+        acceptedApplications: acceptedApplications
     })
 }
 // [PATCH] /admin/user-approval/change-status/:id

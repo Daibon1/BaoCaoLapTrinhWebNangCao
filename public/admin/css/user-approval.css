@@ -405,6 +405,39 @@
   font-size: 18px;
 }
 
+.approval-pagination {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 18px 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.approval-pagination .pagination {
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.approval-pagination .page-link {
+  min-width: 38px;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 13px;
+  text-align: center;
+}
+
+.approval-pagination .page-item.active .page-link {
+  border-color: #059669;
+  background: #059669;
+  color: #fff;
+}
+
+.approval-pagination .page-item.disabled .page-link {
+  color: #94a3b8;
+  pointer-events: none;
+}
+
 .div-cover-modal {
   position: fixed;
   inset: 0;

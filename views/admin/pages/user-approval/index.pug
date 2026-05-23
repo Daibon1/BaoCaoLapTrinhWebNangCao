@@ -1,5 +1,6 @@
 ﻿extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
 
 block styles
   link(rel="stylesheet", href="/admin/css/user-approval.css")
@@ -24,21 +25,21 @@ block main
             i.fa-solid.fa-file-signature
           .approval-summary__content
             span Tổng hồ sơ
-            strong #{applications.length}
+            strong #{totalApplications}
 
         .approval-summary__card
           .approval-summary__icon
             i.fa-solid.fa-clock
           .approval-summary__content
             span Chờ xử lý
-            strong #{applications.filter(item => item.status === "pending").length}
+            strong #{pendingApplications}
 
         .approval-summary__card
           .approval-summary__icon
             i.fa-solid.fa-circle-check
           .approval-summary__content
             span Đã chấp nhận
-            strong #{applications.filter(item => item.status === "accepted").length}
+            strong #{acceptedApplications}
 
       form.approval-filter(method="GET")
         .approval-filter__field
@@ -76,7 +77,10 @@ block main
           h2 Danh sách ứng viên
           .approval-shell__meta
             i.fa-solid.fa-address-book
-            span #{applications.length} hồ sơ
+            if countApplications > 0
+              span Hiển thị #{pagination.skipItem + 1}-#{pagination.skipItem + applications.length} / #{countApplications} hồ sơ
+            else
+              span 0 hồ sơ
 
         .table-responsive
           table.approval-table.table.align-middle.mb-0
@@ -147,6 +151,9 @@ block main
                     .approval-empty
                       i.fa-solid.fa-user-slash
                       h3 Chưa có hồ sơ ứng tuyển nào
+
+        .approval-pagination
+          +pagination(pagination)
 
     .div-cover-modal
       .div-cover-modal__overlay
