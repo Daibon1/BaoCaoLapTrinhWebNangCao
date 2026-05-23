@@ -57,7 +57,7 @@ aside.sidebar
             i.fa-solid.fa-user-check
             span Duyệt ứng tuyển
 
-        if(role.permissions.includes("client-users-view") || role.permissions.includes("accounts-view"))
+        if(role.permissions.includes("client-users-view"))
           a.sidebar-item(
             href=clientUserPath
             class=isActive(clientUserPath) ? "active" : ""

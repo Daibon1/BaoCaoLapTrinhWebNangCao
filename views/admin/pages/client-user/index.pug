@@ -7,9 +7,9 @@ block styles
   link(rel="stylesheet", href="/admin/css/account.css")
 
 block main
-  - const canViewClientUsers = role.permissions.includes("client-users-view") || role.permissions.includes("accounts-view");
-  - const canEditClientUsers = role.permissions.includes("client-users-edit") || role.permissions.includes("accounts-edit");
-  - const canDeleteClientUsers = role.permissions.includes("client-users-delete") || role.permissions.includes("accounts-delete");
+  - const canViewClientUsers = role.permissions.includes("client-users-view");
+  - const canEditClientUsers = role.permissions.includes("client-users-edit");
+  - const canDeleteClientUsers = role.permissions.includes("client-users-delete");
   if(canViewClientUsers)
     +alert-success(2000)
     +alert-error(2000)

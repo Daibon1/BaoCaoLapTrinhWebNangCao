@@ -4,6 +4,11 @@ const paginationHelper = require("../../helpers/pagination.js");
 const filterStatusHelper = require("../../helpers/filterStatus.js");
 
 module.exports.index = async (req, res) => {
+    if (!res.locals.role.permissions.includes("client-users-view")) {
+        req.flash("error", "Bạn không có quyền xem user!");
+        return res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+    }
+
     try {
         const find = {
             deleted: false
@@ -55,6 +60,11 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.changeStatus = async (req, res) => {
+    if (!res.locals.role.permissions.includes("client-users-edit")) {
+        req.flash("error", "Bạn không có quyền chỉnh sửa user!");
+        return res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/client-user`);
+    }
+
     try {
         const status = req.params.status;
         const id = req.params.id;
@@ -75,6 +85,11 @@ module.exports.changeStatus = async (req, res) => {
 };
 
 module.exports.deleteItem = async (req, res) => {
+    if (!res.locals.role.permissions.includes("client-users-delete")) {
+        req.flash("error", "Bạn không có quyền xóa user!");
+        return res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/client-user`);
+    }
+
     try {
         const id = req.params.id;
 
