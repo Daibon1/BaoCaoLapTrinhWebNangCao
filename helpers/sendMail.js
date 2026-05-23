@@ -58,14 +58,14 @@
 // };
 module.exports.sendMail = async (email, subject, html) => {
     try {
-        const response = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
+        const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
             headers: {
-                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                from: 'onboarding@resend.dev',
+                from: "Web Tim Viec <onboarding@resend.dev>",
                 to: email,
                 subject: subject,
                 html: html
@@ -75,11 +75,11 @@ module.exports.sendMail = async (email, subject, html) => {
         const data = await response.json();
 
         if (!response.ok) {
-            console.error("[sendMail] Loi:", data);
+            console.error("[sendMail] Loi Resend:", data);
             return false;
         }
 
-        console.log("[sendMail] Thanh cong:", data.id);
+        console.log("[sendMail] Da gui:", data.id);
         return true;
     } catch (error) {
         console.error("[sendMail] Loi:", error.message);
