@@ -1,0 +1,700 @@
+/* 1. Khung trang quan ly tai khoan */
+.account-page {
+  padding: 16px;
+  color: #172033;
+}
+
+.account-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.account-page__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.account-page__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.account-page__title h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.account-page__create {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-radius: 8px;
+  padding: 9px 14px;
+}
+
+/* 2. Thanh loc va tim kiem */
+.account-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .04);
+}
+
+.account-toolbar__status .filter-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.account-toolbar__status .filter-status .btn {
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  color: #334155;
+  background: #f8fafc;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.account-toolbar__status .filter-status .btn-success {
+  border-color: #198754;
+  color: #fff;
+  background: #198754;
+}
+
+.account-toolbar__search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.account-toolbar__search .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.account-search {
+  position: relative;
+  flex: 1;
+  max-width: 480px;
+}
+
+.account-search i {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.account-search .form-control {
+  height: 40px;
+  padding-left: 38px;
+  border-radius: 8px;
+  border-color: #d7dde8;
+}
+
+.account-search .form-control:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, .12);
+}
+
+/* 3. Khung bang danh sach */
+.account-table-shell {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.account-table-shell__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.account-table-shell__top h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.account-table-shell__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* 4. Bang va thong tin tai khoan */
+.account-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Cố định độ rộng cột để bảng không bị tràn */
+.account-table thead th:nth-child(1),
+.account-table tbody td:nth-child(1) { width: 46px; }
+.account-table thead th:nth-child(2),
+.account-table tbody td:nth-child(2) { width: 170px; }
+.account-table thead th:nth-child(3),
+.account-table tbody td:nth-child(3) { width: 170px; }
+.account-table thead th:nth-child(4),
+.account-table tbody td:nth-child(4) { width: 100px; }
+.account-table thead th:nth-child(5),
+.account-table tbody td:nth-child(5) { width: 110px; }
+.account-table thead th:nth-child(6),
+.account-table tbody td:nth-child(6) { width: 110px; }
+.account-table thead th:nth-child(7),
+.account-table tbody td:nth-child(7) { width: 110px; }
+
+.account-table thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px;
+}
+
+.account-table tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+.account-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.account-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.account-table__index {
+  width: 58px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.account-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+}
+
+.account-avatar {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-user__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.account-user__info strong,
+.account-email {
+  color: #172033;
+  font-size: 13px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-user__info span {
+  color: #94a3b8;
+  font-size: 11px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-role {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.account-role--empty {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* 5. Khoa tai khoan */
+.account-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.account-status--active {
+  background: #eaf7ef;
+  color: #146c43;
+}
+
+.account-status--inactive {
+  background: #fff0f0;
+  color: #b42318;
+}
+
+.account-status:hover {
+  filter: brightness(.97);
+  text-decoration: none;
+}
+
+/* 6. Nut thao tac va trang thai rong */
+.account-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.account-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.account-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 210px;
+  text-align: center;
+  color: #64748b;
+}
+
+.account-empty i {
+  font-size: 34px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.account-empty h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 18px;
+}
+
+.account-pagination {
+  padding: 14px 18px 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* 7. Form tao/sua tai khoan */
+.account-form__subtitle {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.account-form__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.account-form__main,
+.account-form__side {
+  min-width: 0;
+}
+
+.account-panel {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.account-panel--sticky {
+  position: sticky;
+  top: 72px;
+}
+
+.account-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.account-panel__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.account-panel__head h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.account-panel__head p {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.account-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px;
+}
+
+.account-form-field {
+  min-width: 0;
+}
+
+.account-form-field--wide {
+  grid-column: 1 / -1;
+}
+
+.account-form-field .form-label {
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.account-form-field .form-control,
+.account-form-field .form-select {
+  min-height: 42px;
+  border-color: #d7dde8;
+  border-radius: 8px;
+  color: #172033;
+  font-size: 14px;
+}
+
+.account-form-field .form-control::placeholder {
+  color: #94a3b8;
+}
+
+.account-form-field .form-control:focus,
+.account-form-field .form-select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, .12);
+}
+
+.account-password {
+  position: relative;
+}
+
+.account-password .form-control {
+  padding-right: 44px;
+}
+
+.account-password__toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.account-password__toggle:hover {
+  background: #f1f5f9;
+  color: #172033;
+}
+
+.account-choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.account-choice-group--stack {
+  flex-direction: column;
+}
+
+.account-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.account-choice .form-check-input {
+  margin: 0;
+}
+
+.account-upload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  margin: 0 18px 16px;
+  overflow: hidden;
+  border: 1px dashed #a7b4c8;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.account-upload img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+}
+
+#preview-img.account-upload #img-preview {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+}
+
+.account-upload img[src]:not([src=""]) {
+  opacity: 1;
+}
+
+.account-upload:has(img[src]:not([src=""])) .account-upload__content {
+  opacity: 0;
+}
+
+.account-upload__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: #64748b;
+  text-align: center;
+  pointer-events: none;
+}
+
+.account-upload__content i {
+  color: #4f46e5;
+  font-size: 28px;
+}
+
+.account-upload__content span {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.account-upload__content small {
+  font-size: 12px;
+}
+
+.account-upload__input {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.account-form__side .account-form-field:not(:first-child) {
+  padding: 0 18px 16px;
+}
+
+.account-form-actions {
+  display: grid;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.account-form-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* 8. Responsive */
+@media (max-width: 992px) {
+  .account-page__header,
+  .account-toolbar,
+  .account-toolbar__search {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .account-toolbar__search,
+  .account-search {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .account-page__create {
+    justify-content: center;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-panel--sticky {
+    position: static;
+  }
+}
+
+@media (max-width: 576px) {
+  .account-page {
+    padding: 16px 10px 24px;
+  }
+
+  .account-toolbar,
+  .account-table-shell__top {
+    padding: 12px;
+  }
+
+  .account-toolbar__search .btn {
+    width: 100%;
+  }
+
+  .account-form-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .account-panel__head {
+    padding: 14px;
+  }
+
+  .account-upload {
+    margin: 0 14px 14px;
+  }
+
+  .account-form__side .account-form-field:not(:first-child),
+  .account-form-actions {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .account-form__back {
+    justify-content: center;
+  }
+}

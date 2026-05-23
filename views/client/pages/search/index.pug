@@ -1,9 +1,39 @@
 extends ../../layouts/default.pug
 include ../../mixins/job-layout.pug
-include ../../mixins/box-head.pug
+
+block styles
+  link(rel="stylesheet" href="/css/search.css")
+
 block main
-    +boxHead("Kết quả tìm kiếm")
-    if jobs && jobs.length
+  .client-search-page
+    section.client-search-hero
+      .client-search-hero__content
+        span.client-search-hero__eyebrow Tìm kiếm việc làm
+        h1 Kết quả cho "#{keyword}"
+        p Tìm theo tên việc làm, kỹ năng, mô tả, địa điểm, hình thức làm việc và tên công ty.
+
+      form.client-search-form(action="/search" method="GET")
+        .client-search-form__field
+          i.fa-solid.fa-magnifying-glass
+          input(type="text" name="keyword" placeholder="Nhập vị trí, kỹ năng, công ty..." value=keyword)
+        button(type="submit")
+          span Tìm kiếm
+          i.fa-solid.fa-arrow-right
+
+    section.client-search-results
+      .client-search-results__head
+        div
+          span.client-search-results__count #{jobs ? jobs.length : 0} kết quả phù hợp
+          h2 Danh sách công việc
+        a.client-search-results__link(href="/jobs")
+          span Xem tất cả việc làm
+          i.fa-solid.fa-arrow-right
+
+      if jobs && jobs.length
         +job-grid(jobs)
-    else
-        .alert.alert-warning Không tìm thấy kết quả nào.
+      else
+        .client-search-empty
+          i.fa-solid.fa-magnifying-glass
+          h2 Không tìm thấy kết quả
+          p Thử tìm bằng tên công ty, kỹ năng, vị trí hoặc địa điểm khác.
+          a(href="/jobs") Khám phá việc làm

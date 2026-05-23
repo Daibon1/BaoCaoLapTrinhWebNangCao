@@ -1,39 +1,80 @@
 extends ../../layouts/default.pug
+
+block styles
+  link(rel="stylesheet" href="/css/application.css")
+
 block main
-    link(rel="stylesheet", href="/css/application.css")
-    .applied
-        .applied__container
+  .applied
+    section.applied__hero
+      .applied__heroContent
+        span.applied__eyebrow Hồ sơ ứng tuyển
+        h1 Công việc đã ứng tuyển
+        p Theo dõi các vị trí bạn đã gửi hồ sơ và trạng thái xử lý từ nhà tuyển dụng.
 
-            h2.applied__title Công việc đã ứng tuyển
+      .applied__summary
+        strong #{applications ? applications.length : 0}
+        span Hồ sơ đã gửi
 
-            if applications.length === 0
-                .applied__empty
-                    p Bạn chưa ứng tuyển công việc nào
-            else
-                each app in applications
-                    .applied__job
+    section.applied__section
+      .applied__head
+        div
+          span.applied__count #{applications ? applications.length : 0} công việc
+          h2 Danh sách ứng tuyển
+        a.applied__browse(href="/jobs")
+          span Tìm việc khác
+          i.fa-solid.fa-arrow-right
 
-                        // LOGO COMPANY
-                        .applied__logo
-                            img(src=app.jobId.thumbnail || "/images/company.png")
+      if !applications || applications.length === 0
+        .applied__empty
+          i.fa-solid.fa-briefcase
+          h2 Bạn chưa ứng tuyển công việc nào
+          p Khám phá các công việc phù hợp và gửi hồ sơ ngay khi tìm thấy vị trí tốt.
+          a(href="/jobs") Xem việc làm
+      else
+        .applied__list
+          each app in applications
+            - const job = app.jobId || {};
+            - const company = job.company_id || {};
+            - const statusText = { pending: "Chờ duyệt", reviewing: "Đang xem xét", interview: "Phỏng vấn", accepted: "Đã nhận", rejected: "Từ chối" }[app.status] || app.status;
+            article.applied__job
+              .applied__logo
+                if company.logo
+                  img(src=company.logo alt=company.name)
+                else if job.thumbnail
+                  img(src=job.thumbnail alt=job.title)
+                else
+                  img(src="/images/company-default.png" alt=job.title || "Công việc")
 
-                        // INFO JOB
-                        .applied__info
-                            a.applied__jobTitle(
-                                href=`/jobs/${app.jobId._id}`
-                            )= app.jobId.title
+              .applied__info
+                if job.slug
+                  a.applied__jobTitle(href=`/jobs/detail/${job.slug}`)= job.title
+                else
+                  h3.applied__jobTitle= job.title || "Công việc không còn tồn tại"
 
-                            p.applied__company="DDS"
-                            //- app.jobId.companyName
-                            .applied__meta
-                                span.applied__salary 💰 #{app.jobId.salaryMin/1000000}/#{app.jobId.salaryMax/1000000}
-                                span.applied__location 📍 #{app.jobId.location}
+                p.applied__company
+                  i.fa-solid.fa-building
+                  span= company.name || "Công ty chưa cập nhật"
 
-                        // STATUS
-                        .applied__right
-                            span(class=`applied__status applied__status--${app.status}`)
-                                = app.status
+                .applied__meta
+                  span
+                    i.fa-solid.fa-sack-dollar
+                    if job.salaryMin && job.salaryMax
+                      |  #{(job.salaryMin / 1000000).toLocaleString()} - #{(job.salaryMax / 1000000).toLocaleString()} triệu
+                    else
+                      |  Thỏa thuận
+                  span
+                    i.fa-solid.fa-location-dot
+                    |  #{job.location || "Chưa cập nhật"}
+                  span
+                    i.fa-solid.fa-calendar-days
+                    |  #{moment(app.createdAt).format("DD/MM/YYYY")}
 
-                            a.applied__view(
-                                href=`/jobs/${app.jobId._id}`
-                            ) Xem chi tiết
+              .applied__right
+                span(class=`applied__status applied__status--${app.status}`)= statusText
+                if job.slug
+                  a.applied__view(href=`/jobs/detail/${job.slug}`)
+                    span Xem chi tiết
+                    i.fa-solid.fa-arrow-right
+                a.applied__remove(href=`/applications/delete/${app._id}` onclick="return confirm('Xoa ho so nay khoi danh sach da ung tuyen?')")
+                  i.fa-solid.fa-trash
+                  span Xóa

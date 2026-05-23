@@ -1,118 +1,201 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/job.css")
+
 block main
-    if(role.permissions.includes("jobs-edit"))
-        main.main
-            +alert-success(3000)
-            +alert-error(3000)
-            // Header
-            header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-            h4.mb-0 Cập nhập công việc
-            .card.mb-4
-            .card-body
-                form(action=`/${prefixAdmin}/job/edit/${job.id}?_method=PATCH` method="POST" id="form-edit-job" enctype="multipart/form-data")
-                    .mb-3
-                        label.form-label Tiêu đề công việc
-                        input.form-control(
-                            type="text"
-                            name="title"
-                            value=job.title
-                        )
-                    .mb-3 
-                        label.form-label Danh mục việc làm
-                        select.form-select(name="category")
-                            option(value="") Chọn danh mục
-                            +select-tree(categories,1,job.category)
-                    .mb-3
-                        div(class="form-check form-check-inline")
-                            input(
-                                type="radio"
-                                name="featured"
-                                id="featured-1"
-                                value="1"
-                                class="form-check-input"
-                                checked=(job.featured=="1"?true:false)
-                            )
-                            label(for="featured-1" class="form-check-label") Nổi bật
-                        div(class="form-check form-check-inline")
-                            input(
-                                type="radio"
-                                name="featured"
-                                id="featured-0"
-                                value="0"
-                                class="form-check-input"
-                                checked=(job.featured=="0"?true:false)
-                            )
-                            label(for="featured-0" class="form-check-label") Không nổi bật
-                    .mb-3
-                        label.form-label Mô tả công việc
-                        textarea.form-control.tinymce(
-                            name="description" 
-                            rows="5" 
-                            value=job.description
-                        ) !{job.description}
-                    .mb-3
-                        label.form-label Skill (Nhập cách nhau bằng dấu phẩy)
-                        input.form-control(
-                            type="text"
-                            name="skill"
-                            id="skillInput"
-                            placeholder="VD: NodeJS, MongoDB, React"
-                            value=job.skill.join(",")
-                        )
-                    .mb-3
-                        label.form-label Địa điểm làm việc
-                        input.form-control(
-                            type="text" 
-                            name="location"
-                            value=job.location
-                        )
-                    .mb-3
-                        label.form-label Kinh nghiệm yêu cầu
-                        input.form-control(
-                            type="text" 
-                            name="experience"
-                            value=job.experience
-                        )
-                    .mb-3
-                        label.form-label Thời gian làm việc
-                        .flex.align-items-center.gap-3
-                            label.form-check-label
-                                input.form-check-input(type="radio" name="type" value="Full-time" checked=job.type=="Full-time"?true:false)
-                                | Full-time
-                            label.form-check-label
-                                input.form-check-input(type="radio" name="type" value="Part-time" checked=job.type=="Part-time"?true:false)
-                                | Part-time
-                    .mb-3
-                        label.form-label Mức lương tối thiểu (VNĐ)
-                        input.form-control(type="number" name="salaryMin" min="0" value=job.salaryMin)
-                    .mb-3
-                        label.form-label Mức lương tối đa (VNĐ)
-                        input.form-control(type="number" name="salaryMax" min="0" value=job.salaryMax)
-                    .mb-3
-                        label.form-label Vị trí
-                        input.form-control(type="number" name="position" min="0" placeholder="Tự động tăng" value=job.position) 
-                    .mb-3
-                        label.form-label Thumbnail (Ảnh công việc)
-                        div(id="preview-img")
-                            input.form-control-file(
-                                type="file"
-                                name="thumbnail"
-                                accept="image/*"
-                                id="file-input"
-                            )
-                            img(src=job.thumbnail alt="" id="img-preview" )
+  if(role.permissions.includes("jobs-edit"))
+    +alert-success(3000)
+    +alert-error(3000)
 
-                    .mb-3
-                        label.form-label Trạng thái
-                        .flex.align-items-center.gap-3
-                            label.form-check-label
-                                input.form-check-input(type="radio" name="status" value="active" checked=job.status=="active"?true:false)
-                                | Hoạt động
-                            label.form-check-label
-                                input.form-check-input(type="radio" name="status" value="Part-time" checked=job.status=="inactive"?true:false)
-                                | Ngừng hoạt động
-                    button.btn.btn-primary(type="submit") Cập nhật
+    .job-create-page
+      .job-page__header
+        .job-page__title
+          span.job-page__icon
+            i.fa-solid.fa-pen-to-square
+          div
+            h1 Cập nhật việc làm
+            p.job-create-page__subtitle Chỉnh sửa thông tin tuyển dụng và trạng thái hiển thị
+        a.btn.btn-outline-secondary.job-create-page__back(href=`/${prefixAdmin}/job`)
+          i.fa-solid.fa-arrow-left
+          span Quay lại
 
-        script(src="/admin/js/job.js")
+      form.job-create-form(action=`/${prefixAdmin}/job/edit/${job.id}?_method=PATCH` method="POST" id="form-edit-job" enctype="multipart/form-data")
+        .job-create-form__main
+          section.job-create-panel
+            .job-create-panel__head
+              span.job-create-panel__icon
+                i.fa-solid.fa-file-lines
+              div
+                h2 Thông tin chính
+                p Nội dung hiển thị với ứng viên
+
+            .job-form-grid
+              .job-form-field.job-form-field--wide
+                label.form-label(for="job-title") Tiêu đề công việc
+                input.form-control#job-title(
+                  type="text"
+                  name="title"
+                  value=job.title
+                  required
+                )
+
+              .job-form-field
+                label.form-label(for="job-category") Danh mục việc làm
+                select.form-select#job-category(name="category")
+                  option(value="") Chọn danh mục
+                  +select-tree(categories, 1, job.category)
+
+              .job-form-field
+                label.form-label Chế độ nổi bật
+                .job-choice-group
+                  label.job-choice(for="featured-1")
+                    input.form-check-input(
+                      type="radio"
+                      name="featured"
+                      id="featured-1"
+                      value="1"
+                      checked=(job.featured=="1" ? true : false)
+                    )
+                    span Nổi bật
+                  label.job-choice(for="featured-0")
+                    input.form-check-input(
+                      type="radio"
+                      name="featured"
+                      id="featured-0"
+                      value="0"
+                      checked=(job.featured=="0" ? true : false)
+                    )
+                    span Không nổi bật
+
+              .job-form-field.job-form-field--wide
+                label.form-label(for="job-description") Mô tả công việc
+                textarea.form-control.tinymce#job-description(
+                  name="description"
+                  rows="8"
+                ) !{job.description}
+
+          section.job-create-panel
+            .job-create-panel__head
+              span.job-create-panel__icon
+                i.fa-solid.fa-sliders
+              div
+                h2 Yêu cầu và đãi ngộ
+                p Kỹ năng, địa điểm, lương và kinh nghiệm
+
+            .job-form-grid
+              .job-form-field.job-form-field--wide
+                label.form-label(for="skillInput") Kỹ năng
+                input.form-control#skillInput(
+                  type="text"
+                  name="skill"
+                  placeholder="VD: NodeJS, MongoDB, React"
+                  value=(job.skill || []).join(",")
+                )
+                small.job-form-hint Tối đa 5 kỹ năng, cách nhau bằng dấu phẩy
+                .invalid-feedback#skillError
+
+              .job-form-field
+                label.form-label(for="job-location") Địa điểm làm việc
+                select.form-select#job-location(name="location")
+                  option(value="") Chọn địa điểm
+                  option(value="Hà Nội" selected=job.location=="Hà Nội" ? true : false) Hà Nội
+                  option(value="TP.HCM" selected=job.location=="TP.HCM" ? true : false) TP.HCM
+                  option(value="Đà Nẵng" selected=job.location=="Đà Nẵng" ? true : false) Đà Nẵng
+
+              .job-form-field
+                label.form-label(for="job-experience") Kinh nghiệm yêu cầu
+                input.form-control#job-experience(
+                  type="text"
+                  name="experience"
+                  value=job.experience
+                )
+
+              .job-form-field
+                label.form-label Thời gian làm việc
+                .job-choice-group
+                  label.job-choice
+                    input.form-check-input(type="radio" name="type" value="Full-time" checked=job.type=="Full-time" ? true : false)
+                    span Full-time
+                  label.job-choice
+                    input.form-check-input(type="radio" name="type" value="Part-time" checked=job.type=="Part-time" ? true : false)
+                    span Part-time
+
+              .job-form-field
+                label.form-label(for="job-salary-min") Lương tối thiểu (VNĐ)
+                input.form-control#job-salary-min(type="number" name="salaryMin" min="0" value=job.salaryMin)
+
+              .job-form-field
+                label.form-label(for="job-salary-max") Lương tối đa (VNĐ)
+                input.form-control#job-salary-max(type="number" name="salaryMax" min="0" value=job.salaryMax)
+
+              .job-form-field
+                label.form-label(for="job-position") Vị trí
+                input.form-control#job-position(type="number" name="position" min="0" placeholder="Tự động tăng" value=job.position)
+
+        aside.job-create-form__side
+          section.job-create-panel.job-create-panel--sticky
+            .job-create-panel__head
+              span.job-create-panel__icon
+                i.fa-solid.fa-image
+              div
+                h2 Hình ảnh và trạng thái
+                p Cập nhật ảnh đại diện và trạng thái
+
+            .job-form-field
+              label.form-label Thumbnail
+              .job-upload#preview-img
+                img(src=job.thumbnail || "", alt="" id="img-preview")
+                .job-upload__content
+                  i.fa-solid.fa-cloud-arrow-up
+                  span Chọn ảnh công việc
+                  small PNG, JPG hoặc WEBP
+                input.job-upload__input(
+                  type="file"
+                  name="thumbnail"
+                  accept="image/*"
+                  id="file-input"
+                )
+
+            .job-form-field
+              label.form-label Trạng thái
+              if(role.title != "Employer")
+                .job-choice-group.job-choice-group--stack
+                  label.job-choice
+                    input.form-check-input(type="radio" name="status" value="pending" checked=job.status=="pending" ? true : false)
+                    span Chờ duyệt
+                  label.job-choice
+                    input.form-check-input(type="radio" name="status" value="active" checked=job.status=="active" ? true : false)
+                    span Hoạt động
+                  label.job-choice
+                    input.form-check-input(type="radio" name="status" value="inactive" checked=job.status=="inactive" ? true : false)
+                    span Ngừng hoạt động
+              else
+                if(job.status == "active" || job.status == "inactive")
+                  .job-choice-group.job-choice-group--stack
+                    label.job-choice
+                      input.form-check-input(type="radio" name="status" value="active" checked=job.status=="active" ? true : false)
+                      span Hoạt động
+                    label.job-choice
+                      input.form-check-input(type="radio" name="status" value="inactive" checked=job.status=="inactive" ? true : false)
+                      span Ngừng hoạt động
+                else
+                  .job-pending-note
+                    i.fa-solid.fa-clock
+                    div
+                      strong Chờ admin duyệt
+                      span Bạn có thể cập nhật nội dung, trạng thái sẽ do admin duyệt.
+
+            .job-create-actions
+              button.btn.btn-primary(type="submit")
+                i.fa-solid.fa-floppy-disk
+                span Cập nhật
+              a.btn.btn-outline-secondary(href=`/${prefixAdmin}/job`)
+                i.fa-solid.fa-xmark
+                span Hủy
+
+    script(src="/admin/js/job.js")
+  else
+    h2 Không có quyền truy cập

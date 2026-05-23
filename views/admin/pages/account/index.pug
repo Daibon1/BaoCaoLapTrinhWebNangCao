@@ -1,162 +1,155 @@
-//- extends ../../layouts/default.pug 
-//- include ../../mixins/filter-status.pug
-//- include ../../mixins/filter-search.pug
-//- include ../../mixins/pagination.pug
-//- include ../../mixins/form-change-multi.pug
-//- include ../../mixins/alert.pug
-//- block main 
-//-   +alert-success(2000)
-//-   +alert-error(2000)
-//-   main.main
-//-     // Header
-//-     header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-//-       h4.mb-0 Danh sách tài khoản
-//-     a(href=`/${prefixAdmin}/account/create` class="btn btn-primary") Tạo tài khoản
-//-     .table-card
-//-       .table-scroll
-//-         table(class="table align-middle mb-0" checkbox-multi)
-//-           thead.table-light.sticky-top
-//-             tr
-//-               th 
-//-                 input(type="checkbox" name="checkbox-all")
-//-               th STT
-//-               th Avatar
-//-               th Họ tên
-//-               th Email
-//-               th Phân quyền
-//-               th Số điện thoại
-//-               th Trạng thái
-//-               th Hành động
-//-           tbody
-//-             each item,index in accounts
-//-               tr
-//-                 td 
-//-                   input(type="checkbox" name="id" value=item.id)
-//-                 td #{(pagination.page-1)*pagination.limitItem+index+1}
-//-                 td 
-//-                   if item.avatar
-//-                     img(src=item.avatar alt=item.title style="width: 80px; height: 80px; object-fit: cover;")
-//-                   else
-//-                     img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
-//-                 td #{item.fullName}
-//-                 td #{item.email}
-//-                 td #{item.role}
-//-                 td #{item.phone}
-//-                 td
-//-                   if(item.status=="active")
-//-                       a.btn(
-//-                         data-id=item.id
-//-                         href="javascript:;"
-//-                         class="badge bg-success"
-//-                         change-status
-//-                         data-status=item.status
-//-                       ) Hoạt động
-//-                   else
-//-                       a.btn(
-//-                         href="javascript:;"
-//-                         class="badge bg-danger"
-//-                         change-status
-//-                         data-id=item.id
-//-                         data-status=item.status
-//-                       ) Ngừng hoạt động
-//-                 td(class="text-end")
-//-                   a(class="btn btn-outline-primary btn-sm"
-//-                     href=`/${prefixAdmin}/account/edit/${item.id}`) Sửa
-//-                   button(class="btn btn-outline-danger btn-sm"
-//-                    button-delete
-//-                    data-id=item.id) Xóa
-extends ../../layouts/default.pug 
+extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
-include ../../mixins/filter-search.pug
 include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/account.css")
 
 block main
   if(role.permissions.includes("accounts-view"))
     +alert-success(2000)
     +alert-error(2000)
 
-    main.main
-      // Header
-      header.admin-header.d-flex.flex-wrap.justify-content-between.align-items-center.mb-3.gap-2
-        h4.mb-0 Danh sách tài khoản
+    .account-page
+      .account-page__header
+        .account-page__title
+          span.account-page__icon
+            i.fa-solid.fa-users-gear
+          h1 Quản lý tài khoản
+
         if(role.permissions.includes("accounts-create"))
-          a(href=`/${prefixAdmin}/account/create` class="btn btn-primary") Tạo tài khoản
+          a.btn.btn-primary.account-page__create(href=`/${prefixAdmin}/account/create`)
+            i.fa-solid.fa-user-plus
+            span Tạo tài khoản
 
-      .table-card
-        .table-scroll
-          .table-responsive
-            table(class="table align-middle mb-0" checkbox-multi)
-              thead.table-light.sticky-top
-                tr
-                  th 
-                    input(type="checkbox" name="checkbox-all")
-                  th STT
-                  th Avatar
-                  th Họ tên
-                  th Email
-                  th Phân quyền
-                  th Số điện thoại
-                  th Trạng thái
-                  th Hành động
+      .account-toolbar
+        .account-toolbar__status
+          +filter-status(filterStatus)
 
-              tbody
+        -
+          const activeStatus = filterStatus.find(item => item.class);
+        form.account-toolbar__search#form-search(method="GET")
+          if activeStatus && activeStatus.status
+            input(type="hidden" name="status" value=activeStatus.status)
+          .account-search
+            i.fa-solid.fa-magnifying-glass
+            input.form-control(
+              type="text"
+              name="keyword"
+              placeholder="Tìm theo tên, email, số điện thoại..."
+              value=keyword
+            )
+          button.btn.btn-primary(type="submit")
+            i.fa-solid.fa-filter
+            span Lọc
+          a.btn.btn-outline-secondary(href=`/${prefixAdmin}/account`)
+            i.fa-solid.fa-rotate-left
+            span Xóa lọc
+
+      .account-table-shell
+        .account-table-shell__top
+          h2 Danh sách tài khoản
+          .account-table-shell__meta
+            i.fa-solid.fa-address-book
+            span #{accounts.length} tài khoản
+
+        .table-responsive
+          table.account-table.table.align-middle.mb-0(checkbox-multi)
+            thead
+              tr
+                th STT
+                th Tài khoản
+                th Email
+                th Phân quyền
+                th Số điện thoại
+                th Khóa
+                th.text-end Hành động
+            tbody
+              if accounts.length > 0
                 each item,index in accounts
                   tr
-                    td 
-                      input(type="checkbox" name="id" value=item.id)
-
-                    td #{(pagination.page-1)*pagination.limitItem+index+1}
-
-                    td 
-                      if item.avatar
-                        img(
-                          src=item.avatar 
-                          alt=item.title 
-                          class="img-fluid rounded"
-                          style="max-width: 60px; height: auto;"
-                        )
+                    td.account-table__index #{(pagination.page-1)*pagination.limitItem+index+1}
+                    td
+                      .account-user
+                        .account-avatar
+                          if item.avatar
+                            img(src=item.avatar alt=item.fullName)
+                          else
+                            img(src="/admin/images/no-image.png" alt="No Image")
+                        .account-user__info
+                          strong #{item.fullName || "Chưa cập nhật"}
+                          span ID: #{item.id}
+                    td
+                      .account-email #{item.email || "Chưa cập nhật"}
+                    td
+                      if item.role
+                        span.account-role #{item.role.title}
                       else
-                        img(
-                          src="/admin/images/no-image.png" 
-                          alt="No Image" 
-                          class="img-fluid rounded"
-                          style="max-width: 60px; height: auto;"
-                        )
-
-                    td.text-truncate(style="max-width: 150px;") #{item.fullName}
-                    td.text-truncate(style="max-width: 180px;") #{item.email}
-                    td #{item.role.title}
-                    td #{item.phone}
-
+                        span.account-role.account-role--empty Chưa phân quyền
+                    td #{item.phone || "Chưa cập nhật"}
                     td
                       if(item.status=="active")
-                        a.btn(
+                        a.account-status.account-status--active(
                           data-id=item.id
                           href="javascript:;"
-                          class="badge bg-success"
                           change-status
                           data-status=item.status
-                        ) Hoạt động
+                        )
+                          i.fa-solid.fa-lock-open
+                          span Không khóa
                       else
-                        a.btn(
+                        a.account-status.account-status--inactive(
                           href="javascript:;"
-                          class="badge bg-danger"
                           change-status
                           data-id=item.id
                           data-status=item.status
-                        ) Ngừng hoạt động
-
-                    td.text-end
-                      .d-flex.flex-wrap.gap-1.justify-content-end
+                        )
+                          i.fa-solid.fa-lock
+                          span Đã khóa
+                    td
+                      .account-actions
                         if(role.permissions.includes("accounts-edit"))
-                          a(class="btn btn-outline-primary btn-sm"
-                            href=`/${prefixAdmin}/account/edit/${item.id}`) Sửa
+                          a.btn.btn-outline-primary.btn-sm(
+                            href=`/${prefixAdmin}/account/edit/${item.id}`
+                            title="Sửa"
+                          )
+                            i.fa-solid.fa-pen
+                            span Sửa
                         if(role.permissions.includes("accounts-delete"))
-                          button(class="btn btn-outline-danger btn-sm"
+                          button.btn.btn-outline-danger.btn-sm(
+                            type="button"
                             button-delete
-                            data-id=item.id) Xóa
-      +pagination(pagination)
-  else 
+                            data-id=item.id
+                            title="Xóa"
+                          )
+                            i.fa-solid.fa-trash
+                            span Xóa
+              else
+                tr
+                  td(colspan="7")
+                    .account-empty
+                      i.fa-solid.fa-user-slash
+                      h3 Không tìm thấy tài khoản phù hợp
+
+        .account-pagination
+          +pagination(pagination)
+
+      form(
+        action=""
+        method="POST"
+        name="form-change-status"
+        id="form-change-status"
+        path=`/${prefixAdmin}/account/change-status`
+      )
+      form(
+        action=""
+        method="POST"
+        name="form-delete-item"
+        id="form-delete-item"
+        path=`/${prefixAdmin}/account/delete`
+      )
+
+    script(src="/admin/js/account.js")
+  else
     h2 Không có quyền truy cập

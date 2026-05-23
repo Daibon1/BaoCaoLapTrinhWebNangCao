@@ -8,10 +8,12 @@ const multer = require('multer')
 const upload = multer();
 router.get("/",Controller.index);
 router.get("/add/:jobId",authMiddleware.requireAuth,Controller.add);
+router.get("/delete/:id", authMiddleware.requireAuth, Controller.deleteItem);
 router.post("/add/:jobId",
+    authMiddleware.requireAuth,
+    Controller.checkApplied,
     upload.single('cvUrl'),
     uploadCloud.upload,
-    authMiddleware.requireAuth,
     Controller.addPost
 );
 module.exports=router;

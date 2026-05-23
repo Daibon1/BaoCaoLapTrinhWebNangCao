@@ -15,12 +15,13 @@ module.exports = (query) => {
             class: ""
         }
     ]
-    if (query.status) {
-        const index = filterStatus.findIndex(item => item.status == query.status)
+    const index = filterStatus.findIndex(item => item.status == query.status);
+
+    if (index >= 0) {
         filterStatus[index].class = "btn-success";
     } else {
-        const index = filterStatus.findIndex(item => item.status == "")
-        filterStatus[index].class = "btn-success";
+        filterStatus[0].class = "btn-success";
     }
+
     return filterStatus;
 }

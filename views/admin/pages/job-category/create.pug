@@ -1,58 +1,104 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
-block main
-    if(role.permissions.includes("jobs-category-create"))
-        main.main
-            +alert-success(3000)
-            +alert-error(3000)
-            // Header
-            h2 Tạo danh mục
-            .card.mb-4
-                .card-body
-                    form(action=`/${prefixAdmin}/job-category/create` id="form-create-job-category" method="POST" enctype="multipart/form-data")
-                        .mb-3
-                            label.form-label Tiêu đề danh mục
-                            input.form-control(
-                                type="text"
-                                name="title"
-                                required
-                            )
-                        .mb-3 
-                            label.form-label Danh mục cha 
-                            select.form-select(name="parent_id")
-                                option(value="") -- Chọn danh mục cha --
-                                +select-tree(records,1)
-                        .mb-3
-                            label.form-label Mô tả danh mục
-                            textarea.form-control(
-                                class="tinymce"
-                                name="description" 
-                                rows="5" 
-                            )
-                        .mb-3
-                            label.form-label Vị trí
-                            input.form-control(type="number" name="position" min="0" placeholder="Tự động tăng")
-                        .mb-3
-                            label.form-label Thumbnail (Ảnh danh mục)
-                            div(id="preview-img")
-                                input.form-control-file(
-                                    type="file"
-                                    name="thumbnail"
-                                    accept="image/*"
-                                    id="file-input"
-                                )
-                                img(src="", alt="" id="img-preview" )
 
-                        .mb-3
-                            label.form-label Trạng thái
-                            .flex.align-items-center.gap-3
-                                label.form-check-label
-                                    input.form-check-input(type="radio" name="status" value="active" checked)
-                                    | Hoạt động
-                                label.form-check-label
-                                    input.form-check-input(type="radio" name="status" value="inactive")
-                                    | Dừng hoạt động
-                        button.btn.btn-primary(type="submit") Tạo mới
-    else 
-        h2 Không có quyền truy cập
+block styles
+  link(rel="stylesheet", href="/admin/css/category.css")
+
+block main
+  if(role.permissions.includes("jobs-category-create"))
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .job-category-page
+      .job-category-page__header
+        .job-category-page__title
+          span.job-category-page__icon
+            i.fa-solid.fa-layer-group
+          div
+            h1 Tạo danh mục việc làm
+            p.category-form__subtitle Thiết lập nhóm việc làm để phân loại tin tuyển dụng
+        a.btn.btn-outline-secondary.category-form__back(href=`/${prefixAdmin}/job-category`)
+          i.fa-solid.fa-arrow-left
+          span Quay lại
+
+      form.category-form(action=`/${prefixAdmin}/job-category/create` id="form-create-job-category" method="POST" enctype="multipart/form-data")
+        .category-form__main
+          section.category-panel
+            .category-panel__head
+              span.category-panel__icon
+                i.fa-solid.fa-file-lines
+              div
+                h2 Thông tin danh mục
+                p Tên, danh mục cha và mô tả hiển thị
+
+            .category-form-grid
+              .category-form-field.category-form-field--wide
+                label.form-label(for="category-title") Tiêu đề danh mục
+                input.form-control#category-title(
+                  type="text"
+                  name="title"
+                  placeholder="VD: Công nghệ thông tin"
+                  required
+                )
+
+              .category-form-field
+                label.form-label(for="category-parent") Danh mục cha
+                select.form-select#category-parent(name="parent_id")
+                  option(value="") Không có danh mục cha
+                  +select-tree(records, 1)
+
+              .category-form-field
+                label.form-label(for="category-position") Vị trí
+                input.form-control#category-position(type="number" name="position" min="0" placeholder="Tự động tăng")
+
+              .category-form-field.category-form-field--wide
+                label.form-label(for="category-description") Mô tả danh mục
+                textarea.form-control.tinymce#category-description(
+                  name="description"
+                  rows="8"
+                )
+
+        aside.category-form__side
+          section.category-panel.category-panel--sticky
+            .category-panel__head
+              span.category-panel__icon
+                i.fa-solid.fa-image
+              div
+                h2 Hình ảnh và trạng thái
+                p Ảnh đại diện và trạng thái sử dụng
+
+            .category-form-field
+              label.form-label Thumbnail
+              .category-upload#preview-img
+                img(src="", alt="" id="img-preview")
+                .category-upload__content
+                  i.fa-solid.fa-cloud-arrow-up
+                  span Chọn ảnh danh mục
+                  small PNG, JPG hoặc WEBP
+                input.category-upload__input(
+                  type="file"
+                  name="thumbnail"
+                  accept="image/*"
+                  id="file-input"
+                )
+
+            .category-form-field
+              label.form-label Trạng thái
+              .category-choice-group.category-choice-group--stack
+                label.category-choice
+                  input.form-check-input(type="radio" name="status" value="active" checked)
+                  span Hoạt động
+                label.category-choice
+                  input.form-check-input(type="radio" name="status" value="inactive")
+                  span Ngừng hoạt động
+
+            .category-form-actions
+              button.btn.btn-primary(type="submit")
+                i.fa-solid.fa-plus
+                span Tạo mới
+              a.btn.btn-outline-secondary(href=`/${prefixAdmin}/job-category`)
+                i.fa-solid.fa-xmark
+                span Hủy
+  else
+    h2 Không có quyền truy cập

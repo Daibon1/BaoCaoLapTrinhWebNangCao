@@ -25,6 +25,10 @@ const applicationSchema = new mongoose.Schema({
             "rejected"
         ],
         default: "pending"
+    },
+    hiddenByUser: {
+        type: Boolean,
+        default: false
     }
 
 }, {

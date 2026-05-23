@@ -1,130 +1,141 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
+block styles
+  link(rel="stylesheet" href="/css/job.css")
+
 block main
-    link(rel="stylesheet", href="/css/job.css")
-    +alert-success(3000)
-    +alert-error(3000)
-    main.job-detail
-        .container
+  +alert-success(3000)
+  +alert-error(3000)
 
-            .row
-                // ================= LEFT =================
-                .col-lg-8
+  main.client-job-detail
+    section.job-detail-hero
+      .job-detail-hero__logo
+        if company && company.logo
+          img(src=company.logo alt=company.name)
+        else if job.thumbnail
+          img(src=job.thumbnail alt=job.title)
+        else
+          img(src="/images/company-default.png" alt=job.title)
 
-                    // ===== JOB HEADER =====
-                    .job-header.card.mb-4
-                        .card-body
-                            .d-flex.align-items-center
+      .job-detail-hero__content
+        a.job-detail-hero__back(href="/jobs")
+          i.fa-solid.fa-arrow-left
+          span Danh sách việc làm
 
-                                img.company-logo(
-                                    src="/images/company.png"
-                                    alt="company"
-                                    width="70"
-                                )
+        h1= job.title
 
-                                .ms-3
-                                    h1.job-title #{job.title}
-                                    p.company-name
-                                        a(href="/companies/slug") #{job.companyName}
+        .job-detail-company
+          if company
+            a(href=`/company/detail/${company.slug}`)= company.name
+          else
+            span Công ty chưa cập nhật
 
-                                    .job-meta
-                                        span.badge.bg-primary #{job.type}
-                                        span.text-muted.ms-3 📍 #{job.location}
-                                        span.text-muted.ms-3 💰 #{(job.salaryMin/1000000).toLocaleString()} - #{(job.salaryMax/1000000).toLocaleString()} triệu
+        .job-detail-meta
+          span
+            i.fa-solid.fa-location-dot
+            |  #{job.location || "Chưa cập nhật địa điểm"}
+          span
+            i.fa-solid.fa-briefcase
+            |  #{job.type || "Chưa cập nhật hình thức"}
+          span
+            i.fa-solid.fa-sack-dollar
+            if job.salaryMin && job.salaryMax
+              |  #{(job.salaryMin / 1000000).toLocaleString()} - #{(job.salaryMax / 1000000).toLocaleString()} triệu
+            else
+              |  Thỏa thuận
 
-                            hr
+      .job-detail-hero__actions
+        a.job-detail-apply(href=`/applications/add/${job._id}`)
+          i.fa-solid.fa-paper-plane
+          span Ứng tuyển ngay
+        form(action=`/saved-jobs/add/${job._id}` method="POST")
+          if job.savedJob
+            button.job-detail-save.job-detail-save--active(type="submit")
+              i.fa-solid.fa-heart
+              span Đã lưu
+          else
+            button.job-detail-save(type="submit")
+              i.fa-regular.fa-heart
+              span Lưu việc
 
-                            .d-flex.gap-2
-            
-                                a(href=`/applications/add/${job._id}`)
-                                    button.btn.btn-success(type="submit")
-                                        i.fa-solid.fa-paper-plane.me-2
-                                        | Ứng tuyển ngay
-                                form(
-                                    action=`/saved-jobs/add/${job._id}`
-                                    method="POST"
-                                )
-                                    if  (job.savedJob)
-                                        button.btn.btn-savedjob(type="submit")
-                                            i.fa-solid.fa-heart.me-2
-                                            | Đã lưu
-                                    else
-                                        button.btn.btn-savedjob(type="submit")
-                                            i.fa-regular.fa-heart.me-2  
-                                            | Lưu việc
+    .job-detail-layout
+      .job-detail-main
+        section.job-detail-box
+          .job-detail-box__head
+            i.fa-solid.fa-file-lines
+            h2 Mô tả công việc
+          .job-detail-description !{job.description || "<p>Chưa cập nhật mô tả công việc.</p>"}
 
-                    // ===== JOB DESCRIPTION =====
-                    .card.mb-4
-                        .card-body
-                            h3 Mô tả công việc
-                            span !{job.description}
+        section.job-detail-box
+          .job-detail-box__head
+            i.fa-solid.fa-list-check
+            h2 Yêu cầu kỹ năng
+          if job.skill && job.skill.length
+            .job-detail-skills
+              each item in job.skill
+                span= item
+          else
+            p.job-detail-empty Không có yêu cầu kỹ năng cụ thể.
 
-                            h4 Yêu cầu
-                            ul
-                                if job.skill.length > 0
-                                    each item in job.skill
-                                        li #{item}
-                                else
-                                    li Không có yêu cầu
+        section.job-detail-box
+          .job-detail-box__head
+            i.fa-solid.fa-building
+            h2 Giới thiệu công ty
+          if company && company.description
+            p.job-detail-text= company.description
+          else
+            p.job-detail-empty Công ty chưa cập nhật mô tả.
 
-                            h4 Danh mục
-                            a(href=`/jobs/${category.slug}`) #{category.title}
+          if company
+            a.job-detail-link(href=`/company/detail/${company.slug}`)
+              span Xem công ty
+              i.fa-solid.fa-arrow-right
 
-                    .card
-                        .card-body
-                            h3 Giới thiệu công ty
-                            if (company)
-                                p=company.description
-                            else
-                                p.text-muted Công ty chưa cập nhật mô tả.
-                        
-                            if (company)
-                                a.btn.btn-outline-primary(
-                                    href=`/company/detail/${company.slug}`
-                                ) Xem công ty
+      aside.job-detail-aside
+        section.job-detail-box.job-detail-box--sticky
+          .job-detail-box__head
+            i.fa-solid.fa-circle-info
+            h2 Thông tin chung
 
+          ul.job-detail-info
+            li
+              span Mức lương
+              strong
+                if job.salaryMin && job.salaryMax
+                  | #{(job.salaryMin / 1000000).toLocaleString()} - #{(job.salaryMax / 1000000).toLocaleString()} triệu
+                else
+                  | Thỏa thuận
+            li
+              span Kinh nghiệm
+              strong= job.experience || "Chưa cập nhật"
+            li
+              span Hình thức
+              strong= job.type || "Chưa cập nhật"
+            li
+              span Địa điểm
+              strong= job.location || "Chưa cập nhật"
+            if category
+              li
+                span Danh mục
+                a(href=`/jobs/${category.slug}`)= category.title
 
-                // ================= RIGHT =================
-                .col-lg-4
+          a.job-detail-apply.job-detail-apply--full(href=`/applications/add/${job._id}`)
+            i.fa-solid.fa-paper-plane
+            span Ứng tuyển ngay
 
-                    // APPLY BOX
-                    .card.mb-4
-                        .card-body
-                            h5 Thông tin chung
+        section.job-detail-box
+          .job-detail-box__head
+            i.fa-solid.fa-briefcase
+            h2 Việc làm liên quan
 
-                            ul.list-unstyled
-                                li.mb-2
-                                    strong Mức lương:
-                                    |  #{(job.salaryMin/1000000).toLocaleString()} - #{(job.salaryMax/1000000).toLocaleString()} triệu
-
-                                li.mb-2
-                                    strong Kinh nghiệm:
-                                    |  #{job.experience}
-
-                                li.mb-2
-                                    strong Hình thức:
-                                    |  #{job.type}
-
-                                li.mb-2
-                                    strong Địa điểm:
-                                    |  #{job.location}
-
-                                li.mb-2
-                                    strong Hạn nộp:
-                                    |  30/12/2025
-
-                            a.btn.btn-success.w-100(href=`/applications/add/${job._id}`) Ứng tuyển ngay
-
-
-                    // RELATED JOBS
-                .card
-                    .card-body
-                        h5 Việc làm liên quan
-                        if(jobCategory)
-                            each item in jobCategory
-                                .related-job.mb-3
-                                    a(href=`/jobs/detail/${item.slug}`) #{item.title}
-                                    div.text-muted #{item.salaryMin} - #{item.salaryMax} triệu • #{item.location}
-                        else
-                            p.text-muted Không có công việc nào.
+          if jobCategory && jobCategory.length
+            .job-related-list
+              each item in jobCategory
+                a.job-related-item(href=`/jobs/detail/${item.slug}`)
+                  strong= item.title
+                  span
+                    i.fa-solid.fa-location-dot
+                    |  #{item.location || "Chưa cập nhật"}
+          else
+            p.job-detail-empty Không có công việc liên quan.

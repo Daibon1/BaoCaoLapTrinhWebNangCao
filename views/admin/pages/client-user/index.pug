@@ -1,0 +1,158 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/pagination.pug
+include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/account.css")
+
+block main
+  - const canViewClientUsers = role.permissions.includes("client-users-view") || role.permissions.includes("accounts-view");
+  - const canEditClientUsers = role.permissions.includes("client-users-edit") || role.permissions.includes("accounts-edit");
+  - const canDeleteClientUsers = role.permissions.includes("client-users-delete") || role.permissions.includes("accounts-delete");
+  if(canViewClientUsers)
+    +alert-success(2000)
+    +alert-error(2000)
+
+    .account-page
+      .account-page__header
+        .account-page__title
+          span.account-page__icon
+            i.fa-solid.fa-users
+          h1 Quản lý user client
+
+      .account-toolbar
+        .account-toolbar__status
+          +filter-status(filterStatus)
+
+        -
+          const activeStatus = filterStatus.find(item => item.class);
+        form.account-toolbar__search#form-search(method="GET")
+          if activeStatus && activeStatus.status
+            input(type="hidden" name="status" value=activeStatus.status)
+          .account-search
+            i.fa-solid.fa-magnifying-glass
+            input.form-control(
+              type="text"
+              name="keyword"
+              placeholder="Tìm theo tên, email, số điện thoại..."
+              value=keyword
+            )
+          button.btn.btn-primary(type="submit")
+            i.fa-solid.fa-filter
+            span Lọc
+          a.btn.btn-outline-secondary(href=`/${prefixAdmin}/client-user`)
+            i.fa-solid.fa-rotate-left
+            span Xóa lọc
+
+      .account-table-shell
+        .account-table-shell__top
+          h2 Danh sách user client
+          .account-table-shell__meta
+            i.fa-solid.fa-address-book
+            span #{users.length} user
+
+        .table-responsive
+          table.account-table.table.align-middle.mb-0
+            thead
+              tr
+                th STT
+                th Tài khoản
+                th Email
+                th CV
+                th Số điện thoại
+                th Khóa
+                th.text-end Hành động
+            tbody
+              if users.length > 0
+                each item,index in users
+                  tr
+                    td.account-table__index #{(pagination.page-1)*pagination.limitItem+index+1}
+                    td
+                      .account-user
+                        .account-avatar
+                          if item.avatar
+                            img(src=item.avatar alt=item.fullName)
+                          else
+                            img(src="/admin/images/no-image.png" alt="No Image")
+                        .account-user__info
+                          strong #{item.fullName || "Chưa cập nhật"}
+                          span ID: #{item.id}
+                    td
+                      .account-email #{item.email || "Chưa cập nhật"}
+                    td
+                      if item.cvFile
+                        a.account-role(href=item.cvFile target="_blank" rel="noopener noreferrer")
+                          i.fa-solid.fa-file-lines
+                          span Xem CV
+                      else
+                        span.account-role.account-role--empty Chưa có CV
+                    td #{item.phone || "Chưa cập nhật"}
+                    td
+                      if(item.status=="active")
+                        if(canEditClientUsers)
+                          a.account-status.account-status--active(
+                            data-id=item.id
+                            href="javascript:;"
+                            change-status
+                            data-status=item.status
+                          )
+                            i.fa-solid.fa-lock-open
+                            span Không khóa
+                        else
+                          span.account-status.account-status--active
+                            i.fa-solid.fa-lock-open
+                            span Không khóa
+                      else
+                        if(canEditClientUsers)
+                          a.account-status.account-status--inactive(
+                            href="javascript:;"
+                            change-status
+                            data-id=item.id
+                            data-status=item.status
+                          )
+                            i.fa-solid.fa-lock
+                            span Đã khóa
+                        else
+                          span.account-status.account-status--inactive
+                            i.fa-solid.fa-lock
+                            span Đã khóa
+                    td
+                      .account-actions
+                        if(canDeleteClientUsers)
+                          button.btn.btn-outline-danger.btn-sm(
+                            type="button"
+                            button-delete
+                            data-id=item.id
+                            title="Xóa"
+                          )
+                            i.fa-solid.fa-trash
+                            span Xóa
+              else
+                tr
+                  td(colspan="7")
+                    .account-empty
+                      i.fa-solid.fa-user-slash
+                      h3 Không tìm thấy user phù hợp
+
+        .account-pagination
+          +pagination(pagination)
+
+      form(
+        action=""
+        method="POST"
+        name="form-change-status"
+        id="form-change-status"
+        path=`/${prefixAdmin}/client-user/change-status`
+      )
+      form(
+        action=""
+        method="POST"
+        name="form-delete-item"
+        id="form-delete-item"
+        path=`/${prefixAdmin}/client-user/delete`
+      )
+
+    script(src="/admin/js/account.js")
+  else
+    h2 Không có quyền truy cập

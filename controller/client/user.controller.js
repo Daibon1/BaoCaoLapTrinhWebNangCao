@@ -77,6 +77,74 @@ module.exports.loginPost = async (req, res) => {
     req.flash('success', 'Đăng nhập thành công!');
     res.redirect("/");
 }
+module.exports.googleCallback = async (req, res) => {
+  const user = req.user;
+
+  if (!user) {
+    req.flash("error", "Đăng nhập Google thất bại!");
+    return res.redirect("/user/login");
+  }
+
+  if (user.deleted || user.status !== "active") {
+    req.flash("error", "Tài khoản đã bị khóa!");
+    return res.redirect("/user/login");
+  }
+
+  const saveJob = await SaveJob.findOne({
+    userId: user.id,
+  });
+
+  if (saveJob) {
+    res.cookie("saveJobId", saveJob.id);
+  } else if (req.cookies.saveJobId) {
+    await SaveJob.updateOne(
+      {
+        _id: req.cookies.saveJobId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+  }
+
+  res.cookie("tokenUser", user.tokenUser);
+
+  req.flash("success", "Đăng nhập Google thành công!");
+  res.redirect("/");
+};
+
+module.exports.facebookCallback = async (req, res) => {
+  const user = req.user;
+
+  if (!user) {
+    req.flash("error", "Đăng nhập Facebook thất bại!");
+    return res.redirect("/user/login");
+  }
+
+  if (user.deleted || user.status !== "active") {
+    req.flash("error", "Tài khoản đã bị khóa!");
+    return res.redirect("/user/login");
+  }
+
+  const saveJob = await SaveJob.findOne({
+    userId: user.id,
+  });
+
+  if (saveJob) {
+    res.cookie("saveJobId", saveJob.id);
+  } else if (req.cookies.saveJobId) {
+    await SaveJob.updateOne(
+      { _id: req.cookies.saveJobId },
+      { userId: user.id }
+    );
+  }
+
+  res.cookie("tokenUser", user.tokenUser);
+
+  req.flash("success", "Đăng nhập Facebook thành công!");
+  res.redirect("/");
+};
+
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
     res.clearCookie('tokenUser');

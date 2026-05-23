@@ -6,7 +6,10 @@ mixin job-item(job)
 
             .job-info
                 a(href=`/jobs/detail/${job.slug}` class="title text-primary text-decoration-none") #{job.title}
-                .company Grab Vietnam
+                if(job.company_id)
+                    .company  #{job.company_id.name}
+                else
+                    .company="Không có công ty"
                 if(job.skill.length > 0)
                     .tags
                         each skill in job.skill

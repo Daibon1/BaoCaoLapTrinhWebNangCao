@@ -1,27 +1,76 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet" href="/css/saved-jobs.css")
+
 block main
-    link(rel="stylesheet", href="/css/job.css")
-    +alert-success(3000)
-    +alert-error(3000)
-    .saved-job-list
-        each job in savedJobs
-            .saved-job-item
-                .left
-                    a(href=`/jobs/detail/${job.slug}`)
-                        img(src=job.thumbnail alt=job.title width="80" height="80" style="border-radius: 8px; object-fit: contain;")
+  +alert-success(3000)
+  +alert-error(3000)
 
-                .center
-                    h3= job.title
-                    .company= job.companyName
-                    .location= job.location
-                    .salary= `${(job.salaryMin/1000000).toLocaleString()} - ${(job.salaryMax/1000000).toLocaleString()} triệu`
-                    .type-job= job.type 
+  .saved-page
+    section.saved-hero
+      .saved-hero__content
+        span.saved-hero__eyebrow Danh sách yêu thích
+        h1 Việc làm đã lưu
+        p Quản lý các công việc bạn quan tâm và quay lại ứng tuyển khi đã sẵn sàng.
 
-                .right
-                    a.apply-btn(href=`/jobs/detail/${job.slug}`)
-                        | Apply now
+      .saved-hero__summary
+        strong #{savedJobs ? savedJobs.length : 0}
+        span Việc làm đã lưu
 
-                    a.btn.btn-sm.btn-outline-danger(
-                        href=`saved-jobs/delete/${job._id}`
-                    )="Xóa"
+    section.saved-section
+      .saved-section__head
+        div
+          span.saved-section__count #{savedJobs ? savedJobs.length : 0} công việc
+          h2 Danh sách công việc
+        a.saved-section__browse(href="/jobs")
+          span Tìm thêm việc
+          i.fa-solid.fa-arrow-right
+
+      if !savedJobs || savedJobs.length === 0
+        .saved-empty
+          i.fa-solid.fa-heart
+          h2 Bạn chưa lưu công việc nào
+          p Lưu những công việc phù hợp để theo dõi và ứng tuyển sau.
+          a(href="/jobs") Khám phá việc làm
+      else
+        .saved-list
+          each job in savedJobs
+            - const company = job.company_id || {};
+            article.saved-card
+              a.saved-card__logo(href=`/jobs/detail/${job.slug}`)
+                if company.logo
+                  img(src=company.logo alt=company.name)
+                else if job.thumbnail
+                  img(src=job.thumbnail alt=job.title)
+                else
+                  img(src="/images/company-default.png" alt=job.title)
+
+              .saved-card__info
+                a.saved-card__title(href=`/jobs/detail/${job.slug}`)= job.title
+                p.saved-card__company
+                  i.fa-solid.fa-building
+                  span= company.name || "Công ty chưa cập nhật"
+
+                .saved-card__meta
+                  span
+                    i.fa-solid.fa-location-dot
+                    |  #{job.location || "Chưa cập nhật"}
+                  span
+                    i.fa-solid.fa-briefcase
+                    |  #{job.type || "Chưa cập nhật"}
+                  span
+                    i.fa-solid.fa-sack-dollar
+                    if job.salaryMin && job.salaryMax
+                      |  #{(job.salaryMin / 1000000).toLocaleString()} - #{(job.salaryMax / 1000000).toLocaleString()} triệu
+                    else
+                      |  Thỏa thuận
+
+              .saved-card__actions
+                a.saved-card__apply(href=`/applications/add/${job._id}`)
+                  i.fa-solid.fa-paper-plane
+                  span Ứng tuyển
+                a.saved-card__remove(href=`/saved-jobs/delete/${job._id}`)
+                  i.fa-solid.fa-trash-can
+                  span Xóa

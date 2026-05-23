@@ -59,29 +59,46 @@
 const Job = require("../../models/jobs.model");
 const JobCategory = require("../../models/jobs-category.model");
 const Account = require("../../models/account.model");
+const Application = require("../../models/application.model");
 
 module.exports.dashboard = async (req, res) => {
   try {
+    const isEmployer = res.locals.role && res.locals.role.title === "Employer";
+    const jobFilter = {
+      deleted: false
+    };
+
+    if (isEmployer) {
+      jobFilter["createdBy.account_id"] = res.locals.user._id;
+    }
 
     /* =========================
         COUNT DATA
     ========================== */
 
-    const totalJob = await Job.countDocuments({ deleted:false });
+    const totalJob = await Job.countDocuments(jobFilter);
 
     const activeJob = await Job.countDocuments({
+      ...jobFilter,
       status: "active",
-      deleted:false
     });
 
     const inactiveJob = await Job.countDocuments({
+      ...jobFilter,
       status: "inactive",
-      deleted:false
     });
 
     const totalCategory = await JobCategory.countDocuments();
 
-    const totalAccount = await Account.countDocuments();
+    const totalAccount = isEmployer ? 0 : await Account.countDocuments();
+
+    const employerJobs = isEmployer ? await Job.find(jobFilter).select("_id") : [];
+    const employerJobIds = employerJobs.map(job => job._id);
+    const totalApplication = isEmployer ? await Application.countDocuments({
+      jobId: {
+        $in: employerJobIds
+      }
+    }) : 0;
 
 
     /* =========================
@@ -90,7 +107,7 @@ module.exports.dashboard = async (req, res) => {
     ========================== */
 
     const jobByCategory = await Job.aggregate([
-      { $match: { deleted:false } },
+      { $match: jobFilter },
       {
         $group: {
           _id: "$category",
@@ -106,7 +123,7 @@ module.exports.dashboard = async (req, res) => {
     ========================== */
 
     const jobByMonth = await Job.aggregate([
-      { $match: { deleted:false } },
+      { $match: jobFilter },
       {
         $group: {
           _id: { $month: "$createdAt" },
@@ -125,8 +142,8 @@ module.exports.dashboard = async (req, res) => {
     last7Days.setDate(last7Days.getDate() - 7);
 
     const newJobWeek = await Job.countDocuments({
+      ...jobFilter,
       createdAt: { $gte: last7Days },
-      deleted:false
     });
 
 
@@ -145,14 +162,16 @@ module.exports.dashboard = async (req, res) => {
 
     res.render("admin/pages/dashboard/index", {
       title: "Trang Dashboard",
-
+      currentUrl: req.originalUrl,
       totalJob,
       activeJob,
       inactiveJob,
       totalCategory,
       totalAccount,
+      totalApplication,
       newJobWeek,
       percentActive,
+      isEmployer,
 
       jobByCategory,
       jobByMonth

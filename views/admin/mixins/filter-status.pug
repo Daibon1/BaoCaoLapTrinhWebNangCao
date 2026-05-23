@@ -1,8 +1,21 @@
 mixin filter-status(filterStatus)
+  -
+    const getStatusUrl = (status) => {
+      const sourceUrl = typeof currentUrl !== "undefined" ? currentUrl : "";
+      const url = new URL(sourceUrl || "/", "http://localhost");
+      if (status) {
+        url.searchParams.set("status", status);
+      } else {
+        url.searchParams.delete("status");
+      }
+      url.searchParams.set("page", 1);
+      return `${url.pathname}${url.search}`;
+    };
+
   .filter-status
     each item in filterStatus
-      .btn(
-        type="button"
-        class=(item.class )
+      a.btn(
+        href=getStatusUrl(item.status)
+        class=item.class
         button-status=item.status
       ) #{item.name}

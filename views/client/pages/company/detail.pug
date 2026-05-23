@@ -1,66 +1,88 @@
 extends ../../layouts/default.pug
 
+block styles
+  link(rel="stylesheet" href="/css/company.css")
+
 block main
-    link(rel="stylesheet" href="/css/company.css")
+  .company-detail
+    section.company-detail__hero
+      .company-detail__logo
+        if company.logo
+          img(src=company.logo alt=company.name)
+        else
+          img(src="/images/company-default.png" alt=company.name)
 
-    .company-detail
+      .company-detail__intro
+        a.company-detail__back(href="/company")
+          i.fa-solid.fa-arrow-left
+          span Danh sách công ty
+        h1.company-detail__name= company.name
+        p.company-detail__address
+          i.fa-solid.fa-location-dot
+          span= company.address || "Chưa cập nhật địa chỉ"
 
-        // HEADER
-        .company-detail__header
-            .company-detail__container
+        .company-detail__meta
+          span
+            i.fa-solid.fa-users
+            |  Quy mô: #{company.size || "Đang cập nhật"}
+          span
+            i.fa-solid.fa-envelope
+            |  #{company.email || "Chưa cập nhật email"}
 
-                .company-detail__logo
-                    if company.logo
-                        img(src=company.logo)
+    .company-detail__body
+      .company-detail__main
+        section.company-box
+          .company-box__head
+            i.fa-solid.fa-building
+            h2 Giới thiệu công ty
+
+          if company.description
+            p.company-box__content= company.description
+          else
+            p.company-box__empty Công ty chưa cập nhật mô tả.
+
+        section.company-box
+          .company-box__head
+            i.fa-solid.fa-briefcase
+            h2 Việc làm đang tuyển
+
+          if jobs && jobs.length
+            .company-detail-jobs
+              each job in jobs
+                a.company-detail-job(href=`/jobs/detail/${job.slug}`)
+                  div
+                    h3= job.title
+                    p
+                      i.fa-solid.fa-location-dot
+                      span= job.location || "Chưa cập nhật địa điểm"
+                  .company-detail-job__salary
+                    if job.salaryMin && job.salaryMax
+                      span #{(job.salaryMin / 1000000).toLocaleString()} - #{(job.salaryMax / 1000000).toLocaleString()} triệu
                     else
-                        img(src="/images/company-default.png")
+                      span Thỏa thuận
+                    i.fa-solid.fa-arrow-right
+          else
+            p.company-box__empty Công ty chưa đăng tuyển việc làm nào.
 
-                .company-detail__info
-                    h1.company-detail__name= company.name
-                    p.company-detail__address 📍 #{company.address || "Chưa cập nhật địa chỉ"}
+      aside.company-detail__aside
+        section.company-box.company-box--sticky
+          .company-box__head
+            i.fa-solid.fa-circle-info
+            h2 Thông tin nhanh
 
-                    .company-detail__meta
-                        span Quy mô: #{company.size || "Đang cập nhật"}
-                        span Email: #{company.email || "Chưa cập nhật"}
-
-        // BODY
-        .company-detail__body
-            .company-detail__container
-
-                // LEFT
-                .company-detail__left
-                    .company-box
-                        h3.company-box__title Giới thiệu công ty
-
-                        if company.description
-                            p.company-box__content= company.description
-                        else
-                            p.company-box__empty Công ty chưa cập nhật mô tả.
-
-                // RIGHT
-                .company-detail__right
-
-                    .company-box
-                        h3.company-box__title Thông tin nhanh
-                        ul.company-info
-                            li
-                                strong Website:
-                                if company.website
-                                    a(href=company.website target="_blank")= company.website
-                                else
-                                    span.company-box__empty Chưa cập nhật
-
-                            li
-                                strong Điện thoại:
-                                span= company.phone || "Chưa cập nhật"
-
-                    .company-box
-                        h3.company-box__title Việc làm đang tuyển
-
-                        if jobs.length
-                            each job in jobs
-                                a.job-card(href=`/jobs/detail/${job.slug}`)
-                                    h4.job-card__title= job.title
-                                    p.job-card__salary= job.salary || "Thỏa thuận"
-                        else
-                            p.company-box__empty Công ty chưa đăng tuyển job nào
+          ul.company-info
+            li
+              span Website
+              if company.website
+                a(href=company.website target="_blank")= company.website
+              else
+                strong Chưa cập nhật
+            li
+              span Điện thoại
+              strong= company.phone || "Chưa cập nhật"
+            li
+              span Email
+              strong= company.email || "Chưa cập nhật"
+            li
+              span Quy mô
+              strong= company.size || "Đang cập nhật"

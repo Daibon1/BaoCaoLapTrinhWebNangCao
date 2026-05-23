@@ -1,123 +1,242 @@
-
-extends ../../layouts/default.pug 
+extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
-include ../../mixins/filter-search.pug
 include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
-include ../../mixins/sort.pug
 include ../../mixins/moment.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/job.css")
+
 block main
   if(role.permissions.includes("jobs-view"))
     +alert-success(2000)
     +alert-error(2000)
-    main.main
-      // Header
-      header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-        h4.mb-0 Danh sách việc làm
-      // ===== Status button () =====
-      .col-md-12.mb-2
-        .btn-group(role="group")
+
+    .job-page
+      .job-page__header
+        .job-page__title
+          span.job-page__icon
+            i.fa-solid.fa-briefcase
+          h1 Danh sách việc làm
+        if(role.title == "Employer" && role.permissions.includes("jobs-create"))
+          a.btn.btn-primary.btn-sm.job-page__create(href=`/${prefixAdmin}/job/create`)
+            i.fa-solid.fa-plus
+            span Thêm việc làm
+
+      .job-toolbar
+        .job-toolbar__status
           +filter-status(filterStatus)
-      // ===== Form lọc =====
-      +filter-search(keyword, filterLocation)
-      .card-body
-        +form-change-multi()
-      .card.mb-3.bg-light
-        +sort()
-      .table-card
+
+        -
+          const activeStatus = filterStatus.find(item => item.class);
+        form.job-toolbar__search#form-search(method="GET")
+          if activeStatus && activeStatus.status
+            input(type="hidden" name="status" value=activeStatus.status)
+          .job-search-field
+            i.fa-solid.fa-location-dot
+            select.form-select(name="location")
+              each item in filterLocation
+                option(value=item.name selected=item.selected ? true : false) #{item.name ? item.name : "Địa điểm"}
+          .job-search-field.job-search-field--keyword
+            i.fa-solid.fa-magnifying-glass
+            input.form-control(
+              type="text"
+              name="keyword"
+              placeholder="Tìm theo tên công việc..."
+              value=keyword
+            )
+          button.btn.btn-primary(type="submit")
+            i.fa-solid.fa-filter
+            span Lọc
+          a.btn.btn-outline-secondary(href=`/${prefixAdmin}/job`)
+            i.fa-solid.fa-rotate-left
+            span Xóa lọc
+
+      .job-actions-bar
+        form.job-bulk-form(
+          action=`/${prefixAdmin}/job/change-multi?_method=PATCH`
+          method="POST"
+          form-change-multi
+        )
+          select.form-select(name="type")
+            option(value="" selected disabled) Chọn hành động
+            if(role.title != "Employer")
+              option(value="pending") Chờ duyệt
+              option(value="active") Hoạt động
+              option(value="inactive") Ngừng hoạt động
+            option(value="delete-all") Xóa
+            option(value="change-position") Thay đổi vị trí
+          input(type="text" name="ids" value="" class="form-control d-none")
+          button.btn.btn-primary(type="submit")
+            i.fa-solid.fa-check
+            span Áp dụng
+
+        .job-sort(sort)
+          label Sắp xếp
+          select.form-select.form-select-sm(name="sort" sort-select)
+            option(value="position-desc") Vị trí giảm dần
+            option(value="position-asc") Vị trí tăng dần
+            option(value="salaryMin-desc") Lương giảm dần
+            option(value="salaryMin-asc") Lương tăng dần
+            option(value="title-desc") Tiêu đề Z-A
+            option(value="title-asc") Tiêu đề A-Z
+          button.btn.btn-sm.btn-outline-secondary(type="button" sort-clear) Xóa sắp xếp
+
+      .job-table-shell
+        .job-table-shell__top
+          h2 Danh sách việc làm
+          .job-table-shell__meta
+            i.fa-solid.fa-list-check
+            span #{jobs.length} việc làm
+
         .table-responsive
-          table(class="table align-middle mb-0" checkbox-multi)
-            thead.table-light.sticky-top
+          table.job-table.table.align-middle.mb-0(checkbox-multi)
+            thead
               tr
-                th 
-                  input(type="checkbox" name="checkbox-all")
+                th.job-table__checkbox
+                  input.form-check-input(type="checkbox" name="checkbox-all")
                 th STT
-                th Hình ảnh
-                th Công việc
+                th Việc làm
                 th Địa điểm
                 th Lương
                 th Vị trí
-                th Người tạo
-                th Người cập nhật
+                th Tạo bởi
                 th Trạng thái
-                th Hành động
+                th.text-end Hành động
             tbody
-              each item,index in jobs
+              if jobs.length > 0
+                each item,index in jobs
+                  - const updatedBy = item.updatedBy.slice(-1)[0];
+                  tr
+                    td.job-table__checkbox
+                      input.form-check-input(type="checkbox" name="id" value=item.id)
+                    td.job-table__index #{(pagination.page-1)*pagination.limitItem+index+1}
+                    td
+                      .job-item-main
+                        .job-thumb
+                          if item.thumbnail
+                            img(src=item.thumbnail alt=item.title)
+                          else
+                            img(src="/admin/images/no-image.png" alt="No Image")
+                        .job-item-main__info
+                          strong #{item.title || "Chưa cập nhật"}
+                          if item.type
+                            span #{item.type}
+                    td
+                      .job-location
+                        i.fa-solid.fa-location-dot
+                        span #{item.location || "Chưa cập nhật"}
+                    td
+                      .job-salary
+                        if item.salaryMin || item.salaryMax
+                          if item.salaryMin && item.salaryMax
+                            | #{item.salaryMin / 1000000} - #{item.salaryMax / 1000000} triệu
+                          else if item.salaryMin
+                            | Từ #{item.salaryMin / 1000000} triệu
+                          else
+                            | Đến #{item.salaryMax / 1000000} triệu
+                        else
+                          | Chưa cập nhật
+                    td
+                      input.job-position(type="number" min="1" value=item.position name="position")
+                    td
+                      .job-audit
+                        strong #{item.accountFullName || "Chưa cập nhật"}
+                        if(item.createdBy && item.createdBy.createAt)
+                          span
+                            +momentDate(item.createdBy.createAt)
+                    td
+                      - const canChangeJobStatus = role.permissions.includes("jobs-edit") && (role.title != "Employer" || item.status != "pending");
+                      if(canChangeJobStatus)
+                        if(item.status=="active")
+                          a.job-status.job-status--active(
+                            data-id=item.id
+                            href="javascript:;"
+                            change-status
+                            data-status=item.status
+                          )
+                            i.fa-solid.fa-circle-check
+                            span Hoạt động
+                        else if(item.status=="pending")
+                          a.job-status.job-status--pending(
+                            href="javascript:;"
+                            change-status
+                            data-id=item.id
+                            data-status=item.status
+                          )
+                            i.fa-solid.fa-clock
+                            span Chờ duyệt
+                        else
+                          a.job-status.job-status--inactive(
+                            href="javascript:;"
+                            change-status
+                            data-id=item.id
+                            data-status=item.status
+                          )
+                            i.fa-solid.fa-circle-pause
+                            span Ngừng hoạt động
+                      else
+                        if(item.status=="active")
+                          span.job-status.job-status--active
+                            i.fa-solid.fa-circle-check
+                            span Hoạt động
+                        else if(item.status=="pending")
+                          span.job-status.job-status--pending
+                            i.fa-solid.fa-clock
+                            span Chờ duyệt
+                        else
+                          span.job-status.job-status--inactive
+                            i.fa-solid.fa-circle-pause
+                            span Ngừng hoạt động
+                    td
+                      .job-row-actions
+                        a.btn.btn-light.btn-sm(
+                          href=`/${prefixAdmin}/job/detail/${item.id}`
+                          title="Chi tiết"
+                          aria-label="Chi tiết"
+                        )
+                          i.fa-solid.fa-eye
+                        if(role.permissions.includes("jobs-edit"))
+                          a.btn.btn-outline-primary.btn-sm(
+                            href=`/${prefixAdmin}/job/edit/${item.id}`
+                            title="Sửa"
+                            aria-label="Sửa"
+                          )
+                            i.fa-solid.fa-pen
+                        if(role.permissions.includes("jobs-delete"))
+                          button.btn.btn-outline-danger.btn-sm(
+                            type="button"
+                            button-delete
+                            data-id=item.id
+                            title="Xóa"
+                            aria-label="Xóa"
+                          )
+                            i.fa-solid.fa-trash
+              else
                 tr
-                  td 
-                    input(type="checkbox" name="id" value=item.id)
-                  td #{(pagination.page-1)*pagination.limitItem+index+1}
-                  td 
-                    if item.thumbnail
-                      img(src=item.thumbnail alt=item.title style="width: 80px; height: 80px; object-fit: cover;")
-                    else
-                      img(src="/admin/images/no-image.png" alt="No Image" style="width: 80px; height: 80px; object-fit: cover;")
-                  td #{item.title}
-                  td #{item.location}
-                  td #{item.salaryMin/1000000} - #{item.salaryMax/1000000} triệu
-                  td 
-                    input(type="number" min="1" value=item.position style="width: 50px;" name="position")
-                  td
-                    p #{item.accountFullName}
-                    if(item.createdBy.createAt)
-                      +momentDate(item.createdBy.createAt)
-                  td 
-                    -const updatedBy=item.updatedBy.slice(-1)[0];
-                    if (updatedBy)
-                      p #{updatedBy.accountFullName}
-                      +momentDate(updatedBy.updatedAt)
-                  td
-                    if(role.permissions.includes("jobs-edit"))
-                      if(item.status=="active")
-                        a.btn(
-                          data-id=item.id
-                          href="javascript:;"
-                          class="badge bg-success"
-                          change-status
-                          data-status=item.status
-                        ) Hoạt động
-                      else
-                        a.btn(
-                          href="javascript:;"
-                          class="badge bg-danger"
-                          change-status
-                          data-id=item.id
-                          data-status=item.status
-                        ) Ngừng hoạt động
-                    else 
-                      if(item.status=="active")
-                        a.btn(
-                          class="badge bg-success"
-                        ) Hoạt động 
-                      else
-                        a.btn(
-                          class="badge bg-danger"
-                        ) Ngừng hoạt động
-                  td(class="text-end")
-                    .d-flex.flex-column.flex-md-row.gap-1
-                      a(class= "btn btn-outline-secondary btn-sm"
-                      href=`/${prefixAdmin}/job/detail/${item.id}`) Chi tiết
-                      if(role.permissions.includes("jobs-edit"))
-                        a(class="btn btn-outline-primary btn-sm"
-                          href=`/${prefixAdmin}/job/edit/${item.id}`) Sửa
-                      if(role.permissions.includes("jobs-delete"))
-                        button(class="btn btn-outline-danger btn-sm"
-                        button-delete
-                        data-id=item.id) Xóa
-      // ===== Pagination =====
-      form(action="" 
-        method="POST" 
-        name="form-change-status" 
-        id="form-change-status" 
+                  td(colspan="9")
+                    .job-empty
+                      i.fa-solid.fa-briefcase
+                      h3 Không tìm thấy việc làm phù hợp
+
+        .job-pagination
+          +pagination(pagination)
+
+      form(
+        action=""
+        method="POST"
+        name="form-change-status"
+        id="form-change-status"
         path=`/${prefixAdmin}/job/change-status`
       )
-      form(action=""
+      form(
+        action=""
         method="POST"
         name="form-delete-item"
         id="form-delete-item"
         path=`/${prefixAdmin}/job/delete`
       )
-      +pagination(pagination)
+
     script(src="/admin/js/job.js")
-      
+  else
+    h2 Không có quyền truy cập

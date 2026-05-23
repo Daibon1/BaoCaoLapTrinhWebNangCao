@@ -1,11 +1,70 @@
 extends ../../layouts/default.pug
 include ../../mixins/job-layout.pug
-include ../../mixins/box-head.pug
 include ../../mixins/alert.pug
+
 block main
-    +alert-success(2000)
-    +alert-error(2000)
-    +boxHead("Công việc nổi bật")
-    +job-grid(jobsFeatured)
-    +boxHead("Công việc mới nhất")
-    +job-grid(jobsNew)
+  +alert-success(2000)
+  +alert-error(2000)
+
+  .home-page
+    section.home-hero
+      .home-hero__content
+        span.home-hero__eyebrow Tuyển dụng nhanh hơn, đúng người hơn
+        h1 Tìm công việc phù hợp với kỹ năng của bạn
+        p Khám phá các cơ hội việc làm mới nhất, lưu tin yêu thích và ứng tuyển trực tiếp trên DDS Jobs.
+
+        form.home-search(action="/search" method="GET")
+          .home-search__field
+            i.fa-solid.fa-magnifying-glass
+            input(type="text" name="keyword" placeholder="Nhập vị trí, kỹ năng hoặc công ty..." value=keyword)
+          button(type="submit")
+            i.fa-solid.fa-arrow-right
+            span Tìm việc
+
+        .home-hero__stats
+          .home-stat
+            strong #{jobsNew ? jobsNew.length : 0}+
+            span Việc làm mới
+          .home-stat
+            strong #{jobsFeatured ? jobsFeatured.length : 0}+
+            span Việc làm nổi bật
+          .home-stat
+            strong 3
+            span Thành phố phổ biến
+
+      .home-hero__visual
+        .home-visual-card.home-visual-card--main
+          img(src="/images/default-job.png" alt="DDS Jobs")
+          div
+            strong Cơ hội nổi bật
+            span Công việc đang tuyển hôm nay
+        .home-visual-card
+          i.fa-solid.fa-location-dot
+          div
+            strong Hà Nội, TP.HCM, Đà Nẵng
+            span Lọc nhanh theo địa điểm
+        .home-visual-card
+          i.fa-solid.fa-heart
+          div
+            strong Lưu việc yêu thích
+            span Theo dõi các vị trí quan tâm
+
+    section.home-section
+      .home-section__head
+        div
+          span.home-section__eyebrow Nổi bật
+          h2 Công việc nổi bật
+        a.home-section__link(href="/jobs")
+          span Xem tất cả
+          i.fa-solid.fa-arrow-right
+      +job-grid(jobsFeatured)
+
+    section.home-section
+      .home-section__head
+        div
+          span.home-section__eyebrow Mới nhất
+          h2 Công việc mới nhất
+        a.home-section__link(href="/jobs")
+          span Khám phá thêm
+          i.fa-solid.fa-arrow-right
+      +job-grid(jobsNew)

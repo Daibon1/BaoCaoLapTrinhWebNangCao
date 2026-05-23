@@ -1,84 +1,123 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
-block main 
-    main.main
-    if(role.permissions.includes("accounts-edit"))
-        +alert-success(3000)
-        +alert-error(3000)
-        // Header
-        h2 Tạo tài khoản
-        .card-body
-            form(action=`/${prefixAdmin}/account/edit/${account.id}?_method=PATCH` method="POST" id="form-edit-account" enctype="multipart/form-data")
-                div(class="form-group")
-                    label.form-label FullName
-                    input.form-control(
-                        type="text"
-                        name="fullName"
-                        value=account.fullName
-                        required
-                    )
-                div(class="form-group")
-                    label.form-label Email
-                    input.form-control(
-                        type="email"
-                        name="email"
-                        value=account.email
-                    )
-                div(class="form-group")
-                    label.form-label Password
-                    .input-group-custom(style="position: relative;")
-                        input#password-input.form-control(
-                            type="password"
-                            name="password"
-                            autocomplete="new-password"
-                        )
-                        span#toggle-password(style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;")
-                            i.fas.fa-eye#eye-icon
-                div(class="form-group")
-                    label.form-label Số điện thoại
-                    input.form-control(
-                        type="text" 
-                        name="phone"
-                        value=account.phone
-                    )
-                div(class="form-group form-check form-check-inline")
-                    input(
-                        type="radio"
-                        name="status"
-                        id="status-active"
-                        value="active"
-                        class="form-check-input"
-                        checked=account.status=="active"?true:false
-                    )
-                    label(for="status-active") Hoạt động
-                div(class="form-group form-check form-check-inline")
-                    input(
-                        type="radio"
-                        name="status"
-                        id="status-inactive"
-                        value="inactive"
-                        class="form-check-input"
-                        checked=account.status=="inactive"?true:false
-                    )
-                    label(for="status-inactive") Ngừng hoạt động
-                div(class="form-group")
-                    label.form-label Avartar
-                    div(id="preview-img")
-                        input.form-control-file(
-                            type="file"
-                            name="avatar"
-                            accept="image/*"
-                            id="file-input"
-                        )
-                        img(src=account.avatar alt="" id="img-preview" )
-                div(class="form-group")
-                    label(for="role_id") Phân quyền
-                    select.form-select(name="role_id" id="role_id" class="form-select")
-                        option(value="") Chọn phân quyền
-                        each role in roles
-                            option(value=role.id selected=account.role_id==role.id) #{role.title}
-                div(class="form-group mt-3")
-                    button.btn.btn-primary(type="submit") Cập nhật
-        script(src="/admin/js/account.js")
-    else
-        h2 Không có quyền truy cập
+
+block styles
+  link(rel="stylesheet", href="/admin/css/account.css")
+
+block main
+  if(role.permissions.includes("accounts-edit"))
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .account-page
+      .account-page__header
+        .account-page__title
+          span.account-page__icon
+            i.fa-solid.fa-user-pen
+          div
+            h1 Cập nhật tài khoản
+            p.account-form__subtitle Chỉnh sửa thông tin, phân quyền và trạng thái khóa
+        a.btn.btn-outline-secondary.account-form__back(href=`/${prefixAdmin}/account`)
+          i.fa-solid.fa-arrow-left
+          span Quay lại
+
+      form.account-form(action=`/${prefixAdmin}/account/edit/${account.id}?_method=PATCH` method="POST" id="form-edit-account" enctype="multipart/form-data")
+        .account-form__main
+          section.account-panel
+            .account-panel__head
+              span.account-panel__icon
+                i.fa-solid.fa-id-card
+              div
+                h2 Thông tin tài khoản
+                p Tên, email, mật khẩu và liên hệ
+
+            .account-form-grid
+              .account-form-field
+                label.form-label(for="account-fullname") Họ tên
+                input.form-control#account-fullname(
+                  type="text"
+                  name="fullName"
+                  value=account.fullName
+                  required
+                )
+
+              .account-form-field
+                label.form-label(for="account-email") Email
+                input.form-control#account-email(
+                  type="email"
+                  name="email"
+                  value=account.email
+                )
+
+              .account-form-field
+                label.form-label(for="password-input") Mật khẩu mới
+                .account-password
+                  input.form-control#password-input(
+                    type="password"
+                    name="password"
+                    autocomplete="new-password"
+                    placeholder="Để trống nếu không đổi"
+                  )
+                  button.account-password__toggle#toggle-password(type="button" aria-label="Hiện mật khẩu")
+                    i.fas.fa-eye#eye-icon
+
+              .account-form-field
+                label.form-label(for="account-phone") Số điện thoại
+                input.form-control#account-phone(
+                  type="text"
+                  name="phone"
+                  value=account.phone
+                )
+
+              .account-form-field.account-form-field--wide
+                label.form-label(for="role_id") Phân quyền
+                select.form-select#role_id(name="role_id")
+                  option(value="") Chọn phân quyền
+                  each item in roles
+                    option(value=item.id selected=account.role_id==item.id) #{item.title}
+
+        aside.account-form__side
+          section.account-panel.account-panel--sticky
+            .account-panel__head
+              span.account-panel__icon
+                i.fa-solid.fa-image
+              div
+                h2 Ảnh và khóa tài khoản
+                p Thiết lập avatar và trạng thái truy cập
+
+            .account-form-field
+              label.form-label Avatar
+              .account-upload#preview-img
+                img(src=account.avatar || "", alt="" id="img-preview")
+                .account-upload__content
+                  i.fa-solid.fa-cloud-arrow-up
+                  span Chọn ảnh đại diện
+                  small PNG, JPG hoặc WEBP
+                input.account-upload__input(
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  id="file-input"
+                )
+
+            .account-form-field
+              label.form-label Khóa tài khoản
+              .account-choice-group.account-choice-group--stack
+                label.account-choice
+                  input.form-check-input(type="radio" name="status" id="status-active" value="active" checked=account.status=="active" ? true : false)
+                  span Không khóa
+                label.account-choice
+                  input.form-check-input(type="radio" name="status" id="status-inactive" value="inactive" checked=account.status=="inactive" ? true : false)
+                  span Khóa tài khoản
+
+            .account-form-actions
+              button.btn.btn-primary(type="submit")
+                i.fa-solid.fa-floppy-disk
+                span Cập nhật
+              a.btn.btn-outline-secondary(href=`/${prefixAdmin}/account`)
+                i.fa-solid.fa-xmark
+                span Hủy
+
+    script(src="/admin/js/account.js")
+  else
+    h2 Không có quyền truy cập

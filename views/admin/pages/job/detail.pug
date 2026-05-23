@@ -1,113 +1,147 @@
 extends ../../layouts/default.pug
-
 include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/job.css")
 
 block main
   if(role.permissions.includes("jobs-view"))
     +alert-success(3000)
     +alert-error(3000)
 
-    main.main
-      // Header
-      header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
-        h4.mb-0 Chi tiết công việc
+    .job-detail-page
+      .job-page__header
+        .job-page__title
+          span.job-page__icon
+            i.fa-solid.fa-briefcase
+          div
+            h1 Chi tiết việc làm
+            p.job-detail-page__subtitle Xem thông tin tuyển dụng đã đăng
+        .job-detail-page__actions
+          if(role.permissions.includes("jobs-edit"))
+            a.btn.btn-primary.job-detail-page__button(href=`/${prefixAdmin}/job/edit/${job.id}`)
+              i.fa-solid.fa-pen
+              span Chỉnh sửa
+          a.btn.btn-outline-secondary.job-detail-page__button(href=`/${prefixAdmin}/job`)
+            i.fa-solid.fa-arrow-left
+            span Quay lại
 
-      .card.mb-4
-        .card-body
-          // Tiêu đề
-          if job.title
-            .mb-3
-              strong Tiêu đề công việc:
-              span.ms-2 #{job.title}
+      .job-detail-layout
+        .job-detail-main
+          section.job-detail-panel
+            .job-detail-panel__head
+              span.job-detail-panel__icon
+                i.fa-solid.fa-file-lines
+              div
+                h2 Thông tin chính
+                p Nội dung tổng quan của việc làm
 
-          // Danh mục
-          if job.category
-            .mb-3
-              strong Danh mục việc làm: 
-              span.ms-2 #{category.title}
-          // Mô tả
-          if job.description
-            .mb-3
-              strong Mô tả công việc:
-              span.ms-2 !{job.description}
-          if job.skill.length > 0
-            .mb-3
-              strong Skill:
-              span.ms-2 #{job.skill.join(", ")}
-          // Địa điểm
-          if job.location
-            .mb-3
-              strong Địa điểm làm việc:
-              span.ms-2 #{job.location}
+            .job-detail-title
+              span.job-detail-title__label Tiêu đề công việc
+              h3 #{job.title || "Chưa cập nhật"}
 
-          // Kinh nghiệm
-          if job.experience
-            .mb-3
-              strong Kinh nghiệm yêu cầu:
-              span.ms-2 #{job.experience}
+            .job-detail-grid
+              .job-detail-item
+                span.job-detail-item__label Danh mục
+                strong #{category && category.title ? category.title : "Chưa cập nhật"}
+              .job-detail-item
+                span.job-detail-item__label Địa điểm
+                strong #{job.location || "Chưa cập nhật"}
+              .job-detail-item
+                span.job-detail-item__label Thời gian làm việc
+                strong #{job.type || "Chưa cập nhật"}
+              .job-detail-item
+                span.job-detail-item__label Kinh nghiệm
+                strong #{job.experience || "Chưa cập nhật"}
+              .job-detail-item
+                span.job-detail-item__label Mức lương
+                strong
+                  if job.salaryMin && job.salaryMax
+                    | #{job.salaryMin.toLocaleString()} - #{job.salaryMax.toLocaleString()} VNĐ
+                  else if job.salaryMin
+                    | Tối thiểu #{job.salaryMin.toLocaleString()} VNĐ
+                  else if job.salaryMax
+                    | Tối đa #{job.salaryMax.toLocaleString()} VNĐ
+                  else
+                    | Chưa cập nhật
+              .job-detail-item
+                span.job-detail-item__label Vị trí
+                strong #{job.position || "Tự động"}
 
-          // Thời gian làm việc
-          if job.type
-            .mb-3
-              strong Thời gian làm việc:
-              span.ms-2 #{job.type}
+          section.job-detail-panel
+            .job-detail-panel__head
+              span.job-detail-panel__icon
+                i.fa-solid.fa-list-check
+              div
+                h2 Kỹ năng
+                p Các kỹ năng yêu cầu cho vị trí này
 
-          // Mức lương
-          if job.salaryMin || job.salaryMax
-            .mb-3
-              strong Mức lương:
-              span.ms-2
-                if job.salaryMin && job.salaryMax
-                  | #{job.salaryMin.toLocaleString()} - #{job.salaryMax.toLocaleString()} VNĐ
-                else if job.salaryMin
-                  | Tối thiểu #{job.salaryMin.toLocaleString()} VNĐ
-                else if job.salaryMax
-                  | Tối đa #{job.salaryMax.toLocaleString()} VNĐ
+            if job.skill && job.skill.length > 0
+              .job-detail-skills
+                each skill in job.skill
+                  span.job-detail-skill #{skill}
+            else
+              .job-detail-empty Chưa cập nhật kỹ năng
 
-          // Vị trí
-          if job.position
-            .mb-3
-              strong Vị trí:
-              span.ms-2 #{job.position}
+          section.job-detail-panel
+            .job-detail-panel__head
+              span.job-detail-panel__icon
+                i.fa-solid.fa-align-left
+              div
+                h2 Mô tả công việc
+                p Chi tiết nội dung tuyển dụng
 
-          // Trạng thái
-          .mb-3
-            strong Trạng thái:
-            span.ms-2
-              if job.status == "active"
-                span.badge.bg-success Hoạt động
-              else if job.status == "inactive"
-                span.badge.bg-danger Ngừng hoạt động
-              else
-                span.badge.bg-secondary #{job.status}
+            if job.description
+              .job-detail-description !{job.description}
+            else
+              .job-detail-empty Chưa cập nhật mô tả công việc
 
-          // Thumbnail
-          .mb-3
-            strong Thumbnail:
-            .mt-2
+        aside.job-detail-side
+          section.job-detail-panel.job-detail-panel--sticky
+            .job-detail-cover
               if job.thumbnail
-                img.rounded.shadow-sm(
-                  src=job.thumbnail
-                  alt=job.title
-                  style="width: 200px; height: auto; object-fit: cover;"
-                  id="img-preview"
-                )
+                img(src=job.thumbnail alt=job.title)
               else
-                img(
-                  src="/admin/images/no-image.png"
-                  alt="No Image"
-                  style="width: 80px; height: 80px; object-fit: cover;"
-                )
+                img(src="/admin/images/no-image.png" alt="No Image")
 
-          // Hành động
-          .mt-4.d-flex.gap-2
-            a.btn.btn-outline-primary.btn-sm(href=`/${prefixAdmin}/job/edit/${job.id}`)
-              i.bi.bi-pencil.me-1
-              | Chỉnh sửa
-            a.btn.btn-outline-secondary.btn-sm(href=`/${prefixAdmin}/job/`)
-              i.bi.bi-arrow-left.me-1
-              | Quay lại danh sách
+            .job-detail-side__body
+              if job.status == "active"
+                span.job-status.job-status--active
+                  i.fa-solid.fa-circle-check
+                  span Hoạt động
+              else if job.status == "pending"
+                span.job-status.job-status--pending
+                  i.fa-solid.fa-clock
+                  span Chờ duyệt
+              else if job.status == "inactive"
+                span.job-status.job-status--inactive
+                  i.fa-solid.fa-circle-pause
+                  span Ngừng hoạt động
+              else
+                span.job-status.job-status--inactive
+                  i.fa-solid.fa-circle-question
+                  span #{job.status || "Chưa cập nhật"}
+
+              .job-detail-side__summary
+                .job-detail-side__row
+                  span Nổi bật
+                  strong #{job.featured == "1" ? "Có" : "Không"}
+                .job-detail-side__row
+                  span Danh mục
+                  strong #{category && category.title ? category.title : "Chưa cập nhật"}
+                .job-detail-side__row
+                  span Địa điểm
+                  strong #{job.location || "Chưa cập nhật"}
+
+              .job-detail-side__actions
+                if(role.permissions.includes("jobs-edit"))
+                  a.btn.btn-primary(href=`/${prefixAdmin}/job/edit/${job.id}`)
+                    i.fa-solid.fa-pen
+                    span Chỉnh sửa
+                a.btn.btn-outline-secondary(href=`/${prefixAdmin}/job`)
+                  i.fa-solid.fa-arrow-left
+                  span Danh sách
 
     script(src="/admin/js/job.js")
-  else 
-    h2 Không có quyền truy cập  
+  else
+    h2 Không có quyền truy cập

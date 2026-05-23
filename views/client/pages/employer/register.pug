@@ -1,0 +1,83 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet" href="/css/client-auth.css")
+
+block main
+  +alert-success(2000)
+  +alert-error(2000)
+
+  .client-auth
+    section.client-auth__panel
+      .client-auth__intro
+        span.client-auth__eyebrow Dành cho nhà tuyển dụng
+        h1 Đăng ký nhà tuyển dụng
+        p Tạo tài khoản quản lý tuyển dụng. Sau khi gửi thông tin, admin sẽ duyệt tài khoản trước khi bạn đăng tin việc làm.
+
+        .client-auth__switch
+          span Bạn là ứng viên?
+          a(href="/user/register")
+            span Đăng ký ứng viên
+            i.fa-solid.fa-arrow-right
+
+      .client-auth__card
+        form.client-auth__form(action="/employer/register" method="POST")
+          .client-auth__field
+            label(for="fullName") Tên người liên hệ
+            .client-auth__input
+              i.fa-solid.fa-user
+              input(
+                type="text"
+                name="fullName"
+                id="fullName"
+                placeholder="Nhập họ và tên"
+                required
+              )
+
+          .client-auth__field
+            label(for="email") Email công việc
+            .client-auth__input
+              i.fa-solid.fa-envelope
+              input(
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Nhập email nhà tuyển dụng"
+                required
+              )
+
+          .client-auth__field
+            label(for="phone") Số điện thoại
+            .client-auth__input
+              i.fa-solid.fa-phone
+              input(
+                type="text"
+                name="phone"
+                id="phone"
+                placeholder="Nhập số điện thoại"
+              )
+
+          .client-auth__field
+            label(for="password") Mật khẩu
+            .client-auth__input
+              i.fa-solid.fa-lock
+              input(
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Tối thiểu 8 ký tự"
+                required
+              )
+
+          .client-auth__notice
+            i.fa-solid.fa-circle-info
+            span Tài khoản sẽ ở trạng thái chờ duyệt. Khi admin mở khóa, bạn có thể đăng nhập trang quản lý.
+
+          button.client-auth__submit(type="submit")
+            span Gửi đăng ký
+            i.fa-solid.fa-arrow-right
+
+        p.client-auth__register
+          | Đã có tài khoản nhà tuyển dụng?
+          a(href="/admin/auth/login") Đăng nhập trang quản lý

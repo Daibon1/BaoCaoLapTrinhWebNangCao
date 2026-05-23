@@ -1,0 +1,141 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  if(role.permissions.includes("roles-view"))
+    +alert-success(2000)
+    +alert-error(2000)
+
+    -
+      const permissionGroups = [
+        {
+          label: "Danh mục việc làm",
+          items: [
+            { key: "jobs-category-view", label: "Xem" },
+            { key: "jobs-category-create", label: "Thêm mới" },
+            { key: "jobs-category-edit", label: "Chỉnh sửa" },
+            { key: "jobs-category-delete", label: "Xóa" }
+          ]
+        },
+        {
+          label: "Việc làm",
+          items: [
+            { key: "jobs-view", label: "Xem" },
+            { key: "jobs-create", label: "Thêm mới" },
+            { key: "jobs-edit", label: "Chỉnh sửa" },
+            { key: "jobs-delete", label: "Xóa" }
+          ]
+        },
+        {
+          label: "Nhóm quyền",
+          items: [
+            { key: "roles-view", label: "Xem" },
+            { key: "roles-create", label: "Thêm mới" },
+            { key: "roles-edit", label: "Chỉnh sửa" },
+            { key: "roles-delete", label: "Xóa" },
+            { key: "roles-permissions", label: "Phân quyền" }
+          ]
+        },
+        {
+          label: "Accounts",
+          items: [
+            { key: "accounts-view", label: "Xem" },
+            { key: "accounts-create", label: "Thêm mới" },
+            { key: "accounts-edit", label: "Chỉnh sửa" },
+            { key: "accounts-delete", label: "Xóa" }
+          ]
+        },
+        {
+          label: "User client",
+          items: [
+            { key: "client-users-view", label: "Xem" },
+            { key: "client-users-edit", label: "Chỉnh sửa" },
+            { key: "client-users-delete", label: "Xóa" }
+          ]
+        },
+        {
+          label: "Duyệt ứng tuyển",
+          items: [
+            { key: "user-approval-view", label: "Xem" },
+            { key: "user-approval-edit", label: "Chỉnh sửa" },
+            { key: "user-approval-delete", label: "Xóa" }
+          ]
+        }
+      ];
+      const knownPermissions = permissionGroups.flatMap(group => group.items.map(item => item.key));
+      const otherPermissions = (record.permissions || []).filter(permission => !knownPermissions.includes(permission));
+
+    main.main
+      header.admin-header.d-flex.justify-content-between.align-items-center.mb-3
+        h4.mb-0 Chi tiết nhóm quyền
+        a.btn.btn-outline-secondary.btn-sm(href=`/${prefixAdmin}/roles`)
+          i.fa-solid.fa-arrow-left.me-1
+          | Quay lại
+
+      .card.mb-4
+        .card-header
+          h3.card-title.mb-0 Thông tin nhóm quyền
+        .card-body
+          .row.mb-3
+            .col-md-3
+              strong Tên nhóm quyền
+            .col-md-9 #{record.title || "Chưa cập nhật"}
+          .row.mb-3
+            .col-md-3
+              strong Mô tả
+            .col-md-9 #{record.description || "Chưa cập nhật"}
+          .row.mb-3
+            .col-md-3
+              strong Ngày tạo
+            .col-md-9 #{record.createdAt ? record.createdAt.toLocaleString("vi-VN") : "Chưa cập nhật"}
+          .row.mb-3
+            .col-md-3
+              strong Cập nhật gần nhất
+            .col-md-9 #{record.updatedAt ? record.updatedAt.toLocaleString("vi-VN") : "Chưa cập nhật"}
+
+      .card.mb-4
+        .card-header
+          h3.card-title.mb-0 Quyền được cấp
+        .card-body
+          if(record.permissions && record.permissions.length > 0)
+            .table-responsive
+              table.table.table-hover.align-middle
+                thead
+                  tr
+                    th Nhóm chức năng
+                    th Quyền
+                    th Mã quyền
+                tbody
+                  each group in permissionGroups
+                    - const activeItems = group.items.filter(item => record.permissions.includes(item.key));
+                    if(activeItems.length > 0)
+                      tr.table-light
+                        td(colspan="3")
+                          strong #{group.label}
+                      each item in activeItems
+                        tr
+                          td #{group.label}
+                          td #{item.label}
+                          td
+                            code #{item.key}
+                  if(otherPermissions.length > 0)
+                    tr.table-light
+                      td(colspan="3")
+                        strong Khác
+                    each permission in otherPermissions
+                      tr
+                        td Khác
+                        td Chưa phân loại
+                        td
+                          code #{permission}
+          else
+            .alert.alert-warning.mb-0 Nhóm quyền này chưa được cấp quyền nào.
+
+      .d-flex.gap-2
+        if(role.permissions.includes("roles-edit"))
+          a.btn.btn-primary.btn-sm(href=`/${prefixAdmin}/roles/edit/${record.id}`) Chỉnh sửa
+        if(role.permissions.includes("roles-permissions"))
+          a.btn.btn-outline-primary.btn-sm(href=`/${prefixAdmin}/roles/permissions`) Phân quyền
+        a.btn.btn-outline-secondary.btn-sm(href=`/${prefixAdmin}/roles`) Quay lại danh sách
+  else
+    h2 Không có quyền truy cập

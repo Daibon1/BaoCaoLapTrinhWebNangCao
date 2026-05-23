@@ -1,0 +1,115 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/category.css")
+
+block main
+  if(role.permissions.includes("jobs-category-view"))
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .job-category-page
+      .job-category-page__header
+        .job-category-page__title
+          span.job-category-page__icon
+            i.fa-solid.fa-layer-group
+          div
+            h1 Chi tiết danh mục
+            p.category-form__subtitle Xem thông tin phân loại việc làm
+        .category-detail__actions
+          if(role.permissions.includes("jobs-category-edit"))
+            a.btn.btn-primary.category-detail__button(href=`/${prefixAdmin}/job-category/edit/${data.id}`)
+              i.fa-solid.fa-pen
+              span Chỉnh sửa
+          a.btn.btn-outline-secondary.category-detail__button(href=`/${prefixAdmin}/job-category`)
+            i.fa-solid.fa-arrow-left
+            span Quay lại
+
+      .category-detail-layout
+        .category-detail-main
+          section.category-panel
+            .category-panel__head
+              span.category-panel__icon
+                i.fa-solid.fa-file-lines
+              div
+                h2 Thông tin chính
+                p Tên, cấp cha và dữ liệu hệ thống
+
+            .category-detail-title
+              span.category-detail-title__label Tiêu đề danh mục
+              h3 #{data.title || "Chưa cập nhật"}
+
+            .category-detail-grid
+              .category-detail-item
+                span.category-detail-item__label Danh mục cha
+                strong #{parent ? parent.title : "Không có"}
+              .category-detail-item
+                span.category-detail-item__label Vị trí
+                strong #{data.position || "Chưa cập nhật"}
+              .category-detail-item
+                span.category-detail-item__label Slug
+                code #{data.slug || "Chưa cập nhật"}
+              .category-detail-item
+                span.category-detail-item__label Ngày tạo
+                strong #{data.createdAt ? data.createdAt.toLocaleString("vi-VN") : "Chưa cập nhật"}
+              .category-detail-item
+                span.category-detail-item__label Cập nhật gần nhất
+                strong #{data.updatedAt ? data.updatedAt.toLocaleString("vi-VN") : "Chưa cập nhật"}
+
+          section.category-panel
+            .category-panel__head
+              span.category-panel__icon
+                i.fa-solid.fa-align-left
+              div
+                h2 Mô tả danh mục
+                p Nội dung giới thiệu cho nhóm việc làm
+
+            if data.description
+              .category-detail-description !{data.description}
+            else
+              .category-detail-empty Chưa cập nhật mô tả danh mục
+
+        aside.category-detail-side
+          section.category-panel.category-panel--sticky
+            .category-detail-cover
+              if data.thumbnail
+                img(src=data.thumbnail alt=data.title)
+              else
+                img(src="/admin/images/no-image.png" alt="No Image")
+
+            .category-detail-side__body
+              if data.status == "active"
+                span.category-status.category-status--active
+                  i.fa-solid.fa-circle-check
+                  span Hoạt động
+              else if data.status == "inactive"
+                span.category-status.category-status--inactive
+                  i.fa-solid.fa-circle-pause
+                  span Ngừng hoạt động
+              else
+                span.category-status.category-status--inactive
+                  i.fa-solid.fa-circle-question
+                  span #{data.status || "Chưa cập nhật"}
+
+              .category-detail-side__summary
+                .category-detail-side__row
+                  span Danh mục cha
+                  strong #{parent ? parent.title : "Không có"}
+                .category-detail-side__row
+                  span Vị trí
+                  strong #{data.position || "Chưa cập nhật"}
+                .category-detail-side__row
+                  span Slug
+                  strong #{data.slug || "Chưa cập nhật"}
+
+              .category-detail-side__actions
+                if(role.permissions.includes("jobs-category-edit"))
+                  a.btn.btn-primary(href=`/${prefixAdmin}/job-category/edit/${data.id}`)
+                    i.fa-solid.fa-pen
+                    span Chỉnh sửa
+                a.btn.btn-outline-secondary(href=`/${prefixAdmin}/job-category`)
+                  i.fa-solid.fa-arrow-left
+                  span Danh sách
+  else
+    h2 Không có quyền truy cập

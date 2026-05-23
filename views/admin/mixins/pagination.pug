@@ -1,17 +1,31 @@
 mixin pagination(pagination)
-    ul.pagination
-      button.btn-pagination(class="page-link" value=`${1}`) Trang đầu
-      li.page-item
-        if (pagination.page>1)
-          button.btn-pagination(class="page-link" value=`${pagination.page-1}`) <<
-        - for(let i=pagination.page;i<=pagination.page+2;i++)
-            if (i<=pagination.totalPage)
-              li.page-item
-                if (pagination.page==i)
-                  button.btn-pagination(class="page-link active" value=`${i}`) #{i}
-                else 
-                  button.btn-pagination(class="page-link" value=`${i}`) #{i}
-      li.page-item
-        if (pagination.page<pagination.totalPage) 
-          button.btn-pagination(class="page-link" value=`${pagination.page+1}`) >>
-      button.btn-pagination(class="page-link" value=`${pagination.totalPage}`) Trang cuối
+  -
+    const getPaginationUrl = (page) => {
+      const sourceUrl = typeof currentUrl !== "undefined" ? currentUrl : "";
+      const url = new URL(sourceUrl || "/", "http://localhost");
+      url.searchParams.set("page", page);
+      return `${url.pathname}${url.search}`;
+    };
+
+  if pagination && pagination.totalPage > 0
+    nav(aria-label="Pagination")
+      ul.pagination
+        li.page-item(class=pagination.page == 1 ? "disabled" : "")
+          a.page-link.btn-pagination(href=getPaginationUrl(1) data-page="1" value="1") Trang đầu
+
+        if pagination.page > 1
+          li.page-item
+            a.page-link.btn-pagination(href=getPaginationUrl(pagination.page - 1) data-page=pagination.page - 1 value=pagination.page - 1) <<
+
+        - const startPage = Math.max(1, pagination.page - 1);
+        - const endPage = Math.min(pagination.totalPage, startPage + 2);
+        - for(let i = startPage; i <= endPage; i++)
+          li.page-item(class=pagination.page == i ? "active" : "")
+            a.page-link.btn-pagination(href=getPaginationUrl(i) data-page=i value=i) #{i}
+
+        if pagination.page < pagination.totalPage
+          li.page-item
+            a.page-link.btn-pagination(href=getPaginationUrl(pagination.page + 1) data-page=pagination.page + 1 value=pagination.page + 1) >>
+
+        li.page-item(class=pagination.page == pagination.totalPage ? "disabled" : "")
+          a.page-link.btn-pagination(href=getPaginationUrl(pagination.totalPage) data-page=pagination.totalPage value=pagination.totalPage) Trang cuối

@@ -1,0 +1,247 @@
+.permissions-page {
+  padding: 16px;
+  color: #172033;
+}
+
+.permissions-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.permissions-page__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.permissions-page__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.permissions-page__title h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.permissions-page__title p {
+  margin: 3px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.permissions-page__save {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.permissions-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.permissions-summary__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.permissions-summary__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 10px;
+  background: #e9f2ff;
+  color: #0d6efd;
+}
+
+.permissions-summary__card:nth-child(2) .permissions-summary__icon {
+  background: #eaf7ef;
+  color: #198754;
+}
+
+.permissions-summary__card:nth-child(3) .permissions-summary__icon {
+  background: #fff7ed;
+  color: #f97316;
+}
+
+.permissions-summary__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.permissions-summary__content span {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.permissions-summary__content strong {
+  color: #172033;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.permissions-shell {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.permissions-shell__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.permissions-shell__top h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.permissions-shell__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.permissions-table {
+  min-width: 900px;
+  width: 100%;
+}
+
+.permissions-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 11px 12px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.permissions-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #edf2f7;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.permissions-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.permissions-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.permissions-table tbody tr:not([data-name]) td,
+.permissions-group-row td {
+  background: #f8fafc;
+  color: #172033;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.permissions-table input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #059669;
+}
+
+.permissions-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 210px;
+  color: #64748b;
+  text-align: center;
+}
+
+.permissions-empty i {
+  margin-bottom: 10px;
+  color: #94a3b8;
+  font-size: 34px;
+}
+
+.permissions-empty h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 18px;
+}
+
+@media (max-width: 992px) {
+  .permissions-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .permissions-page__header,
+  .permissions-shell__top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .permissions-page {
+    padding: 12px;
+  }
+}

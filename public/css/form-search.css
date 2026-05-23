@@ -1,109 +1,377 @@
-.jobpro-page{
-  max-width:1400px;
-  margin: auto;
-  padding:10px;
-  font-family:system-ui;
-  background:#f6f8fc;
+.jobpro-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 18px 46px;
 }
 
-/* SEARCH */
-.jobpro-page .jobpro-search{
-  display:flex;
-  gap:12px;
-  margin-bottom:25px;
+.jobpro-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  gap: 24px;
+  align-items: center;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(13, 110, 253, .11), transparent 44%),
+    linear-gradient(315deg, rgba(5, 150, 105, .12), transparent 40%),
+    #fff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, .07);
 }
 
-.jobpro-page .jobpro-search input{
-  flex:1;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  font-size:15px;
+.jobpro-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.jobpro-page .jobpro-search button{
-  background:#2563eb;
-  color:#fff;
-  border:none;
-  padding:14px 24px;
-  border-radius:12px;
-  font-weight:600;
+.jobpro-hero h1 {
+  margin: 12px 0 0;
+  color: #172033;
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 700;
 }
 
-/* LAYOUT */
-.jobpro-page .jobpro-wrapper{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:25px;
+.jobpro-hero p {
+  max-width: 620px;
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-/* SIDEBAR */
-.jobpro-page .jobpro-filter{
-  background:#fff;
-  padding:22px;
-  border-radius:14px;
-  box-shadow:0 5px 14px rgba(0,0,0,.06);
-  height:max-content;
+.jobpro-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, .08);
 }
 
-.jobpro-page .jobpro-filter label{
-  margin-top:15px;
-  display:block;
-  font-weight:600;
+.jobpro-search__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }
 
-.jobpro-page .jobpro-filter select,
-.jobpro-page .jobpro-filter button{
-  width:100%;
-  margin-top:6px;
-  padding:10px;
-  border-radius:8px;
+.jobpro-search__field i {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  color: #94a3b8;
 }
 
-.jobpro-page .jobpro-filter button{
-  margin-top:15px;
-  background:#2563eb;
-  color:#fff;
-  border:none;
+.jobpro-search input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px 0 40px;
+  border: 0;
+  outline: 0;
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
 }
-/* ================= MOBILE ================= */
-@media (max-width:600px){
 
-  .jobpro-page{
-    padding:15px;
+.jobpro-search button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #0d6efd;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.jobpro-wrapper {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.jobpro-filter {
+  position: sticky;
+  top: 88px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .06);
+}
+
+.jobpro-filter__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.jobpro-filter__head i {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #e9f2ff;
+  color: #0d6efd;
+}
+
+.jobpro-filter__head h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.jobpro-filter label {
+  display: block;
+  margin: 14px 0 7px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.jobpro-filter select,
+.jobpro-sort select {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #fff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.jobpro-filter__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.jobpro-filter__actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.jobpro-filter__actions button[type="submit"] {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.jobpro-filter__actions button[type="reset"] {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.jobpro-content {
+  min-width: 0;
+}
+
+.jobpro-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.jobpro-result-count {
+  color: #047857;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.jobpro-toolbar h2 {
+  margin: 6px 0 0;
+  color: #172033;
+  font-size: 23px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.jobpro-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jobpro-sort select {
+  min-width: 170px;
+}
+
+.jobpro-sort button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #fff;
+  color: #64748b;
+}
+
+.jobpro-content .container {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.jobpro-content .job-card {
+  width: auto;
+  min-width: 0;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .06);
+}
+
+.jobpro-content .pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+.jobpro-content .page-link {
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.jobpro-content .page-link.active,
+.jobpro-content .page-link:hover {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.jobpro-empty {
+  display: flex;
+  min-height: 260px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 34px 18px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.jobpro-empty i {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #e9f2ff;
+  color: #0d6efd;
+  font-size: 18px;
+}
+
+.jobpro-empty h2 {
+  margin: 14px 0 0;
+  color: #172033;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.jobpro-empty p {
+  max-width: 420px;
+  margin: 8px 0 18px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.jobpro-empty a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: #0d6efd;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media(max-width: 1050px) {
+  .jobpro-wrapper,
+  .jobpro-hero {
+    grid-template-columns: 1fr;
   }
 
-  /* đổi layout từ 2 cột -> 1 cột */
-  .jobpro-page .jobpro-wrapper{
-    grid-template-columns:1fr;
+  .jobpro-filter {
+    position: static;
   }
-
-  /* filter lên trên */
-  .jobpro-page .jobpro-filter{
-    order:-1;
-    width:100%;
-  }
-
-  /* search xuống dòng đẹp hơn */
-  .jobpro-page .jobpro-search{
-    flex-direction:column;
-  }
-
-  .jobpro-page .jobpro-search button{
-    width:100%;
-  }
-
 }
-/* ================= TABLET ================= */
-/* ================= TABLET ================= */
-@media (max-width:1199px){
 
-  .jobpro-page .jobpro-wrapper{
-    grid-template-columns:200px 1fr;
+@media(max-width: 760px) {
+  .jobpro-content .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 600px) {
+  .jobpro-page {
+    padding: 16px 10px 34px;
   }
 
-  .jobpro-page .jobpro-page{
-    padding:20px;
+  .jobpro-hero {
+    padding: 18px;
   }
 
+  .jobpro-hero h1 {
+    font-size: 27px;
+  }
+
+  .jobpro-search,
+  .jobpro-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .jobpro-search button,
+  .jobpro-sort,
+  .jobpro-sort select {
+    width: 100%;
+  }
 }

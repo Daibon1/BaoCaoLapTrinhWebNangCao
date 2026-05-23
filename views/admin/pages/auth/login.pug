@@ -1,36 +1,42 @@
 extends ../../layouts/auth.pug
 include ../../mixins/alert.pug
+
 block content
   +alert-success(3000)
   +alert-error(3000)
-  h3.text-center.mb-4 Đăng nhập
-  form(action=`/${prefixAdmin}/auth/login` method="POST" id="form-login")
-    // Email
-    .mb-3
-      label.form-label Email
-      input#email-input.form-control(
-        tabindex="1"
-        type="text"
-        name="email"
-        placeholder="Nhập email"
-      )
 
-    // Password (đã sửa đúng theo yêu cầu)
-    .mb-3
-      label.form-label Password
-      .position-relative
+  .auth-heading
+    span.auth-heading__eyebrow Trang quản lý
+    h1 Đăng nhập hệ thống
+    p Quản lý việc làm, danh mục, tài khoản và phân quyền.
+
+  form.auth-form(action=`/${prefixAdmin}/auth/login` method="POST" id="form-login")
+    .auth-field
+      label.form-label(for="email-input") Email
+      .auth-input
+        i.fa-solid.fa-envelope
+        input#email-input.form-control(
+          tabindex="1"
+          type="text"
+          name="email"
+          placeholder="Nhập email"
+        )
+
+    .auth-field
+      label.form-label(for="password-input") Mật khẩu
+      .auth-input
+        i.fa-solid.fa-lock
         input#password-input.form-control(
           tabindex="2"
           type="password"
           name="password"
           placeholder="Nhập mật khẩu"
         )
-        span#toggle-password(
-          style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"
-        )
+        button.auth-password-toggle#toggle-password(type="button" aria-label="Hiện mật khẩu")
           i#eye-icon.fas.fa-eye
-    // Submit
-    button.btn.btn-primary.w-100(id="submitBtn" type="submit" tabindex="3") Đăng nhập
-  .text-center.mt-3
-    a(href="/register") Chưa có tài khoản?
-  script(src="/admin/js/auth.js") 
+
+    button.btn.btn-primary.auth-submit(id="submitBtn" type="submit" tabindex="3")
+      i.fa-solid.fa-right-to-bracket
+      span Đăng nhập
+
+  script(src="/admin/js/auth.js")

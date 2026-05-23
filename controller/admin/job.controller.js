@@ -1,14 +1,32 @@
 const Job = require("../../models/jobs.model")
 const JobCategory = require("../../models/jobs-category.model.js");
 const Account = require("../../models/account.model.js");
-const filterStatusHelper = require("../../helpers/filterStatus.js")
 const filterSearchHelper = require("../../helpers/filterSearch.js")
 const paginationHelper = require("../../helpers/pagination.js")
 const systemConfig = require("../../config/system.js");
 const createTreeHelper = require("../../helpers/createTree.js");
+
+const jobFilterStatus = (query) => {
+    const filterStatus = [
+        { name: "Tất Cả", status: "", class: "" },
+        { name: "Chờ duyệt", status: "pending", class: "" },
+        { name: "Hoạt Động", status: "active", class: "" },
+        { name: "Ngừng Hoạt Động", status: "inactive", class: "" }
+    ];
+    const index = filterStatus.findIndex(item => item.status == query.status);
+
+    if (index >= 0) {
+        filterStatus[index].class = "btn-success";
+    } else {
+        filterStatus[0].class = "btn-success";
+    }
+
+    return filterStatus;
+};
+
 // [GET] /admin/job
 module.exports.index = async (req, res) => {
-    let filterStatus = filterStatusHelper(req.query);
+    let filterStatus = jobFilterStatus(req.query);
     let find = {
         deleted: false
     }
@@ -92,12 +110,36 @@ module.exports.indexApi = async (req, res) => {
 }
 //[PATCH] /admin/job/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-    // console.log(req.params);
     const status = req.params.status;
     const id = req.params.id;
-    // console.log(status);
-    // console.log(id);
+    const allowedStatuses = ["pending", "active", "inactive"];
+
+    if (!allowedStatuses.includes(status)) {
+        req.flash('error', 'Trạng thái công việc không hợp lệ!');
+        return res.redirect(req.get("Referrer") || "/admin/job");
+    }
+
     try {
+        const job = await Job.findOne({
+            _id: id,
+            deleted: false
+        });
+
+        if (!job) {
+            req.flash('error', 'Không tìm thấy công việc!');
+            return res.redirect(req.get("Referrer") || "/admin/job");
+        }
+
+        if (res.locals.role.title === "Employer") {
+            const isOwner = job.createdBy && job.createdBy.account_id == res.locals.user.id;
+            const canToggleApprovedJob = ["active", "inactive"].includes(job.status) && ["active", "inactive"].includes(status);
+
+            if (!isOwner || !canToggleApprovedJob) {
+                req.flash('error', 'Bạn chỉ được bật/tắt công việc đã được admin duyệt!');
+                return res.redirect(req.get("Referrer") || "/admin/job");
+            }
+        }
+
         const updatedBy = {
             account_id: res.locals.user.id,
             updatedAt: new Date()
@@ -123,6 +165,12 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     let type = req.body.type;
     let ids = req.body.ids;
+
+    if (["pending", "active", "inactive"].includes(type) && res.locals.role.title === "Employer") {
+        req.flash('error', 'Bạn không có quyền duyệt trạng thái công việc!');
+        return res.redirect(req.get("Referrer") || "/admin/job");
+    }
+
     ids = ids.split(", ");
     // console.log(ids);
     const updatedBy = {
@@ -144,6 +192,24 @@ module.exports.changeMulti = async (req, res) => {
                 })
                 req.flash('success', `Cập nhật trạng thái cho ${ids.length} jobs thành công!`);
 
+            } catch (error) {
+                console.error(error);
+                req.flash('error', `Có lỗi xảy ra khi cập nhật trạng thái cho ${ids.length} jobs!`);
+            }
+            break;
+        case "pending":
+            try {
+                await Job.updateMany({
+                    _id: {
+                        $in: ids
+                    }
+                }, {
+                    status: "pending",
+                    $push: {
+                        updatedBy: updatedBy
+                    }
+                })
+                req.flash('success', `Cập nhật trạng thái cho ${ids.length} jobs thành công!`);
             } catch (error) {
                 console.error(error);
                 req.flash('error', `Có lỗi xảy ra khi cập nhật trạng thái cho ${ids.length} jobs!`);
@@ -237,6 +303,7 @@ module.exports.create = async (req, res) => {
     const newCategories = createTreeHelper.tree(categories);
     res.render("admin/pages/job/create", {
         title: "Trang tạo công việc",
+        currentUrl: req.originalUrl,
         categories: newCategories
     })}
     else{
@@ -268,6 +335,7 @@ module.exports.createPost = async (req, res) => {
         req.body.skill = [];
     }
     req.body.company_id = res.locals.user.company_id;
+    req.body.status = "pending";
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
     if (!req.body.position) {
@@ -283,7 +351,7 @@ module.exports.createPost = async (req, res) => {
     console.log(req.file);
     try {
         await newJob.save();
-        req.flash('success', 'Tạo công việc thành công!');
+        req.flash('success', 'Tạo công việc thành công, đang chờ admin duyệt!');
         res.redirect(`${systemConfig.prefixAdmin}/job`);
     } catch (error) {
         console.error(error);
@@ -309,6 +377,7 @@ module.exports.edit = async (req, res) => {
         const newCategories = createTreeHelper.tree(categories);
         res.render("admin/pages/job/edit", {
             title: "Cập nhật công việc",
+            currentUrl: req.originalUrl,
             job: job,
             categories: newCategories
         })
@@ -342,6 +411,20 @@ module.exports.editPatch = async (req, res) => {
         req.body.skill = [];
     }
     req.body.skill = skills;
+
+    if (res.locals.role.title === "Employer") {
+        const currentJob = await Job.findOne({
+            _id: id,
+            deleted: false
+        });
+        const canUpdateStatus = currentJob
+            && ["active", "inactive"].includes(currentJob.status)
+            && ["active", "inactive"].includes(req.body.status);
+
+        if (!canUpdateStatus) {
+            delete req.body.status;
+        }
+    }
     req.body.salaryMin = parseInt(req.body.salaryMin);
     req.body.salaryMax = parseInt(req.body.salaryMax);
     // if (req.file) {
@@ -379,6 +462,7 @@ module.exports.detail = async (req, res) => {
         })
         res.render("admin/pages/job/detail", {
             title: "Chi tiết công việc",
+            currentUrl: req.originalUrl,
             job: job,
             category: category
         })

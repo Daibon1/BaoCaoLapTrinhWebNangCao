@@ -7,6 +7,8 @@ const uploadCloud=require("../../middlewares/admin/uploadCloud.middleware");
 const multer = require('multer')
 const upload = multer();
 router.get("/",Controller.index);
+router.patch("/change-status/:status/:id", Controller.changeStatus);
+router.delete("/delete/:id", Controller.deleteItem);
 router.get("/create",Controller.create);
 router.post("/create",
     upload.single('avatar'),

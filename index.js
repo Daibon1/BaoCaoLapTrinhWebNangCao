@@ -10,20 +10,34 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const moment = require('moment');
+
+const passport = require("passport");
+require("./config/passport");
+
+
 const app = express();
 const port = process.env.PORT;
 let database = require("./config/database");
 database.connect();
 const route = require("./router/client/index.route");
 const routeAdmin = require("./router/admin/index.route");
-const routeApi=require("./api/admin/index.route");
+const routeApi = require("./api/admin/index.route");
 //flash
 app.use(cookieParser('djgwdgjwudjjd'));
 app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     maxAge: 60000
   }
 }));
+
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 //end flash
 // tinymce

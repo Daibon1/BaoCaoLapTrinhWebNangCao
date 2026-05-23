@@ -1,11 +1,12 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
-include ../../mixins/job-layout.pug
-include ../../mixins/box-head.pug
 include ../../mixins/form-search.pug
+
+block styles
+  link(rel="stylesheet" href="/css/form-search.css")
+
 block main
   +alert-success(3000)
   +alert-error(3000)
-  +boxHead("Việc làm")
-  +form-search(keyword,jobs, filterLocation, filterType)
-  script(src="/js/jobs.js") 
+  +form-search(keyword, jobs, filterLocation, filterType)
+  script(src="/js/jobs.js")

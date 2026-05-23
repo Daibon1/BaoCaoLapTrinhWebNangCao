@@ -10,6 +10,8 @@ router.post("/create",Controller.createPost);
 router.get("/edit/:id",Controller.edit);
 //[PATCH] /admin/roles/edit/:id
 router.patch("/edit/:id",Controller.editPatch);
+//[GET] /admin/roles/detail/:id
+router.get("/detail/:id",Controller.detail);
 //[DELETE] /admin/roles/delete/:id
 router.delete("/delete/:id",Controller.delete);
 //[GET] /admin/roles/permissions

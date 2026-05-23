@@ -6,8 +6,11 @@ const userSchema = new mongoose.Schema({
     password: String,
     tokenUser:{
         type: String,
-        default: gennerate.generateRandomString(20)
+        default: () => gennerate.generateRandomString(20)
     },
+    googleId: String,
+    facebookId: String,
+
     phone:String,
     avatar:String,
     status:{

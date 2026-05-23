@@ -2,8 +2,8 @@
 const buttonStatus = document.querySelectorAll("[button-status]");
 // console.log(buttonStatus);
 buttonStatus.forEach(item => {
-    item.addEventListener("click", () => {
-        // e.preventDefault();
+    item.addEventListener("click", (e) => {
+        e.preventDefault();
         const status = item.getAttribute("button-status");
         // console.log(window.location.href);
         // console.log(status);
@@ -26,8 +26,8 @@ if (formSearch) {
     formSearch.addEventListener("submit", (e) => {
         let url = new URL(window.location.href);
         e.preventDefault();
-        const keyword = e.target.elements.keyword.value;
-        const location = e.target.elements.location.value;
+        const keyword = e.target.elements.keyword ? e.target.elements.keyword.value : "";
+        const location = e.target.elements.location ? e.target.elements.location.value : "";
         if (keyword) {
             url.searchParams.set("keyword", keyword);
             url.searchParams.set("page", 1);
@@ -52,10 +52,11 @@ if (formSearch) {
 const pagination = document.querySelectorAll(".btn-pagination")
 // console.log(pagination)
 if (pagination.length > 0) {
-    let url = new URL(window.location.href);
     pagination.forEach(item => {
-        item.addEventListener("click", () => {
-            const page = item.value;
+        item.addEventListener("click", (e) => {
+            e.preventDefault();
+            let url = new URL(window.location.href);
+            const page = item.value || item.getAttribute("data-page");
             if (page) {
                 url.searchParams.set("page", page);
             } else {
@@ -140,18 +141,19 @@ if (formChangeMulti) {
 }
 // end form change multi
 // show alert
-const showAlert = document.querySelector("[show-alert]");
-if (showAlert) {
-    const time = parseInt(showAlert.getAttribute("data-time"));
-    const closeAlert = showAlert.querySelector("[close-alert]");
-    setTimeout(() => {
+const showAlert=document.querySelector("[show-alert]");
+if(showAlert){
+    const time=parseInt(showAlert.getAttribute("data-time"));
+    console.log(time);
+    const closeAlert=showAlert.querySelector("[close-alert]");
+    setTimeout(()=>{
         showAlert.classList.add("alert-hiden");
     }, time);
-    if (closeAlert) {
-        closeAlert.addEventListener("click", () => {
+    if(closeAlert){
+        closeAlert.addEventListener("click",()=>{
             showAlert.classList.add("alert-hiden");
         })
-        // console.log(showAlert);
+    // console.log(showAlert);
     }
 }
 // end show alert
@@ -220,13 +222,15 @@ const modalText = document.querySelector(".div-cover-modal__text");
 const overlay = document.querySelector(".div-cover-modal__overlay");
 const closeBtn = document.querySelector(".div-cover-modal__close");
 
-document.querySelectorAll(".cover-preview").forEach(el => {
-    el.onclick = () => {
-        modal.classList.add("active");
-        modalText.textContent = el.dataset.text;
-    };
-});
+if (modal && modalText && overlay && closeBtn) {
+    document.querySelectorAll(".cover-preview").forEach(el => {
+        el.onclick = () => {
+            modal.classList.add("active");
+            modalText.textContent = el.dataset.text;
+        };
+    });
 
-overlay.onclick = closeBtn.onclick = () => {
-    modal.classList.remove("active");
-};
+    overlay.onclick = closeBtn.onclick = () => {
+        modal.classList.remove("active");
+    };
+}

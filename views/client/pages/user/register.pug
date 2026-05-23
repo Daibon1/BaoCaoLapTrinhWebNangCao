@@ -1,45 +1,68 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet" href="/css/client-auth.css")
+
 block main
-    +alert-success(2000)
-    +alert-error(2000)
-    .my-5 
-        .row.justify-content-center
-            .col-5
-                h1.text-center.mb-5 Đăng ký tài khoản
-                form(
-                    action="/user/register"
-                    method="POST"
-                )
-                    div(class="form-group")
-                        label(for="fullName") Họ và tên
-                        input(
-                            type="text"
-                            name="fullName"
-                            id="fullName"
-                            class="form-control"
-                            placeholder="Họ và tên"
-                            required
-                        )
-                    div(class="form-group")
-                        label(for="email") Email
-                        input(
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="form-control"
-                            placeholder="Email"
-                            required
-                        )
-                    div(class="form-group")
-                        label(for="password") Mật khẩu
-                        input(
-                            type="password"
-                            name="password"
-                            id="password"
-                            class="form-control"
-                            placeholder="Mật khẩu"
-                            required
-                        )
-                    div(class="form-group")
-                        button(type="submit" class="btn btn-primary w-100") Đăng ký
+  +alert-success(2000)
+  +alert-error(2000)
+
+  .client-auth
+    section.client-auth__panel
+      .client-auth__intro
+        span.client-auth__eyebrow Dành cho ứng viên
+        h1 Đăng ký ứng viên
+        p Tạo tài khoản để lưu việc làm, ứng tuyển nhanh và theo dõi trạng thái hồ sơ của bạn.
+
+        .client-auth__switch
+          span Bạn là nhà tuyển dụng?
+          a(href="/employer/register")
+            span Đăng ký nhà tuyển dụng
+            i.fa-solid.fa-arrow-right
+
+      .client-auth__card
+        form.client-auth__form(action="/user/register" method="POST")
+          .client-auth__field
+            label(for="fullName") Họ và tên
+            .client-auth__input
+              i.fa-solid.fa-user
+              input(
+                type="text"
+                name="fullName"
+                id="fullName"
+                placeholder="Nhập họ và tên"
+                required
+              )
+
+          .client-auth__field
+            label(for="email") Email
+            .client-auth__input
+              i.fa-solid.fa-envelope
+              input(
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Nhập email ứng viên"
+                required
+              )
+
+          .client-auth__field
+            label(for="password") Mật khẩu
+            .client-auth__input
+              i.fa-solid.fa-lock
+              input(
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Tối thiểu 8 ký tự"
+                required
+              )
+
+          button.client-auth__submit(type="submit")
+            span Đăng ký
+            i.fa-solid.fa-arrow-right
+
+        p.client-auth__register
+          | Đã có tài khoản?
+          a(href="/user/login") Đăng nhập ứng viên

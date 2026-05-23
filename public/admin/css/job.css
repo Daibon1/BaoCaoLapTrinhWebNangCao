@@ -1,0 +1,1092 @@
+/* 1. Khung trang quan ly viec lam */
+.job-page {
+  padding: 16px;
+  color: #172033;
+}
+
+.job-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.job-page__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.job-page__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.job-page__title h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.job-page__create {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-radius: 8px;
+  padding: 9px 14px;
+}
+
+/* 2. Thanh loc va tim kiem */
+.job-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .04);
+}
+
+.job-toolbar__status .filter-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.job-toolbar__status .filter-status .btn {
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  color: #334155;
+  background: #f8fafc;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.job-toolbar__status .filter-status .btn-success {
+  border-color: #198754;
+  color: #fff;
+  background: #198754;
+}
+
+.job-toolbar__search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.job-toolbar__search .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.job-search-field {
+  position: relative;
+  min-width: 150px;
+}
+
+.job-search-field--keyword {
+  flex: 1;
+  min-width: 220px;
+}
+
+.job-search-field i {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  z-index: 1;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.job-search-field .form-control,
+.job-search-field .form-select {
+  height: 40px;
+  padding-left: 38px;
+  border-radius: 8px;
+  border-color: #d7dde8;
+}
+
+.job-search-field .form-control:focus,
+.job-search-field .form-select:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, .12);
+}
+
+/* 3. Hanh dong hang loat va sap xep */
+.job-actions-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.job-bulk-form,
+.job-sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.job-bulk-form .form-select {
+  min-width: 190px;
+}
+
+.job-sort label {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.job-sort .form-select {
+  width: auto;
+  min-width: 170px;
+}
+
+.job-actions-bar .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* 4. Khung bang danh sach */
+.job-table-shell {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.job-table-shell__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.job-table-shell__top h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.job-table-shell__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* 5. Bang va noi dung viec lam */
+.job-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Cố định độ rộng cột để bảng không bị tràn */
+.job-table thead th:nth-child(1),
+.job-table tbody td:nth-child(1) { width: 46px; }
+.job-table thead th:nth-child(2),
+.job-table tbody td:nth-child(2) { width: 46px; }
+.job-table thead th:nth-child(3),
+.job-table tbody td:nth-child(3) { width: 180px; }
+.job-table thead th:nth-child(4),
+.job-table tbody td:nth-child(4) { width: 110px; }
+.job-table thead th:nth-child(5),
+.job-table tbody td:nth-child(5) { width: 110px; }
+.job-table thead th:nth-child(6),
+.job-table tbody td:nth-child(6) { width: 70px; }
+.job-table thead th:nth-child(7),
+.job-table tbody td:nth-child(7) { width: 130px; }
+.job-table thead th:nth-child(8),
+.job-table tbody td:nth-child(8) { width: 110px; }
+.job-table thead th:nth-child(9),
+.job-table tbody td:nth-child(9) { width: 110px; }
+
+.job-table thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px;
+}
+
+.job-table tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+.job-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.job-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.job-table__checkbox {
+  width: 46px;
+}
+
+.job-table__index {
+  width: 58px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.job-item-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+  max-width: 260px;
+}
+
+.job-thumb {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.job-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.job-item-main__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.job-item-main__info strong {
+  color: #172033;
+  font-size: 13px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-item-main__info span,
+.job-audit span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.job-location,
+.job-audit {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.job-location {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-location i {
+  color: #94a3b8;
+}
+
+.job-audit strong {
+  color: #172033;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-salary {
+  min-width: 0;
+  color: #0f766e;
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.job-position {
+  width: 56px;
+  height: 32px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  text-align: center;
+  color: #334155;
+}
+
+/* 6. Trang thai va nut thao tac */
+.job-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.job-status--active {
+  background: #eaf7ef;
+  color: #146c43;
+}
+
+.job-status--inactive {
+  background: #fff0f0;
+  color: #b42318;
+}
+
+.job-status--pending {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.job-status:hover {
+  filter: brightness(.97);
+  text-decoration: none;
+}
+
+.job-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.job-row-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.job-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 210px;
+  text-align: center;
+  color: #64748b;
+}
+
+.job-empty i {
+  font-size: 34px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.job-empty h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 18px;
+}
+
+.job-pagination {
+  padding: 14px 18px 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* 7. Trang tao viec lam */
+.job-create-page {
+  padding: 16px;
+  color: #172033;
+}
+
+.job-create-page__subtitle {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.job-create-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.job-create-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.job-create-form__main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.job-create-form__side {
+  min-width: 0;
+}
+
+.job-create-panel {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.job-create-panel--sticky {
+  position: sticky;
+  top: 72px;
+}
+
+.job-create-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.job-create-panel__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.job-create-panel__head h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.job-create-panel__head p {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.job-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px;
+}
+
+.job-form-field {
+  min-width: 0;
+}
+
+.job-form-field--wide {
+  grid-column: 1 / -1;
+}
+
+.job-form-field .form-label {
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.job-form-field .form-control,
+.job-form-field .form-select {
+  min-height: 42px;
+  border-color: #d7dde8;
+  border-radius: 8px;
+  color: #172033;
+  font-size: 14px;
+}
+
+.job-form-field .form-control::placeholder {
+  color: #94a3b8;
+}
+
+.job-form-field .form-control:focus,
+.job-form-field .form-select:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, .12);
+}
+
+.job-form-hint {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.job-choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.job-choice-group--stack {
+  flex-direction: column;
+}
+
+.job-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.job-choice .form-check-input {
+  margin: 0;
+}
+
+.job-pending-note {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.job-pending-note i {
+  margin-top: 2px;
+  color: #d97706;
+}
+
+.job-pending-note strong,
+.job-pending-note span {
+  display: block;
+}
+
+.job-pending-note strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.job-pending-note span {
+  margin-top: 3px;
+  color: #a16207;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.job-upload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  margin: 0 18px 16px;
+  overflow: hidden;
+  border: 1px dashed #a7b4c8;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.job-upload img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+}
+
+#preview-img.job-upload #img-preview {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+}
+
+.job-upload img[src]:not([src=""]) {
+  opacity: 1;
+}
+
+.job-upload:has(img[src]:not([src=""])) .job-upload__content {
+  opacity: 0;
+}
+
+.job-upload__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: #64748b;
+  text-align: center;
+  pointer-events: none;
+}
+
+.job-upload__content i {
+  color: #059669;
+  font-size: 28px;
+}
+
+.job-upload__content span {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.job-upload__content small {
+  font-size: 12px;
+}
+
+.job-upload__input {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.job-create-form__side .job-form-field:not(:first-child) {
+  padding: 0 18px 16px;
+}
+
+.job-create-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.job-create-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* 8. Trang chi tiet viec lam */
+.job-detail-page {
+  padding: 16px;
+  color: #172033;
+}
+
+.job-detail-page__subtitle {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.job-detail-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.job-detail-page__button,
+.job-detail-side__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.job-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.job-detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.job-detail-side {
+  min-width: 0;
+}
+
+.job-detail-panel {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+
+.job-detail-panel--sticky {
+  position: sticky;
+  top: 72px;
+}
+
+.job-detail-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.job-detail-panel__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.job-detail-panel__head h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.job-detail-panel__head p {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.job-detail-title {
+  padding: 18px 18px 4px;
+}
+
+.job-detail-title__label,
+.job-detail-item__label {
+  display: block;
+  margin-bottom: 5px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.job-detail-title h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.job-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 18px 18px;
+}
+
+.job-detail-item {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.job-detail-item strong {
+  display: block;
+  color: #172033;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.job-detail-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px;
+}
+
+.job-detail-skill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.job-detail-description {
+  padding: 18px;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.job-detail-description p:last-child {
+  margin-bottom: 0;
+}
+
+.job-detail-empty {
+  padding: 18px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.job-detail-cover {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.job-detail-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.job-detail-side__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.job-detail-side__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-detail-side__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.job-detail-side__row span {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.job-detail-side__row strong {
+  min-width: 0;
+  color: #172033;
+  font-size: 13px;
+  text-align: right;
+  word-break: break-word;
+}
+
+.job-detail-side__actions {
+  display: grid;
+  gap: 10px;
+}
+
+/* 9. Responsive */
+@media (max-width: 1200px) {
+  .job-toolbar,
+  .job-toolbar__search,
+  .job-actions-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .job-toolbar__search,
+  .job-search-field,
+  .job-search-field--keyword,
+  .job-bulk-form,
+  .job-sort {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .job-bulk-form,
+  .job-sort {
+    flex-wrap: wrap;
+  }
+
+  .job-page__create,
+  .job-toolbar__search .btn {
+    justify-content: center;
+  }
+
+  .job-create-form {
+    grid-template-columns: 1fr;
+  }
+
+  .job-create-panel--sticky {
+    position: static;
+  }
+
+  .job-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .job-detail-panel--sticky {
+    position: static;
+  }
+}
+
+@media (max-width: 576px) {
+  .job-page,
+  .job-create-page,
+  .job-detail-page {
+    padding: 16px 10px 24px;
+  }
+
+  .job-page__header,
+  .job-table-shell__top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .job-toolbar,
+  .job-actions-bar,
+  .job-table-shell__top {
+    padding: 12px;
+  }
+
+  .job-toolbar__search .btn,
+  .job-bulk-form .btn,
+  .job-sort .btn {
+    width: 100%;
+  }
+
+  .job-form-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .job-create-panel__head {
+    padding: 14px;
+  }
+
+  .job-upload {
+    margin: 0 14px 14px;
+  }
+
+  .job-create-form__side .job-form-field:not(:first-child),
+  .job-create-actions {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .job-create-page__back {
+    justify-content: center;
+  }
+
+  .job-detail-page__actions,
+  .job-detail-page__button {
+    width: 100%;
+  }
+
+  .job-detail-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .job-detail-panel__head,
+  .job-detail-title,
+  .job-detail-skills,
+  .job-detail-description,
+  .job-detail-empty,
+  .job-detail-side__body {
+    padding: 14px;
+  }
+}

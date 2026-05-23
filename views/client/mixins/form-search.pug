@@ -1,59 +1,74 @@
-include ../mixins/job-item.pug
 include ../mixins/job-layout.pug
 include ../mixins/pagination.pug
-mixin form-search(keyword,jobs, filterLocation, filterType)
-    link(rel="stylesheet", href="/css/form-search.css")
-    .jobpro-page
 
-        // ===== SEARCH =====
-        form.jobpro-search(method="GET" id="form-search-jobs")
-            input(
-                type="text"
-                name="keyword"
-                placeholder="Tìm việc IT, Marketing, Designer..."
-                value=keyword
-            )
-            button(type="submit") Tìm kiếm
+mixin form-search(keyword, jobs, filterLocation, filterType)
+  .jobpro-page
+    section.jobpro-hero
+      .jobpro-hero__content
+        span.jobpro-hero__eyebrow Cơ hội việc làm
+        h1 Tìm việc làm phù hợp với bạn
+        p Lọc nhanh theo từ khóa, địa điểm, hình thức làm việc và sắp xếp danh sách theo nhu cầu.
 
-        .jobpro-wrapper
+      form.jobpro-search(method="GET" id="form-search-jobs")
+        .jobpro-search__field
+          i.fa-solid.fa-magnifying-glass
+          input(
+            type="text"
+            name="keyword"
+            placeholder="Nhập vị trí, kỹ năng hoặc công ty..."
+            value=keyword
+          )
+        button(type="submit")
+          span Tìm kiếm
+          i.fa-solid.fa-arrow-right
 
-            // ===== SIDEBAR FILTER =====
-            .jobpro-filter
-                h3 Bộ lọc
+    .jobpro-wrapper
+      aside.jobpro-filter
+        .jobpro-filter__head
+          i.fa-solid.fa-filter
+          h2 Bộ lọc
 
-                form(method="GET" id="form-filter-jobs")
+        form(method="GET" id="form-filter-jobs")
+          label(for="job-location") Địa điểm
+          select(name="location" id="job-location")
+            each item in filterLocation
+              option(value=item.name selected=item.selected ? true : false) #{item.name ? item.name : "-- Tất cả địa điểm --"}
 
-                    label Địa điểm
-                    select(name="location")
-                        each item in filterLocation
-                            option(value=item.name selected=item.selected ? true : false) #{item.name?item.name:"--Địa Điểm--"}
+          label(for="job-type") Hình thức
+          select(name="type" id="job-type")
+            each item in filterType
+              option(value=item.name selected=item.selected ? true : false) #{item.name ? item.name : "-- Tất cả hình thức --"}
 
-                    label Hình thức
-                    select(name="type")
-                        each item in filterType
-                            option(value=item.name selected=item.selected ? true : false) #{item.name?item.name:"--Hình thức--"}
+          .jobpro-filter__actions
+            button(type="submit")
+              i.fa-solid.fa-check
+              span Lọc
+            button(type="reset")
+              i.fa-solid.fa-rotate-left
+              span Xóa lọc
 
-                    button(type="submit") Lọc
-                    button(type="reset") Xóa lọc
+      section.jobpro-content
+        .jobpro-toolbar
+          div
+            span.jobpro-result-count #{jobs ? jobs.length : 0} việc làm đang hiển thị
+            h2 Danh sách việc làm
 
-            // ===== CONTENT =====
-            .jobpro-content
+          div(sort).jobpro-sort
+            select(name="sort" sort-select)
+              option(value="") Sắp xếp
+              option(value="position-desc") Mới nhất
+              option(value="salaryMin-desc") Lương cao
+              option(value="title-desc") Tiêu đề Z-A
+              option(value="title-asc") Tiêu đề A-Z
+            button(type="button" sort-clear title="Xóa sắp xếp")
+              i.fa-solid.fa-xmark
 
-                .jobpro-sort
-                    div(sort).d-flex
-                        select(name="sort" sort-select style="width: auto;")
-                            option(value="") Sắp xếp
-                            option(value="position-desc") Mới nhất
-                            option(value="salaryMin-desc") Lương cao
-                            option(value="title-desc") Tiêu đề Z→A
-                            option(value="title-asc") Tiêu đề A→Z
-                        .col-auto   
-                            button(sort-clear) Clear
-
-                // ===== GRID JOB =====
-                if(jobs.length > 0)
-                    +job-grid(jobs)
-                    +pagination(pagination)
-                else
-                    .alert.alert-warning Không có công việc nào.
-                
+        if jobs && jobs.length
+          +job-grid(jobs)
+          +pagination(pagination)
+        else
+          .jobpro-empty
+            i.fa-solid.fa-briefcase
+            h2 Không có công việc phù hợp
+            p Thử đổi từ khóa, địa điểm hoặc hình thức làm việc để xem thêm kết quả.
+            a(href="/jobs") Xem tất cả việc làm

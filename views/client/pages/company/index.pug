@@ -1,40 +1,70 @@
 extends ../../layouts/default.pug
 
+block styles
+  link(rel="stylesheet" href="/css/company.css")
+
 block main
-    link(rel="stylesheet" href="/css/company.css")
-    .client-company-page
+  .client-company-page
+    section.company-hero
+      .company-hero__content
+        span.company-hero__eyebrow Công ty tuyển dụng
+        h1 Khám phá các công ty đang tuyển dụng
+        p Tìm hiểu môi trường làm việc, quy mô công ty và các cơ hội đang mở trên DDS Jobs.
 
-        h2.page-title Danh sách công ty tuyển dụng
+      form.company-search(action="/company" method="GET")
+        .company-search__field
+          i.fa-solid.fa-magnifying-glass
+          input(
+            type="text"
+            name="keyword"
+            placeholder="Tìm theo tên công ty, địa điểm..."
+            value=keyword
+          )
+        button(type="submit")
+          span Tìm kiếm
+          i.fa-solid.fa-arrow-right
 
-        .company-search
-            form(method="GET")
-                input(
-                    type="text"
-                    name="keyword"
-                    placeholder="Tìm công ty..."
-                    value=keyword
-                )
-                button Tìm kiếm
+    section.company-section
+      .company-section__head
+        div
+          span.company-section__count #{companies ? companies.length : 0} công ty phù hợp
+          h2 Danh sách công ty
+        if keyword
+          a.company-section__link(href="/company")
+            span Xóa tìm kiếm
+            i.fa-solid.fa-xmark
 
+      if companies && companies.length
         .company-grid
-            each company in companies
-                a.company-card(href=`/company/detail/${company.slug}`)
+          each company in companies
+            a.company-card(href=`/company/detail/${company.slug}`)
+              .company-card__top
+                .company-card__logo-wrap
+                  if company.logo
+                    img.company-card__logo(src=company.logo alt=company.name)
+                  else
+                    img.company-card__logo(src="/images/company-default.png" alt=company.name)
 
-                    .card-top
-                        if company.logo
-                            img.logo(src=company.logo)
-                        else
-                            img.logo(src="/images/company-default.png")
+                .company-card__info
+                  h3= company.name
+                  p
+                    i.fa-solid.fa-location-dot
+                    span= company.address || "Chưa cập nhật địa chỉ"
 
-                        .info
-                            h3= company.name
-                            p.address= company.address
+              .company-card__desc
+                if company.description
+                  p= company.description.length > 130 ? company.description.substring(0, 130) + "..." : company.description
+                else
+                  p Chưa có mô tả công ty.
 
-                    .desc
-                        if company.description
-                            p= company.description.substring(0,120) + "..." 
-                        else
-                            p.chua Chưa có mô tả
-
-                    .meta
-                        span.size #{company.size}
+              .company-card__meta
+                span
+                  i.fa-solid.fa-users
+                  |  #{company.size || "Đang cập nhật"}
+                i.fa-solid.fa-arrow-right
+      else
+        .company-empty
+          i.fa-solid.fa-building
+          h2 Không tìm thấy công ty
+          p Thử tìm bằng tên công ty, địa điểm hoặc từ khóa khác.
+          a(href="/company") Xem tất cả công ty

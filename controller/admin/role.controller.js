@@ -63,6 +63,29 @@ module.exports.editPatch = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/roles/edit/${id}`);
     }
 }
+// [GET] /admin/roles/detail/:id
+module.exports.detail = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const record = await Role.findOne({
+            _id: id,
+            deleted: false
+        });
+
+        if (!record) {
+            req.flash("error", "Nhóm quyền không tồn tại");
+            return res.redirect(`${systemConfig.prefixAdmin}/roles`);
+        }
+
+        res.render("admin/pages/roles/detail", {
+            title: "Chi tiết nhóm quyền",
+            record: record
+        });
+    } catch (error) {
+        req.flash("error", "Đã xảy ra lỗi khi lấy chi tiết nhóm quyền");
+        res.redirect(`${systemConfig.prefixAdmin}/roles`);
+    }
+}
 // [DELETE] /admin/roles/delete/:id
 module.exports.delete = async (req, res) => {
     try {

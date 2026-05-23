@@ -1,85 +1,143 @@
-extends ../../layouts/default.pug
+﻿extends ../../layouts/default.pug
 
 block main
+  .dashboard-page
+    .dashboard-hero
+      .dashboard-hero__content
+        span.dashboard-hero__badge
+          i.fa-solid.fa-chart-line
+          |  #{isEmployer ? "Tổng quan tuyển dụng" : "Tổng quan hệ thống"}
+        h1 #{isEmployer ? "Dashboard nhà tuyển dụng" : "Dashboard quản trị"}
+        p #{isEmployer ? "Theo dõi nhanh việc làm và hồ sơ ứng tuyển thuộc tài khoản của bạn." : "Theo dõi nhanh tình trạng việc làm, tài khoản và danh mục trong hệ thống DDSJob."}
+      .dashboard-hero__summary
+        span Tỉ lệ việc làm đang hiển thị
+        strong #{percentActive}%
+        .dashboard-progress
+          .dashboard-progress__bar(style=`width: ${percentActive}%`)
 
-  script(src="https://cdn.jsdelivr.net/npm/chart.js")
+    .dashboard-stats
+      .dashboard-card.dashboard-card--blue
+        .dashboard-card__icon
+          i.fa-solid.fa-briefcase
+        .dashboard-card__content
+          span #{isEmployer ? "Việc làm của tôi" : "Tổng việc làm"}
+          strong #{totalJob}
+          small #{isEmployer ? "Tất cả việc làm bạn đã đăng" : "Tất cả việc làm trong hệ thống"}
 
-  h2.mb-4 Dashboard thống kê
+      .dashboard-card.dashboard-card--green
+        .dashboard-card__icon
+          i.fa-solid.fa-circle-check
+        .dashboard-card__content
+          span Đang hiển thị
+          strong #{activeJob}
+          small Việc làm đang được kích hoạt
 
-  .row.g-4
+      .dashboard-card.dashboard-card--red
+        .dashboard-card__icon
+          i.fa-solid.fa-circle-pause
+        .dashboard-card__content
+          span Đang ẩn
+          strong #{inactiveJob}
+          small Việc làm tạm ngừng hiển thị
 
-    .col-md-3
-      .stat-card
-        h2 #{totalJob}
-        p Tổng Job
+      if(isEmployer)
+        .dashboard-card.dashboard-card--purple
+          .dashboard-card__icon
+            i.fa-solid.fa-file-signature
+          .dashboard-card__content
+            span Hồ sơ ứng tuyển
+            strong #{totalApplication}
+            small Tổng hồ sơ ứng tuyển vào việc làm của bạn
+      else
+        .dashboard-card.dashboard-card--purple
+          .dashboard-card__icon
+            i.fa-solid.fa-users
+          .dashboard-card__content
+            span Tài khoản
+            strong #{totalAccount}
+            small Tổng số tài khoản quản trị
 
-    .col-md-3
-      .stat-card
-        h2 #{activeJob}
-        p Job đang hiển thị
+      .dashboard-card.dashboard-card--orange
+        .dashboard-card__icon
+          i.fa-solid.fa-calendar-week
+        .dashboard-card__content
+          span Mới trong 7 ngày
+          strong #{newJobWeek}
+          small Việc làm mới được tạo gần đây
 
-    .col-md-3
-      .stat-card
-        h2 #{inactiveJob}
-        p Job bị ẩn
+      if(!isEmployer)
+        .dashboard-card.dashboard-card--cyan
+          .dashboard-card__icon
+            i.fa-solid.fa-layer-group
+          .dashboard-card__content
+            span Danh mục
+            strong #{totalCategory}
+            small Tổng danh mục việc làm
 
-    .col-md-3
-      .stat-card
-        h2 #{totalAccount}
-        p Tài khoản
+    .dashboard-grid
+      .dashboard-panel
+        .dashboard-panel__head
+          div
+            span.dashboard-panel__label Hiệu suất
+            h2 Tình trạng việc làm
+          i.fa-solid.fa-signal
 
-    .col-md-3
-      .stat-card.bg-success.text-white
-        h2 #{percentActive}%
-        p Tỉ lệ Job Active
+        .dashboard-status-list
+          .dashboard-status-item
+            .dashboard-status-item__text
+              span Việc làm đang hiển thị
+              strong #{activeJob} / #{totalJob}
+            .dashboard-status-line
+              .dashboard-status-line__bar.dashboard-status-line__bar--green(style=`width: ${percentActive}%`)
 
-    .col-md-3
-      .stat-card.bg-warning
-        h2 #{newJobWeek}
-        p Job mới 7 ngày
+          .dashboard-status-item
+            .dashboard-status-item__text
+              span Việc làm đang ẩn
+              strong #{inactiveJob}
+            .dashboard-status-line
+              - const inactivePercent = totalJob === 0 ? 0 : Math.round((inactiveJob / totalJob) * 100);
+              .dashboard-status-line__bar.dashboard-status-line__bar--red(style=`width: ${inactivePercent}%`)
 
-    .col-md-3
-      .stat-card.bg-info.text-white
-        h2 #{totalCategory}
-        p Danh mục
+          .dashboard-status-item
+            .dashboard-status-item__text
+              span Việc làm mới 7 ngày
+              strong #{newJobWeek}
+            .dashboard-status-line
+              - const newWeekPercent = totalJob === 0 ? 0 : Math.min(100, Math.round((newJobWeek / totalJob) * 100));
+              .dashboard-status-line__bar.dashboard-status-line__bar--blue(style=`width: ${newWeekPercent}%`)
 
+      .dashboard-panel
+        .dashboard-panel__head
+          div
+            span.dashboard-panel__label Truy cập nhanh
+            h2 #{isEmployer ? "Thao tác tuyển dụng" : "Thao tác quản trị"}
+          i.fa-solid.fa-bolt
 
-  hr.my-5
+        .dashboard-actions
+          if(role.permissions.includes("jobs-view"))
+            a.dashboard-action(href=`/${prefixAdmin}/job`)
+              i.fa-solid.fa-briefcase
+              div
+                strong Quản lý việc làm
+                span Xem, sửa và cập nhật trạng thái
 
-  .row
+          if(role.permissions.includes("user-approval-view"))
+            a.dashboard-action(href=`/${prefixAdmin}/user-approval`)
+              i.fa-solid.fa-user-check
+              div
+                strong Duyệt ứng tuyển
+                span Xem hồ sơ ứng viên theo việc làm
 
-    .col-md-6
-      h4 Job theo Category
-      canvas#categoryChart(height="150")
+          if(role.permissions.includes("accounts-view"))
+            a.dashboard-action(href=`/${prefixAdmin}/account`)
+              i.fa-solid.fa-users-gear
+              div
+                strong Quản lý tài khoản
+                span Phân quyền và kiểm soát tài khoản
 
-    .col-md-6
-      h4 Job theo Tháng
-      canvas#monthChart(height="150")
-
-
-  script.
-    const categoryData = !{JSON.stringify(jobByCategory)}
-    const monthData = !{JSON.stringify(jobByMonth)}
-
-    new Chart(document.getElementById("categoryChart"), {
-      type: "pie",
-      data: {
-        labels: categoryData.map(i => i._id),
-        datasets: [{
-          data: categoryData.map(i => i.total)
-        }]
-      }
-    });
-
-    new Chart(document.getElementById("monthChart"), {
-      type: "line",
-      data: {
-        labels: monthData.map(i => "Tháng " + i._id),
-        datasets: [{
-          label: "Job đăng",
-          data: monthData.map(i => i.total),
-          fill:true,
-          tension:0.4
-        }]
-      }
-    });
+          if(role.permissions.includes("jobs-category-view"))
+            a.dashboard-action(href=`/${prefixAdmin}/job-category`)
+              i.fa-solid.fa-layer-group
+              div
+                strong Danh mục việc làm
+                span Quản lý nhóm ngành nghề

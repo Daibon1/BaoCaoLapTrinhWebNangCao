@@ -1,1 +1,32 @@
-footer.footer footer
+mixin footer()
+  footer.client-footer
+    .client-footer__inner
+      .client-footer__brand
+        .client-footer__logo
+          img(src="/images/default-job.png" alt="DDS Jobs")
+        div
+          strong DDS Jobs
+          p Kết nối ứng viên với cơ hội việc làm phù hợp.
+
+      .client-footer__links
+        .client-footer__group
+          h3 Khám phá
+          a(href="/jobs") Việc làm
+          a(href="/company") Công ty
+          a(href="/saved-jobs") Việc làm đã lưu
+        .client-footer__group
+          h3 Tài khoản
+          if(user)
+            a(href="/user/info") Hồ sơ cá nhân
+            a(href="/applications") Đã ứng tuyển
+          else
+            a(href="/user/login") Đăng nhập
+            a(href="/user/register") Đăng ký
+        .client-footer__group
+          h3 Liên hệ
+          span support@ddsjobs.vn
+          span 024 1234 5678
+
+    .client-footer__bottom
+      span © 2026 DDS Jobs. All rights reserved.
+      span Nền tảng tuyển dụng trực tuyến

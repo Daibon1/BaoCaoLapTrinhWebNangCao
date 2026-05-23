@@ -1,72 +1,160 @@
-extends ../../layouts/default.pug
+﻿extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/user-approval.css")
 
 block main
-    if(role.permissions.includes("user-approval-view"))
-        link(rel="stylesheet", href="/admin/css/user-approval.css")
-        .admin-app
-            h2.admin-app__title Quản lý ứng viên tuyển dụng
+  if(role.permissions.includes("user-approval-view"))
+    +alert-success(3000)
+    +alert-error(3000)
 
-            table.admin-app__table
-                thead
-                    tr
-                        th Ứng viên
-                        th Job
-                        th CV
-                        th Cover Letter
-                        th Trạng thái
-                        th Ngày apply
-                        th Hành động
+    .approval-page
+      .approval-page__header
+        .approval-page__title
+          span.approval-page__icon
+            i.fa-solid.fa-user-check
+          div
+            h1 Duyệt ứng tuyển
+            p Quản lý hồ sơ ứng viên ứng tuyển vào các việc làm của bạn.
 
-                tbody
-                    each app in applications
-                        tr
+      .approval-summary
+        .approval-summary__card
+          .approval-summary__icon
+            i.fa-solid.fa-file-signature
+          .approval-summary__content
+            span Tổng hồ sơ
+            strong #{applications.length}
 
-                            td.admin-app__candidate
-                                img(src=app.userId.avatar)
-                                div
-                                    strong= app.userId.fullName
-                                    p= app.userId.email
+        .approval-summary__card
+          .approval-summary__icon
+            i.fa-solid.fa-clock
+          .approval-summary__content
+            span Chờ xử lý
+            strong #{applications.filter(item => item.status === "pending").length}
 
-                            td
-                                a(
-                                    href=`/admin/jobs/detail/${app.jobId._id}`
-                                )= app.jobId.title
+        .approval-summary__card
+          .approval-summary__icon
+            i.fa-solid.fa-circle-check
+          .approval-summary__content
+            span Đã chấp nhận
+            strong #{applications.filter(item => item.status === "accepted").length}
 
-                            td
-                                if app.cvUrl
-                                    a.btn-cv(
-                                        href=app.cvUrl
-                                        target="_blank"
-                                    ) Xem CV
-                                else
-                                    span Không có
+      form.approval-filter(method="GET")
+        .approval-filter__field
+          i.fa-solid.fa-briefcase
+          select.form-select(name="jobId")
+            option(value="" selected=!selectedJobId) Tất cả công việc
+            each job in jobs
+              option(value=job.id selected=selectedJobId == job.id) #{job.title}
+        .approval-filter__field
+          i.fa-solid.fa-circle-check
+          select.form-select(name="status")
+            option(value="" selected=!selectedStatus) Tất cả trạng thái
+            option(value="pending" selected=selectedStatus == "pending") Pending
+            option(value="reviewing" selected=selectedStatus == "reviewing") Reviewing
+            option(value="interview" selected=selectedStatus == "interview") Interview
+            option(value="accepted" selected=selectedStatus == "accepted") Accepted
+            option(value="rejected" selected=selectedStatus == "rejected") Rejected
+        .approval-filter__field.approval-filter__field--search
+          i.fa-solid.fa-magnifying-glass
+          input.form-control(
+            type="text"
+            name="keyword"
+            placeholder="Tìm theo tên/email ứng viên..."
+            value=keyword
+          )
+        button.btn.btn-primary(type="submit")
+          i.fa-solid.fa-filter
+          span Lọc
+        a.btn.btn-outline-secondary(href=`/${prefixAdmin}/user-approval`)
+          i.fa-solid.fa-rotate-left
+          span Xóa lọc
 
-                            td.admin-app__cover
-                                if app.coverLetter
-                                    span.cover-preview(data-text=app.coverLetter)=app.coverLetter.substring(0,15) + "..."
-                                else
-                                    | Không có
+      .approval-shell
+        .approval-shell__top
+          h2 Danh sách ứng viên
+          .approval-shell__meta
+            i.fa-solid.fa-address-book
+            span #{applications.length} hồ sơ
 
-                            td
-                                span(class=`status status--${app.status}`)
-                                    = app.status
+        .table-responsive
+          table.approval-table.table.align-middle.mb-0
+            thead
+              tr
+                th Ứng viên
+                th Việc làm
+                th Hồ sơ
+                th Trạng thái
+                th Ngày apply
+                th.text-end Hành động
+            tbody
+              if applications.length > 0
+                each app in applications
+                  tr
+                    td
+                      .approval-candidate
+                        .approval-avatar
+                          if app.userId && app.userId.avatar
+                            img(src=app.userId.avatar alt=app.userId.fullName)
+                          else
+                            img(src="/admin/images/no-image.png" alt="No Image")
+                        .approval-candidate__info
+                          strong #{app.userId ? app.userId.fullName : "Chưa cập nhật"}
+                          span #{app.userId ? app.userId.email : "Chưa cập nhật"}
 
-                            td= app.createdAt.toLocaleDateString()
+                    td
+                      if app.jobId
+                        a.approval-job(href=`/admin/job/detail/${app.jobId._id}`) #{app.jobId.title}
+                      else
+                        span.approval-muted Chưa cập nhật
 
-                            td.admin-app__action
-                                form(method="POST", action=`/admin/user-approval/change-status/${app._id}?_method=PATCH` class="form-status-application")
-                                    select(name="status")
-                                        option(value="pending" class="status--pending" selected=app.status=="pending") Pending
-                                        option(value="reviewing" class="status--reviewing" selected=app.status=="reviewing") Reviewing
-                                        option(value="interview" class="status--interview" selected=app.status=="interview") Interview
-                                        option(value="accepted" class="status--accepted" selected=app.status=="accepted") Accepted
-                                        option(value="rejected" class="status--rejected" selected=app.status=="rejected") Rejected
-                                    button(type="submit" class="btn-change-status") Cập nhật
-                            // ===== MODAL COVER LETTER =====
-        .div-cover-modal
-            .div-cover-modal__overlay
-            .div-cover-modal__content
-                span.div-cover-modal__close x
-                h3 Cover Letter
-                p.div-cover-modal__text
-        script(src="/admin/js/user-approval.js") 
+                    td
+                      .approval-profile-links
+                        if app.cvUrl
+                          a.approval-cv(href=app.cvUrl target="_blank" rel="noopener noreferrer")
+                            i.fa-solid.fa-file-lines
+                            span CV
+                        else
+                          span.approval-muted Không có CV
+                        if app.coverLetter
+                          span.cover-preview.approval-cover(data-text=app.coverLetter)
+                            i.fa-solid.fa-envelope-open-text
+                            span Thư
+
+                    td
+                      span(class=`approval-status approval-status--${app.status}`)
+                        = app.status
+
+                    td
+                      span.approval-date #{app.createdAt.toLocaleDateString()}
+
+                    td
+                      .approval-actions
+                        form(method="POST", action=`/admin/user-approval/change-status/${app._id}?_method=PATCH` class="form-status-application")
+                          select.form-select.form-select-sm(name="status")
+                            option(value="pending" selected=app.status=="pending") Pending
+                            option(value="reviewing" selected=app.status=="reviewing") Reviewing
+                            option(value="interview" selected=app.status=="interview") Interview
+                            option(value="accepted" selected=app.status=="accepted") Accepted
+                            option(value="rejected" selected=app.status=="rejected") Rejected
+                          button.btn.btn-success.btn-sm(type="submit")
+                            i.fa-solid.fa-check
+                            span Cập nhật
+              else
+                tr
+                  td(colspan="6")
+                    .approval-empty
+                      i.fa-solid.fa-user-slash
+                      h3 Chưa có hồ sơ ứng tuyển nào
+
+    .div-cover-modal
+      .div-cover-modal__overlay
+      .div-cover-modal__content
+        span.div-cover-modal__close x
+        h3 Cover Letter
+        p.div-cover-modal__text
+
+    script(src="/admin/js/user-approval.js")
+  else
+    h2 Không có quyền truy cập

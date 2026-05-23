@@ -6,7 +6,7 @@ module.exports.index = async (req, res) => {
         featured: "1",
         deleted: false,
         status: "active"
-    }).limit(6);
+    }).limit(6).populate("company_id");
     // console.log("ok");
     // console.log(productsFeatured);
     // Hiển thị danh sách công iệc mới nhất
@@ -16,7 +16,7 @@ module.exports.index = async (req, res) => {
         status: "active"
     }).sort({
         position: "desc"
-    }).limit(6);
+    }).limit(6).populate("company_id");
     // lấy saved job
     // const savedJob = await SavedJob.findById(
     //     req.cookies.saveJobId
@@ -33,7 +33,7 @@ module.exports.index = async (req, res) => {
     // }
     // console.log(jobsSaved.map(job => job._id));
     res.render('client/pages/home/index', {
-        title: "Trang Chủ",
+        pageTitle: "Trang chủ",
         jobsFeatured: jobsFeatured,
         jobsNew: jobsNew,
         // jobsSaved: jobsSaved

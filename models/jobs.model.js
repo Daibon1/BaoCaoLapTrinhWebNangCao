@@ -16,7 +16,11 @@ const jobSchema = new mongoose.Schema({
     featured: String,
     type: String,
     experience: String,
-    status: String,
+    status: {
+        type: String,
+        enum: ["pending", "active", "inactive"],
+        default: "pending"
+    },
     slug: {
         type: String,
         slug: "title",
@@ -37,7 +41,10 @@ const jobSchema = new mongoose.Schema({
         account_id: String,
         deleteAt: Date
     },
-    company_id: String,
+    company_id: {
+        type: String,
+        ref: "Company"
+    },
     position: Number,
     updatedBy: [{
         account_id: String,

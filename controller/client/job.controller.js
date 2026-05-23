@@ -4,10 +4,11 @@ const Company = require("../../models/company.model");
 const helperCategory = require("../../helpers/product-category");
 const SavedJob = require("../../models/saved-jobs.model");
 const filterSearchHepler = require("../../helpers/filterSearch");
-const paginationHelper = require("../../helpers/pagination.js")
+const paginationHelper = require("../../helpers/pagination.js");
+
 // [GET] /jobs
 module.exports.index = async (req, res) => {
-    let find = {
+    const find = {
         deleted: false,
         status: "active"
     };
@@ -17,8 +18,12 @@ module.exports.index = async (req, res) => {
     const keyword = filterSearchHelper.title;
     const location = filterSearchHelper.location;
     const type = filterSearchHelper.type;
+
     if (keyword) {
-        find.title = filterSearchHelper.regex;
+        find.$or = [
+            { title: filterSearchHelper.regex },
+            { description: filterSearchHelper.regex }
+        ];
     }
     if (location) {
         find.location = location;
@@ -26,45 +31,51 @@ module.exports.index = async (req, res) => {
     if (type) {
         find.type = type;
     }
-    // console.log("ok");
-    // console.log(jobs);
-    // console.log(filterType);
-    // sort
-    let sort = {};
+
+    const sort = {};
     if (req.query.sortKey && req.query.sortValue) {
-        const sortKey = req.query.sortKey;
-        const sortValue = req.query.sortValue;
-        sort[sortKey] = sortValue;
+        sort[req.query.sortKey] = req.query.sortValue;
     } else {
-        sort.position = "desc"
+        sort.position = "desc";
     }
-    // end sort
-    // pagination
+
     const countJobs = await Job.countDocuments(find);
-    let objectPagination = paginationHelper({
+    const objectPagination = paginationHelper({
         limitItem: 6,
         skipItem: 0,
         page: 1
     }, req.query, countJobs);
-    const jobs = await Job.find(find).sort(sort).limit(objectPagination.limitItem).skip(objectPagination.skipItem);
+
+    const jobs = await Job.find(find)
+        .sort(sort)
+        .limit(objectPagination.limitItem)
+        .skip(objectPagination.skipItem)
+        .populate("company_id");
+
     res.render("client/pages/jobs/index", {
-        title: "Danh sách công việc",
+        pageTitle: "Danh sách công việc",
         jobs: jobs,
         filterLocation: filterLocation,
         filterType: filterType,
         keyword: keyword,
         pagination: objectPagination
     });
-}
+};
+
 // [GET] /jobs/detail/:slug
 module.exports.detail = async (req, res) => {
     try {
-        const slug = req.params.slugJob;
         const job = await Job.findOne({
-            slug: slug,
+            slug: req.params.slugJob,
             status: "active",
             deleted: false
         });
+
+        if (!job) {
+            req.flash("error", "Không tìm thấy công việc.");
+            return res.redirect("/jobs");
+        }
+
         let category = null;
         if (job.category) {
             category = await Category.findOne({
@@ -73,50 +84,49 @@ module.exports.detail = async (req, res) => {
                 status: "active"
             });
         }
-        //Kiểm tra xem công việc đã được lưu vào danh sách yêu thích chưa
+
         const query = {
             _id: req.cookies.saveJobId,
             jobIds: {
                 $in: [job._id]
             }
-        }
+        };
         if (res.locals.user) {
             query.userId = res.locals.user.id;
         }
+
         const savedJob = await SavedJob.findOne(query);
-        if (savedJob) {
-            job.savedJob = true;
-        } else {
-            job.savedJob = false;
-        }
+        job.savedJob = !!savedJob;
+
         const jobCategory = await Job.find({
+            _id: {
+                $ne: job._id
+            },
             category: job.category,
             deleted: false,
             status: "active"
-        }).limit(3);
+        }).limit(3).populate("company_id");
+
         const company = await Company.findOne({
             _id: job.company_id,
             deleted: false,
             status: "active"
         });
-        if (job) {
-            res.render("client/pages/jobs/detail", {
-                title: "Chi tiết công việc",
-                job: job,
-                category: category,
-                company: company,
-                jobCategory: jobCategory
-            })
-        } else {
-            req.flash("error", "Vui lòng thêm slug");
-            return res.redirect("/jobs");
-        }
+
+        res.render("client/pages/jobs/detail", {
+            pageTitle: job.title,
+            job: job,
+            category: category,
+            company: company,
+            jobCategory: jobCategory
+        });
     } catch (error) {
         console.error(error);
         req.flash("error", "Có lỗi xảy ra khi tải dữ liệu!");
-        res.redirect(`/jobs`);
+        res.redirect("/jobs");
     }
-}
+};
+
 // [GET] /jobs/:slugCategory
 module.exports.category = async (req, res) => {
     const category = await Category.findOne({
@@ -124,7 +134,13 @@ module.exports.category = async (req, res) => {
         deleted: false,
         status: "active"
     });
-    let find = {
+
+    if (!category) {
+        req.flash("error", "Không tìm thấy danh mục.");
+        return res.redirect("/jobs");
+    }
+
+    const find = {
         deleted: false,
         status: "active"
     };
@@ -134,6 +150,7 @@ module.exports.category = async (req, res) => {
     const keyword = filterSearchHelper.title;
     const location = filterSearchHelper.location;
     const type = filterSearchHelper.type;
+
     if (keyword) {
         find.title = filterSearchHelper.regex;
     }
@@ -143,30 +160,27 @@ module.exports.category = async (req, res) => {
     if (type) {
         find.type = type;
     }
-    // console.log("ok");
-    // console.log(jobs);
-    // console.log(filterType);
-    // sort
-    let sort = {};
+
+    const sort = {};
     if (req.query.sortKey && req.query.sortValue) {
-        const sortKey = req.query.sortKey;
-        const sortValue = req.query.sortValue;
-        sort[sortKey] = sortValue;
+        sort[req.query.sortKey] = req.query.sortValue;
     } else {
-        sort.position = "desc"
+        sort.position = "desc";
     }
-    // end sort
-    // pagination
+
     const subCategories = await helperCategory.getSubCategory(category.id);
     const listSubCategoryId = subCategories.map(item => item.id);
-    //pagination
-    const countJobs = await Job.countDocuments({
-        ...find,
+    const categoryFilter = {
         category: {
             $in: [category.id, ...listSubCategoryId]
-        },
+        }
+    };
+
+    const countJobs = await Job.countDocuments({
+        ...find,
+        ...categoryFilter
     });
-    let objectPagination = paginationHelper({
+    const objectPagination = paginationHelper({
         limitItem: 6,
         skipItem: 0,
         page: 1
@@ -174,16 +188,15 @@ module.exports.category = async (req, res) => {
 
     const jobs = await Job.find({
         ...find,
-        category: {
-            $in: [category.id, ...listSubCategoryId]
-        }
-    }).sort(sort).limit(objectPagination.limitItem).skip(objectPagination.skipItem);
+        ...categoryFilter
+    }).sort(sort).limit(objectPagination.limitItem).skip(objectPagination.skipItem).populate("company_id");
+
     res.render("client/pages/jobs/index", {
-        title: category.title,
+        pageTitle: category.title,
         jobs: jobs,
         filterLocation: filterLocation,
         filterType: filterType,
         keyword: keyword,
         pagination: objectPagination
     });
-}
+};

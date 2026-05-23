@@ -1,33 +1,41 @@
-header.header.bg-dark.text-white.fixed-top.shadow-sm
-  .container-fluid
-    .row.align-items-center.py-2
+header.header.fixed-top
+  .header-inner
+    // ===== Logo =====
+    a.header-logo(href=`/${prefixAdmin}/dashboard`)
+      i.fa-solid.fa-briefcase
+      span DDSJob
 
-      // ===== Logo =====
-      .col-6.col-md-3
-        .inner-logo.fw-bold.fs-5
-          | DDSJob
+    // ===== Right Actions =====
+    .header-actions
+      if(role.title === "Employer")
+        if(user.company_id)
+          a.header-btn.header-btn--company(
+            href=`/${prefixAdmin}/company/my-company`
+            title="Công ty của tôi"
+          )
+            i.fa-regular.fa-building
+            span #{user.company_id.name}
+        else
+          a.header-btn.header-btn--company(
+            href=`/${prefixAdmin}/company/create`
+            title="Tạo công ty"
+          )
+            i.fa-regular.fa-building
+            span Tạo công ty
 
-      // ===== Right Actions =====
-      .col-6.col-md-9.d-flex.justify-content-end
-        .text-end
-          if(user.company_id)
-            a.btn.btn-primary.btn-sm.px-3(
-              href=`/${prefixAdmin}/company/my-company`
-            )
-              <i class="fa-regular fa-building"></i>
-              | #{user.company_id.name}
-          else
-            a.btn.btn-primary.btn-sm.px-3(
-              href=`/${prefixAdmin}/company/create`
-            )
-              <i class="fa-regular fa-building"></i>
-              | Tạo công ty
-          a.btn.btn-primary.btn-sm.px-3(
-            href=`/${prefixAdmin}/my-account`
-          )
-           <i class="fa-regular fa-user"></i>
-          a.btn.btn-danger.btn-sm.px-3(
-            href=`/${prefixAdmin}/auth/logout`
-          )
-            i.fa-solid.fa-right-from-bracket.me-1
-            | Đăng xuất
+      a.header-btn.header-btn--account(
+        href=`/${prefixAdmin}/my-account`
+        title="Tài khoản"
+      )
+        if(user.avatar)
+          img.header-avatar(src=user.avatar alt=user.fullName)
+        else
+          .header-avatar.header-avatar--fallback
+            i.fa-solid.fa-user
+        span.header-name #{user.fullName || "Admin"}
+
+      a.header-btn.header-btn--logout(
+        href=`/${prefixAdmin}/auth/logout`
+        title="Đăng xuất"
+      )
+        i.fa-solid.fa-right-from-bracket

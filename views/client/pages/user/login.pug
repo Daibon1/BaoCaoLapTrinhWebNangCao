@@ -1,36 +1,70 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+
+block styles
+  link(rel="stylesheet" href="/css/client-auth.css")
+
 block main
-    +alert-success(2000)
-    +alert-error(2000)
-    .my-5 
-        .row.justify-content-center
-            .col-5
-                h1.text-center.mb-5 Đăng nhập
-                form(
-                    action="/user/login"
-                    method="POST"
-                )
-                    div(class="form-group")
-                        label(for="email") Email
-                        input(
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="form-control"
-                            placeholder="Email"
-                            required
-                        )
-                    div(class="form-group")
-                        label(for="password") Mật khẩu
-                        input(
-                            type="password"
-                            name="password"
-                            id="password"
-                            class="form-control"
-                            placeholder="Mật khẩu"
-                            required
-                        )
-                    div(class="form-group")
-                        button(type="submit" class="btn btn-primary w-100") Đăng nhập
-            a.btn.btn-link(href="/user/password/forgot") Quên mật khẩu?
+  +alert-success(2000)
+  +alert-error(2000)
+
+  .client-auth
+    section.client-auth__panel
+      .client-auth__intro
+        span.client-auth__eyebrow Dành cho ứng viên
+        h1 Đăng nhập ứng viên
+        p Theo dõi việc làm đã lưu, hồ sơ đã ứng tuyển và cập nhật thông tin cá nhân của bạn.
+
+        .client-auth__switch
+          span Bạn là nhà tuyển dụng?
+          a(href="/employer/register")
+            span Đăng ký nhà tuyển dụng
+            i.fa-solid.fa-arrow-right
+
+      .client-auth__card
+        form.client-auth__form(action="/user/login" method="POST")
+          .client-auth__field
+            label(for="email") Email
+            .client-auth__input
+              i.fa-solid.fa-envelope
+              input(
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Nhập email ứng viên"
+                required
+              )
+
+          .client-auth__field
+            label(for="password") Mật khẩu
+            .client-auth__input
+              i.fa-solid.fa-lock
+              input(
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Nhập mật khẩu"
+                required
+              )
+
+          .client-auth__options
+            a(href="/user/password/forgot") Quên mật khẩu?
+
+          button.client-auth__submit(type="submit")
+            span Đăng nhập
+            i.fa-solid.fa-arrow-right
+
+        .client-auth__divider
+          span Hoặc đăng nhập với
+
+        .client-auth__socials
+          a(href="/user/google")
+            i.fa-brands.fa-google
+            span Google
+          a(href="/user/facebook")
+            i.fa-brands.fa-facebook-f
+            span Facebook
+
+        p.client-auth__register
+          | Chưa có tài khoản?
+          a(href="/user/register") Đăng ký ứng viên

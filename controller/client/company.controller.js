@@ -1,38 +1,60 @@
 const Company = require("../../models/company.model");
 const Job = require("../../models/jobs.model");
-const Account = require("../../models/account.model");
+
+const escapeRegex = (value = "") => {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 module.exports.index = async (req, res) => {
-    const companies = await Company.find({});
+    const keyword = req.query.keyword ? req.query.keyword.trim() : "";
+    const find = {
+        deleted: false,
+        status: "active"
+    };
+
+    if (keyword) {
+        const regex = new RegExp(escapeRegex(keyword), "i");
+        find.$or = [
+            { name: regex },
+            { address: regex },
+            { description: regex }
+        ];
+    }
+
+    const companies = await Company.find(find).sort({
+        createdAt: "desc"
+    });
+
     res.render("client/pages/company/index", {
-        title: "Công ty",
-        companies: companies
-    })
-}
+        pageTitle: "Công ty",
+        companies: companies,
+        keyword: keyword
+    });
+};
+
 module.exports.detail = async (req, res) => {
-    const slug = req.params.slug;
     const company = await Company.findOne({
-        slug: slug,
+        slug: req.params.slug,
         deleted: false,
         status: "active"
     });
-    let jobs = [];
-    if(company){
-        const user = await Account.findOne({
-            _id: company.createdBy.account_id
-        });
-        // console.log(user);
-        jobs = await Job.find({
-            deleted: false,
-            status: "active",
-            "createdBy.account_id": user._id
-        }).sort({
-            position: "asc"
-        }).limit(3);
+
+    if (!company) {
+        req.flash("error", "Không tìm thấy công ty.");
+        return res.redirect("/company");
     }
-    // console.log(jobs);
+
+    const jobs = await Job.find({
+        deleted: false,
+        status: "active",
+        company_id: company._id.toString()
+    }).sort({
+        position: "desc"
+    }).limit(4);
+
     res.render("client/pages/company/detail", {
-        title: "Chi tiết công ty",
+        pageTitle: company.name,
         company: company,
         jobs: jobs
-    })
-}
+    });
+};

@@ -1,56 +1,97 @@
-aside.sidebar.shadow-sm
-  .sidebar-inner.d-flex.flex-column.h-50
+- const activeUrl = typeof currentUrl !== "undefined" ? currentUrl : "";
+- const isActive = (path) => activeUrl === path || activeUrl.startsWith(`${path}/`);
+- const dashboardPath = `/${prefixAdmin}/dashboard`;
+- const jobPath = `/${prefixAdmin}/job`;
+- const jobCategoryPath = `/${prefixAdmin}/job-category`;
+- const userApprovalPath = `/${prefixAdmin}/user-approval`;
+- const clientUserPath = `/${prefixAdmin}/client-user`;
+- const accountPath = `/${prefixAdmin}/account`;
+- const rolesPath = `/${prefixAdmin}/roles`;
+- const permissionsPath = `/${prefixAdmin}/roles/permissions`;
 
-    // ===== Logo =====
-    h3.logo.text-center.py-2.mb-1 #{user.fullName}
+aside.sidebar
+  .sidebar-inner
+    .sidebar-profile
+      .sidebar-profile__avatar
+        if user.avatar
+          img(src=user.avatar alt=user.fullName)
+        else
+          i.fa-solid.fa-user
+      .sidebar-profile__meta
+        strong #{user.fullName}
+        span #{role.title || "Admin"}
 
-    // ===== Menu =====
-    nav.nav.flex-column
+    nav.sidebar-nav
+      .sidebar-section
+        .sidebar-section__label Tổng quan
+        a.sidebar-item(
+          href=dashboardPath
+          class=isActive(dashboardPath) ? "active" : ""
+        )
+          i.fa-solid.fa-chart-line
+          span Tổng quan
 
-      a.sidebar-item(
-        href=`/${prefixAdmin}/dashboard`
-        class=currentUrl === `/${prefixAdmin}/dashboard` ? 'active' : ''
-      )
-        span Tổng Quan
-      if(role.permissions.includes("jobs-view"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/job`
-          class=currentUrl === `/${prefixAdmin}/job` ? 'active' : ''
-        )
-          span Quản lý việc làm
+      .sidebar-section
+        .sidebar-section__label Quản lý
+        if(role.permissions.includes("jobs-view"))
+          a.sidebar-item(
+            href=jobPath
+            class=isActive(jobPath) ? "active" : ""
+          )
+            i.fa-solid.fa-briefcase
+            span Việc làm
 
-      a.sidebar-item(href="#")
-        span Cài đặt
-      if(role.permissions.includes("accounts-view"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/account`
-          class=currentUrl === `/${prefixAdmin}/account` ? 'active' : ''
-        )
-          span Danh sách tài khoản
-      if(role.permissions.includes("jobs-category-view"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/job-category`
-          class=currentUrl === `/${prefixAdmin}/job-category` ? 'active' : ''
-        )
-          span Danh mục việc làm
-      if(role.permissions.includes("roles-view"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/roles`
-          class=currentUrl === `/${prefixAdmin}/roles` ? 'active' : ''
-        )
-          span Nhóm quyền
-      if(role.permissions.includes("roles-permissions"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/roles/permissions`
-          class=currentUrl === `/${prefixAdmin}/roles/permissions` ? 'active' : ''
-        )
-          span Phân quyền
-      //- if(role.permissions.inlcudes("jobs-approval-view"))
-      if(role.permissions.includes("user-approval-view"))
-        a.sidebar-item(
-          href=`/${prefixAdmin}/user-approval`
-          class=currentUrl === `/${prefixAdmin}/user-approval` ? 'active' : ''
-        )
-          span Duyệt ứng tuyển
+        if(role.permissions.includes("jobs-category-view"))
+          a.sidebar-item(
+            href=jobCategoryPath
+            class=isActive(jobCategoryPath) ? "active" : ""
+          )
+            i.fa-solid.fa-layer-group
+            span Danh mục việc làm
 
-      
+        if(role.permissions.includes("user-approval-view"))
+          a.sidebar-item(
+            href=userApprovalPath
+            class=isActive(userApprovalPath) ? "active" : ""
+          )
+            i.fa-solid.fa-user-check
+            span Duyệt ứng tuyển
+
+        if(role.permissions.includes("client-users-view") || role.permissions.includes("accounts-view"))
+          a.sidebar-item(
+            href=clientUserPath
+            class=isActive(clientUserPath) ? "active" : ""
+          )
+            i.fa-solid.fa-users
+            span User client
+
+      .sidebar-section
+        .sidebar-section__label Hệ thống
+        if(role.permissions.includes("accounts-view"))
+          a.sidebar-item(
+            href=accountPath
+            class=isActive(accountPath) ? "active" : ""
+          )
+            i.fa-solid.fa-users-gear
+            span Tài khoản
+
+        if(role.permissions.includes("roles-view"))
+          a.sidebar-item(
+            href=rolesPath
+            class=(isActive(rolesPath) && !isActive(permissionsPath)) ? "active" : ""
+          )
+            i.fa-solid.fa-user-shield
+            span Nhóm quyền
+
+        if(role.permissions.includes("roles-permissions"))
+          a.sidebar-item(
+            href=permissionsPath
+            class=isActive(permissionsPath) ? "active" : ""
+          )
+            i.fa-solid.fa-key
+            span Phân quyền
+
+    .sidebar-footer
+      a.sidebar-footer__link(href=`/${prefixAdmin}/my-account`)
+        i.fa-regular.fa-user
+        span Tài khoản của tôi

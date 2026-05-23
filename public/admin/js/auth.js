@@ -1,7 +1,6 @@
 const formLogin=document.querySelector("#form-login");
 if(formLogin){
     const inputs=formLogin.querySelectorAll("input");
-    console.log(inputs);
     inputs.forEach((input, index) => {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -11,5 +10,18 @@ if(formLogin){
         else document.getElementById('submitBtn').focus(); // Nếu cuối, nhảy nút gửi
       }
     });
+  });
+}
+
+const togglePassword = document.querySelector("#toggle-password");
+const passwordInput = document.querySelector("#password-input");
+const eyeIcon = document.querySelector("#eye-icon");
+
+if (togglePassword && passwordInput && eyeIcon) {
+  togglePassword.addEventListener("click", () => {
+    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+    eyeIcon.classList.toggle("fa-eye");
+    eyeIcon.classList.toggle("fa-eye-slash");
   });
 }

@@ -9,6 +9,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/my-account/index", {
         title: "Trang tài khoản của tôi",
         account: account,
+        currentUrl: req.originalUrl,
         role: role
     })
 }

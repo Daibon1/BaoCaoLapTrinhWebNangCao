@@ -1,46 +1,103 @@
 extends ../../layouts/default.pug 
 include ../../mixins/alert.pug
 include ../../mixins/pagination.pug
+
+block styles
+  link(rel="stylesheet", href="/admin/css/roles.css")
+
 block main
   if (role.permissions.includes("roles-view"))
     +alert-success(2000)
     +alert-error(2000)
-    main.main
-      // Header
-      h1 Nhóm quyền
-      .card.mb-3
-        .card-header 
-          h3.card-title Danh sách
-        .card-body
-          .row 
-            .col-8
-            .col-4.text-end
-              if(role.permissions.includes("roles-create"))
-                a.btn.btn-primary.btn-sm(href=`/${prefixAdmin}/roles/create`) Thêm mới
-          table(class="table table-hover")
+
+    .roles-page
+      .roles-page__header
+        .roles-page__title
+          span.roles-page__icon
+            i.fa-solid.fa-user-shield
+          div
+            h1 Nhóm quyền
+            p Quản lý vai trò và phạm vi truy cập trong hệ thống.
+
+        if(role.permissions.includes("roles-create"))
+          a.btn.btn-primary.roles-page__create(href=`/${prefixAdmin}/roles/create`)
+            i.fa-solid.fa-plus
+            span Thêm nhóm quyền
+
+      .roles-summary
+        .roles-summary__card
+          .roles-summary__icon
+            i.fa-solid.fa-users-gear
+          .roles-summary__content
+            span Tổng nhóm quyền
+            strong #{records.length}
+
+        .roles-summary__card
+          .roles-summary__icon
+            i.fa-solid.fa-key
+          .roles-summary__content
+            span Có phân quyền
+            strong #{records.filter(item => item.permissions && item.permissions.length > 0).length}
+
+        .roles-summary__card
+          .roles-summary__icon
+            i.fa-solid.fa-layer-group
+          .roles-summary__content
+            span Đang hoạt động
+            strong #{records.length}
+
+      .roles-shell
+        .roles-shell__top
+          h2 Danh sách nhóm quyền
+          .roles-shell__meta
+            i.fa-solid.fa-address-card
+            span #{records.length} nhóm quyền
+
+        .table-responsive
+          table.roles-table.table.align-middle.mb-0
             thead
               tr
                 th STT
-                th Tên
+                th Tên nhóm quyền
                 th Mô tả
-                th Hành động
+                th.text-end Hành động
             tbody
-              each record, index in records
+              if records.length > 0
+                each record, index in records
+                  tr
+                    td.roles-index #{index + 1}
+                    td
+                      .roles-name
+                        i.fa-solid.fa-user-shield
+                        span #{record.title}
+                    td
+                      .roles-description #{record.description || "Chưa có mô tả"}
+                    td
+                      .roles-actions
+                        a.btn.btn-outline-success.btn-sm(href=`/${prefixAdmin}/roles/detail/${record.id}`)
+                          i.fa-solid.fa-eye
+                          span Chi tiết
+                        if(role.permissions.includes("roles-edit"))
+                          a.btn.btn-outline-primary.btn-sm(href=`/${prefixAdmin}/roles/edit/${record.id}`)
+                            i.fa-solid.fa-pen
+                            span Sửa
+                        if(role.permissions.includes("roles-delete"))
+                          a.btn.btn-outline-danger.btn-sm(href="javascript:;" class="button-delete" data-id=record.id)
+                            i.fa-solid.fa-trash
+                            span Xóa
+              else
                 tr
-                  td= index + 1
-                  td= record.title
-                  td= record.description
-                  td
-                    a.btn.btn-sm.btn-success(href=`/${prefixAdmin}/roles/detail/${record.id}`) Chi tiết
-                    if(role.permissions.includes("roles-edit"))
-                      a.btn.btn-sm.btn-primary(href=`/${prefixAdmin}/roles/edit/${record.id}`) Sửa
-                    if(role.permissions.includes("roles-delete"))
-                      a.btn.btn-sm.btn-danger(href="javascript:;" class="button-delete" data-id=record.id) Xóa 
+                  td(colspan="4")
+                    .roles-empty
+                      i.fa-solid.fa-user-shield
+                      h3 Chưa có nhóm quyền nào
+
       form(actiton="" 
-      method="post" 
-      id="form-delete-item"
-      path=`/${prefixAdmin}/roles/delete`
+        method="post" 
+        id="form-delete-item"
+        path=`/${prefixAdmin}/roles/delete`
       )
+
     script(src="/admin/js/role.js")
   else 
     h2 Không có quyền truy cập
