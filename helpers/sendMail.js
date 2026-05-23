@@ -27,34 +27,32 @@
 // }
 const nodemailer = require('nodemailer');
 
-module.exports.sendMail = (email, subject, html) => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.resend.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: 'resend',
-            pass: process.env.RESEND_API_KEY
-        }
-    });
-
+module.exports.sendMail = async (email, subject, html) => {
     console.log("[sendMail] Gửi tới:", email);
     console.log("[sendMail] RESEND_API_KEY set:", !!process.env.RESEND_API_KEY);
 
-    const mailOptions = {
-        from: 'onboarding@resend.dev',
-        to: email,
-        subject: subject,
-        html: html
-    };
+    try {
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from: 'onboarding@resend.dev',
+                to: email,
+                subject: subject,
+                html: html
+            })
+        });
 
-    console.log("[sendMail] Bắt đầu gửi...");
-    transporter.sendMail(mailOptions, function(error, info) {
-        console.log("[sendMail] Callback chạy");
-        if (error) {
-            console.error("[sendMail] Lỗi:", error.message);
+        const data = await response.json();
+        if (!response.ok) {
+            console.error("[sendMail] Lỗi:", data);
         } else {
-            console.log("[sendMail] Thành công:", info.response);
+            console.log("[sendMail] Thành công:", data.id);
         }
-    });
+    } catch (error) {
+        console.error("[sendMail] Lỗi:", error.message);
+    }
 };
