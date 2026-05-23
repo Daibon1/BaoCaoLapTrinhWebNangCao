@@ -42,17 +42,19 @@ module.exports.sendMail = (email, subject, html) => {
     console.log("[sendMail] RESEND_API_KEY set:", !!process.env.RESEND_API_KEY);
 
     const mailOptions = {
-        from: 'onboarding@resend.dev', // ← dùng địa chỉ này khi chưa verify domain
+        from: 'onboarding@resend.dev',
         to: email,
         subject: subject,
         html: html
     };
 
+    console.log("[sendMail] Bắt đầu gửi...");
     transporter.sendMail(mailOptions, function(error, info) {
+        console.log("[sendMail] Callback chạy");
         if (error) {
-            console.error("[sendMail] Lỗi gửi mail:", error.message);
+            console.error("[sendMail] Lỗi:", error.message);
         } else {
-            console.log("[sendMail] Gửi thành công:", info.response);
+            console.log("[sendMail] Thành công:", info.response);
         }
     });
 };
