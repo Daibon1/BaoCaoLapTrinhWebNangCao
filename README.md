@@ -51,10 +51,11 @@ Trang chủ, tìm kiếm việc làm, xem chi tiết tin tuyển dụng, lưu vi
 | Database       | MongoDB, Mongoose                               | Lưu dữ liệu linh hoạt cho job, user, company, application; hỗ trợ schema, populate, timestamps và index. |
 | Authentication | Cookie token, express-session, Passport         | Phù hợp với luồng web server-rendered; hỗ trợ đăng nhập thường, Google OAuth và Facebook OAuth.          |
 | Upload         | Multer memory, Cloudinary, streamifier          | Upload avatar, logo, thumbnail và CV PDF trực tiếp lên Cloudinary, không phụ thuộc lưu file local.       |
-| Email          | Nodemailer Gmail                                | Gửi OTP quên mật khẩu và email thông báo trạng thái hồ sơ ứng tuyển.                                     |
-| Frontend       | HTML/Pug, CSS, JavaScript, FontAwesome, TinyMCE | Xây dựng giao diện client/admin, form động, icon, editor mô tả công việc.                                |
+| Email          | Brevo Transactional Email API                   | Gửi OTP quên mật khẩu và email thông báo trạng thái hồ sơ ứng tuyển qua HTTP API, phù hợp khi deploy.    |
+| Frontend       | HTML/Pug, CSS, JavaScript, FontAwesome          | Xây dựng giao diện client/admin, form động và icon.                                                       |
+| Editor         | TinyMCE                                         | Soạn thảo nội dung mô tả công việc với trình soạn thảo rich text.                                        |
 | Test           | Jest, Supertest, mongodb-memory-server          | Kiểm thử validator, helper, model và integration mà không cần database thật.                             |
-| Deploy         | Render, Vercel                                 | Deploy chính trên Render Web Service; đồng thời hỗ trợ deploy Vercel qua cấu hình `vercel.json`.         |
+| Deploy         | Railway, Render                                | Deploy chính trên Railway; Render là website phụ/dự phòng.                                               |
 
 ---
 
@@ -62,18 +63,38 @@ Trang chủ, tìm kiếm việc làm, xem chi tiết tin tuyển dụng, lưu vi
 
 |                   | Link                  |
 | ----------------- | --------------------- |
-| 🎥 Video demo     | [Xem trên drive]()    |
-| 🌐 Website chính (Render) | [https://ddsjobs.onrender.com/](https://ddsjobs.onrender.com/) |
-| 🌐 Website phụ (Vercel) | [Cấu hình bằng `vercel.json`]() |
+| 🎥 Video demo / thuyết trình | [Xem trên Google Drive](https://drive.google.com/drive/folders/1uN7f1V5hE-mIcJ_RFqrToKA66CSFwR7e) |
+| 🌐 Website chính (Railway) | [https://baocaolaptrinhwebnangcao-production.up.railway.app](https://baocaolaptrinhwebnangcao-production.up.railway.app) |
+| 🌐 Website phụ (Render) | [https://ddsjobs.onrender.com/](https://ddsjobs.onrender.com/) |
 | 💻 Source code    | [https://github.com/Daibon1/BaoCaoLapTrinhWebNangCao.git](https://github.com/Daibon1/BaoCaoLapTrinhWebNangCao.git) |
+
+### Tài khoản test app
+
+Link đăng nhập admin/employer:
+
+[https://baocaolaptrinhwebnangcao-production.up.railway.app/admin/auth/login](https://baocaolaptrinhwebnangcao-production.up.railway.app/admin/auth/login)
+
+| Vai trò | Email | Mật khẩu |
+| ------- | ----- | -------- |
+| Admin | `admin@gamil.com` | `12345678` |
+| Công ty demo | `levanb@gmail.com` | `12345678` |
 
 ### Nền tảng triển khai
 
-Dự án ưu tiên deploy trên **Render** vì đây là ứng dụng Express server-rendered chạy liên tục với MongoDB Atlas, session, cookie, OAuth và upload Cloudinary. Render được dùng làm môi trường chính để demo và kiểm thử các luồng client/admin.
+Dự án ưu tiên deploy trên **Railway** vì đây là ứng dụng Express server-rendered chạy liên tục với MongoDB Atlas, session, cookie, OAuth và upload Cloudinary. Railway được dùng làm môi trường chính để demo và kiểm thử các luồng client/admin.
 
-Dự án cũng có thể deploy trên **Vercel** thông qua file `vercel.json`, dùng `index.js` làm entry với `@vercel/node`. Vercel được xem là phương án phụ để kiểm tra khả năng chạy serverless, trong khi link chính vẫn là Render.
+Dự án cũng được deploy phụ trên **Render** để dự phòng và đối chiếu khi demo. Railway vẫn là môi trường chính; Render là link phụ.
 
-**Cấu hình Render chính:**
+**Cấu hình Railway chính:**
+
+```text
+Build command: npm install
+Start command: npm start
+Runtime: Node.js
+Environment: khai báo các biến trong .env tại Railway Variables
+```
+
+**Cấu hình Render phụ:**
 
 ```text
 Service type: Web Service
@@ -81,14 +102,6 @@ Build command: npm install
 Start command: npm start
 Runtime: Node.js
 Environment: khai báo các biến trong .env trên Render Dashboard
-```
-
-**Cấu hình Vercel phụ:**
-
-```text
-Entry: index.js
-Config: vercel.json
-Environment: khai báo các biến trong Project Settings > Environment Variables
 ```
 
 ---
@@ -167,7 +180,7 @@ webnc2/
 ├── package.json                        # Scripts và dependencies Node.js
 ├── package-lock.json                   # Khóa phiên bản dependencies
 ├── jest.config.js                      # Cấu hình Jest
-├── vercel.json                         # Cấu hình deploy Vercel phụ
+├── vercel.json                         # Cấu hình Vercel nếu triển khai thử
 ├── .env                                # Biến môi trường local
 ├── .gitignore                          # Bỏ qua file khi commit
 │
@@ -455,7 +468,7 @@ webnc2/
 - Node.js và npm
 - MongoDB local hoặc MongoDB Atlas
 - Tài khoản Cloudinary để upload ảnh/CV
-- Gmail app password để gửi email OTP/thông báo
+- Tài khoản Brevo và API key để gửi email OTP/thông báo
 - Trình duyệt web hiện đại: Chrome, Firefox, Edge
 
 ### Các bước cài đặt
@@ -485,8 +498,8 @@ CLOUD_NAME=your_cloud_name
 CLOUD_KEY=your_cloud_key
 CLOUD_SECRET=your_cloud_secret
 
-EMAIL_USER=your_gmail@gmail.com
-EMAIL_PASSWORD=your_gmail_app_password
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=your_verified_sender_email
 
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
