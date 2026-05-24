@@ -86,32 +86,32 @@
 //         return false;
 //     }
 // };
-const nodemailer = require('nodemailer');
+module.exports.sendMail = async (email, subject, html) => {
+    try {
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'api-key': process.env.BREVO_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { 
+                    name: "DDS Job", 
+                    email: process.env.BREVO_SENDER_EMAIL 
+                },
+                to: [{ email: email }],
+                subject: subject,
+                htmlContent: html
+            })
+        });
 
-module.exports.sendMail = (email, subject, html) => {
-    const transporter = nodemailer.createTransport({
-        host: '74.125.133.108',
-        port: 587,
-        secure: false,
-        family: 4,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
-        }
-    });
-
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: subject,
-        html: html
-    };
-
-    transporter.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            console.error("[sendMail] Lỗi:", error.message);
+        const data = await response.json();
+        if (!response.ok) {
+            console.error("[sendMail] Lỗi:", data);
         } else {
-            console.log("[sendMail] Thành công:", info.response);
+            console.log("[sendMail] Thành công:", data.messageId);
         }
-    });
+    } catch (error) {
+        console.error("[sendMail] Lỗi:", error.message);
+    }
 };
