@@ -9,6 +9,7 @@ const userMiddleware = require("../../middlewares/client/user.middleware");
 const applicationRouter = require("./application.route");
 const companyRouter = require("./company.route");
 const employerRouter = require("./employer.route");
+const aboutRouter = require("./about.route");
 const authMiddleware = require("../../middlewares/client/auth.middleware");
 module.exports = (app) => {
     app.use(saveJobMiddleware.saveJob);
@@ -22,4 +23,5 @@ module.exports = (app) => {
     app.use("/applications",applicationRouter);
     app.use("/company",companyRouter);
     app.use("/employer", employerRouter);
+    app.use("/about", aboutRouter);
 }

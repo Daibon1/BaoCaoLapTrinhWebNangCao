@@ -1,0 +1,92 @@
+extends ../../layouts/default.pug
+
+block main
+  .about-page
+    section.about-hero
+      .about-hero__content
+        span.about-eyebrow DDS Jobs
+        h1 Kết nối ứng viên phù hợp với cơ hội việc làm đáng tin cậy
+        p DDS Jobs giúp ứng viên tìm kiếm, lưu và ứng tuyển công việc nhanh hơn; đồng thời hỗ trợ nhà tuyển dụng quản lý hồ sơ rõ ràng hơn trong một hệ thống thống nhất.
+        .about-hero__actions
+          a.about-btn.about-btn--primary(href="/jobs")
+            i.fa-solid.fa-magnifying-glass
+            span Tìm việc ngay
+          a.about-btn.about-btn--secondary(href="/employer/register")
+            i.fa-solid.fa-building-user
+            span Đăng ký tuyển dụng
+
+      .about-hero__panel
+        .about-brand-card
+          img(src="/images/dds_job_logo.svg" alt="DDS Jobs")
+          div
+            strong DDS Jobs
+            span Nền tảng tuyển dụng trực tuyến
+        .about-mini-grid
+          .about-mini-card
+            i.fa-solid.fa-briefcase
+            strong #{activeJobs}+
+            span Việc làm đang mở
+          .about-mini-card
+            i.fa-solid.fa-building
+            strong #{activeCompanies}+
+            span Công ty hoạt động
+
+    section.about-section
+      .about-section__head
+        span.about-eyebrow Giá trị cốt lõi
+        h2 Tập trung vào quy trình tuyển dụng thực tế
+      .about-values
+        .about-value
+          i.fa-solid.fa-filter-circle-dollar
+          h3 Tìm kiếm có trọng tâm
+          p Bộ lọc theo từ khóa, địa điểm và nhóm công việc giúp ứng viên thu hẹp lựa chọn thay vì lướt qua quá nhiều tin không phù hợp.
+        .about-value
+          i.fa-solid.fa-bookmark
+          h3 Theo dõi cơ hội quan tâm
+          p Ứng viên có thể lưu việc làm, xem lại danh sách đã ứng tuyển và chủ động quản lý các cơ hội đang theo đuổi.
+        .about-value
+          i.fa-solid.fa-user-check
+          h3 Duyệt hồ sơ rõ ràng
+          p Nhà tuyển dụng có khu vực quản trị để theo dõi hồ sơ, cập nhật trạng thái và phản hồi ứng viên theo từng vòng xử lý.
+
+    section.about-band
+      .about-band__content
+        span.about-eyebrow Dành cho hai phía
+        h2 Một trải nghiệm thống nhất cho ứng viên và nhà tuyển dụng
+        p Từ khám phá việc làm, nộp CV, lưu công việc đến duyệt hồ sơ ứng tuyển, DDS Jobs được xây dựng để các thao tác chính diễn ra nhanh, dễ kiểm soát và ít bị gián đoạn.
+      .about-checklist
+        .about-check
+          i.fa-solid.fa-circle-check
+          span Hồ sơ ứng tuyển được lưu theo từng công việc
+        .about-check
+          i.fa-solid.fa-circle-check
+          span Doanh nghiệp quản lý tin tuyển dụng trong trang quản trị
+        .about-check
+          i.fa-solid.fa-circle-check
+          span Ứng viên đăng nhập để lưu việc và theo dõi lịch sử ứng tuyển
+
+    section.about-section
+      .about-section__head
+        span.about-eyebrow Quy trình
+        h2 Cách DDS Jobs vận hành
+      .about-steps
+        .about-step
+          span 01
+          h3 Khám phá việc làm
+          p Ứng viên tìm kiếm công việc theo nhu cầu, xem chi tiết vị trí, mức lương, kỹ năng và thông tin công ty.
+        .about-step
+          span 02
+          h3 Ứng tuyển và lưu hồ sơ
+          p Người dùng nộp CV, viết thư giới thiệu và lưu lại các vị trí muốn theo dõi thêm.
+        .about-step
+          span 03
+          h3 Nhà tuyển dụng xử lý
+          p Hồ sơ được chuyển vào trang duyệt ứng viên để cập nhật trạng thái như phỏng vấn, chấp nhận hoặc từ chối.
+
+    section.about-cta
+      div
+        span.about-eyebrow Bắt đầu
+        h2 Sẵn sàng tìm cơ hội phù hợp hơn?
+      a.about-btn.about-btn--primary(href="/jobs")
+        i.fa-solid.fa-arrow-right
+        span Xem việc làm
