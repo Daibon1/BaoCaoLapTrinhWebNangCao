@@ -451,8 +451,74 @@
 }
 
 .job-pagination {
+  display: flex;
+  justify-content: flex-end;
   padding: 14px 18px 18px;
   border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.job-pagination nav {
+  max-width: 100%;
+}
+
+.job-pagination .pagination {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+}
+
+.job-pagination .page-item {
+  margin: 0;
+}
+
+.job-pagination .page-item:not(:first-child) .page-link {
+  margin-left: 0;
+}
+
+.job-pagination .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 7px;
+  color: #334155;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.job-pagination .page-link:hover {
+  color: #0d6efd;
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(13, 110, 253, .14);
+}
+
+.job-pagination .page-item.active .page-link {
+  color: #fff;
+  background: #0d6efd;
+  box-shadow: 0 10px 22px rgba(13, 110, 253, .28);
+}
+
+.job-pagination .page-item.disabled .page-link {
+  color: #94a3b8;
+  background: #f1f5f9;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 /* 7. Trang tao viec lam */
@@ -1046,6 +1112,27 @@
   .job-bulk-form .btn,
   .job-sort .btn {
     width: 100%;
+  }
+
+  .job-pagination {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .job-pagination nav,
+  .job-pagination .pagination {
+    width: 100%;
+  }
+
+  .job-pagination .pagination {
+    justify-content: center;
+  }
+
+  .job-pagination .page-link {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
   .job-form-grid {

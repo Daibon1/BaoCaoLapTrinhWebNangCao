@@ -97,6 +97,11 @@
   font-weight: 600;
 }
 
+.client-auth__required {
+  margin-left: 4px;
+  color: #ef4444;
+}
+
 .client-auth__input {
   position: relative;
 }
@@ -121,9 +126,49 @@
   font-size: 14px;
 }
 
+.client-auth__input--password input {
+  padding-right: 48px;
+}
+
 .client-auth__input input:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 0 3px rgba(13, 110, 253, .12);
+}
+
+.client-auth__password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.client-auth__password-toggle:hover {
+  background: #eff6ff;
+  color: #0d6efd;
+}
+
+.client-auth__password-toggle i {
+  position: static;
+  transform: none;
+  color: inherit;
+}
+
+.client-auth__hint {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .client-auth__options {
@@ -152,6 +197,32 @@
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
+}
+
+.client-auth__terms label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.client-auth__terms input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin-top: 2px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  accent-color: #0d6efd;
+  cursor: pointer;
+}
+
+.client-auth__terms span {
+  min-width: 0;
 }
 
 .client-auth__notice {

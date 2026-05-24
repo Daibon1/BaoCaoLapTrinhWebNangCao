@@ -14,5 +14,20 @@ module.exports.registerPost = (req, res, next) => {
         return res.redirect(req.get("Referrer") || "/employer/register");
     }
 
+    if (!req.body.confirmPassword || req.body.confirmPassword.length === 0) {
+        req.flash("error", "Xác nhận mật khẩu không được để trống!");
+        return res.redirect(req.get("Referrer") || "/employer/register");
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+        req.flash("error", "Mật khẩu xác nhận không khớp!");
+        return res.redirect(req.get("Referrer") || "/employer/register");
+    }
+
+    if (req.body.agreePolicy !== "1") {
+        req.flash("error", "Bạn cần đồng ý với điều khoản sử dụng và chính sách bảo mật!");
+        return res.redirect(req.get("Referrer") || "/employer/register");
+    }
+
     next();
 };

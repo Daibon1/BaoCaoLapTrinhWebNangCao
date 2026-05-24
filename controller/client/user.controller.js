@@ -13,16 +13,20 @@ module.exports.register = async (req, res) => {
 // [POST] /user/register
 module.exports.registerPost = async (req, res) => {
     try {
+        const email = req.body.email.trim();
         const exitsEmail = await User.findOne({
-            email: req.body.email
+            email: email
         });
         if (exitsEmail) {
             req.flash('error', 'Email đã được sử dụng');
             res.redirect(req.get("Referrer") || "/user/register");
             return;
         }
-        req.body.password = md5(req.body.password);
-        const user = new User(req.body);
+        const user = new User({
+            fullName: req.body.fullName.trim(),
+            email: email,
+            password: md5(req.body.password)
+        });
         await user.save();
         res.cookie('tokenUser', user.tokenUser);
         req.flash('success', 'Đăng ký thành công!');

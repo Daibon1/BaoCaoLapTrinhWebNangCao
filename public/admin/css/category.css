@@ -41,10 +41,19 @@
 .job-category-page__create {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   white-space: nowrap;
   border-radius: 8px;
-  padding: 9px 14px;
+  padding: 11px 18px;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(13, 110, 253, .24);
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.job-category-page__create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(13, 110, 253, .32);
 }
 
 /* 2. Thanh loc va tim kiem */
@@ -68,18 +77,38 @@
 }
 
 .category-toolbar__status .filter-status .btn {
-  border: 1px solid #d7dde8;
+  min-height: 40px;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   color: #334155;
-  background: #f8fafc;
+  background: #fff;
   font-size: 13px;
-  padding: 8px 12px;
+  font-weight: 700;
+  padding: 9px 16px;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, .05);
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.category-toolbar__status .filter-status .btn:hover {
+  border-color: #0d6efd;
+  color: #0d6efd;
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(13, 110, 253, .14);
 }
 
 .category-toolbar__status .filter-status .btn-success {
-  border-color: #198754;
+  border-color: #15803d;
   color: #fff;
-  background: #198754;
+  background: #15803d;
+  box-shadow: 0 12px 24px rgba(21, 128, 61, .24);
+}
+
+.category-toolbar__status .filter-status .btn-success:hover {
+  border-color: #166534;
+  color: #fff;
+  background: #166534;
+  box-shadow: 0 16px 28px rgba(21, 128, 61, .3);
 }
 
 .category-toolbar__search {
@@ -96,9 +125,36 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 40px;
+  min-height: 42px;
   border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 700;
   white-space: nowrap;
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.category-toolbar__search .btn-primary {
+  box-shadow: 0 12px 24px rgba(13, 110, 253, .22);
+}
+
+.category-toolbar__search .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(13, 110, 253, .3);
+}
+
+.category-toolbar__search .btn-outline-secondary {
+  color: #475569;
+  background: #fff;
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, .05);
+}
+
+.category-toolbar__search .btn-outline-secondary:hover {
+  color: #334155;
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, .12);
 }
 
 .category-search {
@@ -156,13 +212,19 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #475569;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  color: #334155;
+  background: #fff;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 7px 10px;
+  padding: 9px 13px;
   font-size: 13px;
+  font-weight: 700;
   white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .06);
+}
+
+.category-table-shell__meta i {
+  color: #0d6efd;
 }
 
 /* 4. Bang va cac o du lieu */
@@ -277,16 +339,70 @@
 .category-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 7px;
+  gap: 9px;
   white-space: nowrap;
 }
 
 .category-actions .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 34px;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 12px;
   border-radius: 8px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .06);
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.category-actions .btn i {
+  font-size: 14px;
+}
+
+.category-actions .btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.category-actions .btn-light {
+  color: #475569;
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.category-actions .btn-light:hover {
+  color: #334155;
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 22px rgba(15, 23, 42, .12);
+}
+
+.category-actions .btn-outline-primary {
+  color: #0d6efd;
+  background: #fff;
+  border-color: #0d6efd;
+}
+
+.category-actions .btn-outline-primary:hover {
+  color: #fff;
+  background: #0d6efd;
+  border-color: #0d6efd;
+  box-shadow: 0 12px 22px rgba(13, 110, 253, .24);
+}
+
+.category-actions .btn-outline-danger {
+  color: #dc2626;
+  background: #fff;
+  border-color: #ef4444;
+}
+
+.category-actions .btn-outline-danger:hover {
+  color: #fff;
+  background: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 12px 22px rgba(220, 38, 38, .24);
 }
 
 .category-empty {
@@ -312,8 +428,74 @@
 }
 
 .category-pagination {
+  display: flex;
+  justify-content: flex-end;
   padding: 14px 18px 18px;
   border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.category-pagination nav {
+  max-width: 100%;
+}
+
+.category-pagination .pagination {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+}
+
+.category-pagination .page-item {
+  margin: 0;
+}
+
+.category-pagination .page-item:not(:first-child) .page-link {
+  margin-left: 0;
+}
+
+.category-pagination .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 7px;
+  color: #334155;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.category-pagination .page-link:hover {
+  color: #0d6efd;
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(13, 110, 253, .14);
+}
+
+.category-pagination .page-item.active .page-link {
+  color: #fff;
+  background: #0d6efd;
+  box-shadow: 0 10px 22px rgba(13, 110, 253, .28);
+}
+
+.category-pagination .page-item.disabled .page-link {
+  color: #94a3b8;
+  background: #f1f5f9;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 /* 7. Form tao/sua danh muc */
@@ -752,6 +934,27 @@
 
   .category-toolbar__search .btn {
     width: 100%;
+  }
+
+  .category-pagination {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .category-pagination nav,
+  .category-pagination .pagination {
+    width: 100%;
+  }
+
+  .category-pagination .pagination {
+    justify-content: center;
+  }
+
+  .category-pagination .page-link {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
   .category-form-grid,

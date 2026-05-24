@@ -111,7 +111,7 @@ body {
   margin: 4px 0;
   font-size: 14px;
   font-weight: 600;
-  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 
 .sidebar-item i {
@@ -119,6 +119,7 @@ body {
   flex: 0 0 18px;
   color: #64748b;
   text-align: center;
+  transition: color .2s ease, transform .2s ease;
 }
 
 .sidebar-item span {
@@ -130,19 +131,36 @@ body {
 
 /* hover */
 .sidebar-item:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #eff6ff;
+  color: #0d6efd;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(13, 110, 253, .12);
+}
+
+.sidebar-item:hover i {
+  color: #0d6efd;
+  transform: scale(1.08);
 }
 
 /* ACTIVE - sáng hàng */
 .sidebar-item.active {
-  background: #0d6efd;
+  background: linear-gradient(135deg, #0d6efd 0%, #2563eb 100%);
   color: #fff;
-  font-weight: 600;
-  box-shadow: 0 4px 10px rgba(13,110,253,0.25);
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(13, 110, 253, .26);
+}
+
+.sidebar-item.active:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(13, 110, 253, .32);
 }
 
 .sidebar-item.active i {
+  color: #fff;
+}
+
+.sidebar-item.active:hover i {
   color: #fff;
 }
 

@@ -48,16 +48,60 @@ block main
               )
 
           .client-auth__field
-            label(for="password") Mật khẩu
-            .client-auth__input
+            label(for="password")
+              | Mật khẩu
+              span.client-auth__required *
+            .client-auth__input.client-auth__input--password
               i.fa-solid.fa-lock
               input(
                 type="password"
                 name="password"
                 id="password"
                 placeholder="Tối thiểu 8 ký tự"
+                minlength="8"
                 required
               )
+              button.client-auth__password-toggle(
+                type="button"
+                data-password-toggle
+                aria-label="Hiện mật khẩu"
+                aria-controls="password"
+              )
+                i.fa-solid.fa-eye
+            p.client-auth__hint Mật khẩu phải có ít nhất 8 ký tự
+
+          .client-auth__field
+            label(for="confirmPassword")
+              | Xác nhận mật khẩu
+              span.client-auth__required *
+            .client-auth__input.client-auth__input--password
+              i.fa-solid.fa-lock
+              input(
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                placeholder="Nhập lại mật khẩu"
+                minlength="8"
+                required
+              )
+              button.client-auth__password-toggle(
+                type="button"
+                data-password-toggle
+                aria-label="Hiện mật khẩu"
+                aria-controls="confirmPassword"
+              )
+                i.fa-solid.fa-eye
+
+          .client-auth__terms
+            label(for="agreePolicy")
+              input(
+                type="checkbox"
+                name="agreePolicy"
+                id="agreePolicy"
+                value="1"
+                required
+              )
+              span Tôi đồng ý với Điều khoản sử dụng và Chính sách bảo mật.
 
           button.client-auth__submit(type="submit")
             span Đăng ký
