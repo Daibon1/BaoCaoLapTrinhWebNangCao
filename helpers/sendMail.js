@@ -90,7 +90,7 @@ const nodemailer = require('nodemailer');
 
 module.exports.sendMail = (email, subject, html) => {
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: '74.125.133.108',
         port: 587,
         secure: false,
         family: 4,
