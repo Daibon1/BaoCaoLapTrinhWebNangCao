@@ -54,7 +54,7 @@ Trang chủ, tìm kiếm việc làm, xem chi tiết tin tuyển dụng, lưu vi
 | Email          | Nodemailer Gmail                                | Gửi OTP quên mật khẩu và email thông báo trạng thái hồ sơ ứng tuyển.                                     |
 | Frontend       | HTML/Pug, CSS, JavaScript, FontAwesome, TinyMCE | Xây dựng giao diện client/admin, form động, icon, editor mô tả công việc.                                |
 | Test           | Jest, Supertest, mongodb-memory-server          | Kiểm thử validator, helper, model và integration mà không cần database thật.                             |
-| Deploy         | Vercel config                                   | Có cấu hình `vercel.json` để chạy entry `index.js` bằng `@vercel/node`.                                  |
+| Deploy         | Render, Vercel                                 | Deploy chính trên Render Web Service; đồng thời hỗ trợ deploy Vercel qua cấu hình `vercel.json`.         |
 
 ---
 
@@ -63,8 +63,33 @@ Trang chủ, tìm kiếm việc làm, xem chi tiết tin tuyển dụng, lưu vi
 |                   | Link                  |
 | ----------------- | --------------------- |
 | 🎥 Video demo     | [Xem trên drive]()    |
-| 🌐 Website online | []()                  |
-| 💻 Source code    | [GitHub Repository]() |
+| 🌐 Website chính (Render) | [https://ddsjobs.onrender.com/](https://ddsjobs.onrender.com/) |
+| 🌐 Website phụ (Vercel) | [Cấu hình bằng `vercel.json`]() |
+| 💻 Source code    | [https://github.com/Daibon1/BaoCaoLapTrinhWebNangCao.git](https://github.com/Daibon1/BaoCaoLapTrinhWebNangCao.git) |
+
+### Nền tảng triển khai
+
+Dự án ưu tiên deploy trên **Render** vì đây là ứng dụng Express server-rendered chạy liên tục với MongoDB Atlas, session, cookie, OAuth và upload Cloudinary. Render được dùng làm môi trường chính để demo và kiểm thử các luồng client/admin.
+
+Dự án cũng có thể deploy trên **Vercel** thông qua file `vercel.json`, dùng `index.js` làm entry với `@vercel/node`. Vercel được xem là phương án phụ để kiểm tra khả năng chạy serverless, trong khi link chính vẫn là Render.
+
+**Cấu hình Render chính:**
+
+```text
+Service type: Web Service
+Build command: npm install
+Start command: npm start
+Runtime: Node.js
+Environment: khai báo các biến trong .env trên Render Dashboard
+```
+
+**Cấu hình Vercel phụ:**
+
+```text
+Entry: index.js
+Config: vercel.json
+Environment: khai báo các biến trong Project Settings > Environment Variables
+```
 
 ---
 
@@ -142,7 +167,7 @@ webnc2/
 ├── package.json                        # Scripts và dependencies Node.js
 ├── package-lock.json                   # Khóa phiên bản dependencies
 ├── jest.config.js                      # Cấu hình Jest
-├── vercel.json                         # Cấu hình deploy Vercel
+├── vercel.json                         # Cấu hình deploy Vercel phụ
 ├── .env                                # Biến môi trường local
 ├── .gitignore                          # Bỏ qua file khi commit
 │
