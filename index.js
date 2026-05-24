@@ -21,7 +21,6 @@ let database = require("./config/database");
 database.connect();
 const route = require("./router/client/index.route");
 const routeAdmin = require("./router/admin/index.route");
-const routeApi = require("./api/admin/index.route");
 //flash
 app.use(cookieParser('djgwdgjwudjjd'));
 app.use(session({
@@ -61,7 +60,6 @@ app.set('views', `${__dirname}/views`);
 app.use(express.static(`${__dirname}/public`));
 route(app);
 routeAdmin(app);
-routeApi(app);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 })
