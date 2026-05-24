@@ -14,6 +14,14 @@ module.exports = (query) => {
         {
             name: "Đà Nẵng",
             selected: ""
+        },
+        {
+            name: "Bắc Ninh",
+            selected: ""
+        },
+        {
+            name: "Hải Phòng",
+            selected: ""
         }
     ]
     let filterType = [{
@@ -40,7 +48,9 @@ module.exports = (query) => {
 
     if (query.location) {
         const index = filterLocation.findIndex(item => item.name == query.location);
-        filterLocation[index]["selected"] = "selected";
+        if (index >= 0) {
+            filterLocation[index]["selected"] = "selected";
+        }
     }
     if (query.keyword) {
         objectFind.title = query.keyword;
@@ -52,7 +62,9 @@ module.exports = (query) => {
     }
     if (query.type) {
         const index = filterType.findIndex(item => item.name == query.type);
-        filterType[index]["selected"] = "selected";
+        if (index >= 0) {
+            filterType[index]["selected"] = "selected";
+        }
         objectFind.type = query.type;
     }
     return objectFind;
