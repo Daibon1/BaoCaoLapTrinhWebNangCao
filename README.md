@@ -151,6 +151,12 @@ Environment: khai báo các biến trong .env trên Render Dashboard
 
 ![Admin Đăng nhập](/documents/screenshorts/admindangnhap.png)
 
+### Giao diện phân quyền
+
+<!-- Thêm ảnh chụp màn hình giao diện phân quyền -->
+
+![Phân quyền](/documents/screenshorts/phanquyen1.png)
+![Phân quyền](/documents/screenshorts/phanquyen2.png)
 ### Trang admin quản lý người dùng
 
 <!-- Thêm ảnh chụp màn hình admin quản lý người dùng -->
