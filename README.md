@@ -22,7 +22,7 @@ Dự án môn học xây dựng website tìm kiếm việc làm fullstack với 
 Trang chủ, tìm kiếm việc làm, xem chi tiết tin tuyển dụng, lưu việc, nộp CV, quản lý hồ sơ cá nhân, quên mật khẩu và đăng nhập mạng xã hội.
 
 **Giao diện Nhà tuyển dụng (Employer) — `[Nguyễn Văn Đại]`**
-Đăng ký nhà tuyển dụng, tạo/cập nhật hồ sơ công ty, đăng tin tuyển dụng, quản lý tin đăng, xem danh sách ứng viên và cập nhật trạng thái hồ sơ ứng tuyển,upload cloudinary, tinymce....
+Đăng ký nhà tuyển dụng, tạo/cập nhật hồ sơ công ty, đăng tin tuyển dụng, quản lý tin đăng, xem danh sách ứng viên và cập nhật trạng thái hồ sơ ứng tuyển,upload cloudinary, tinymce, gửi gmail cập nhật trạng thái ứng tuyển....
 
 **Hệ thống Quản trị & Hỗ trợ — `[Nguyễn Ngọc Sơn]`**
 Đăng nhập admin, dashboard thống kê, quản lý tài khoản, phân quyền, quản lý danh mục, duyệt tin tuyển dụng, quản lý ứng viên và API hỗ trợ.
